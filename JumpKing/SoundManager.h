@@ -1,6 +1,5 @@
 #pragma once
 
-
 // sound 용도 - 헤더 순서 중요
 #include <mmsystem.h>
 #include <dsound.h>

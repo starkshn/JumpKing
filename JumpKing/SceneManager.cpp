@@ -2,6 +2,9 @@
 #include "SceneManager.h"
 
 #include "StartScene.h"
+#include "StageScene.h"
+
+UINT SceneManager::g_stageNumber = 1;
 
 SceneManager::SceneManager() 
 	: 
@@ -25,12 +28,12 @@ SceneManager::~SceneManager()
 void SceneManager::Init()
 {
 	// Scene 생성
-	p_scenes[static_cast<unsigned int>(SCENE_TYPE::START)] = new StartScene;
-	p_scenes[static_cast<unsigned int>(SCENE_TYPE::START)]->SetName(L"StartScene");
+	p_scenes[static_cast<unsigned int>(SCENE_TYPE::STAGE_01)] = new StartScene;
+	p_scenes[static_cast<unsigned int>(SCENE_TYPE::STAGE_01)]->SetName(L"StartScene");
 
 
 	// 현재 씬 지정
-	p_curScene = p_scenes[static_cast<unsigned int>(SCENE_TYPE::START)];
+	p_curScene = p_scenes[static_cast<unsigned int>(SCENE_TYPE::STAGE_01)];
 	p_curScene->Enter();
 }
 

@@ -56,9 +56,10 @@ int Core::Init(HWND hwnd, POINT resolution)
 	PathManager::GetInstance()->Init();
 	TimeManager::GetInstance()->Init();
 	KeyManager::GetInstance()->Init();
+	SoundManager::GetInstance()->Init();
 	CameraManager::GetInstance()->Init();
 	SceneManager::GetInstance()->Init();
-	SoundManager::GetInstance()->Init();
+	
 	// ====================================
 
 	return S_OK;

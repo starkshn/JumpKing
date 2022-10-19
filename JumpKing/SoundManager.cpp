@@ -10,10 +10,12 @@ SoundManager::SoundManager()
 	: _sound(nullptr)
 	, p_BGM(nullptr)
 {
+
 }
 
 SoundManager::~SoundManager()
 {
+
 }
 
 int SoundManager::Init(void)

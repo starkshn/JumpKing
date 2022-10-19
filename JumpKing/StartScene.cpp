@@ -7,11 +7,13 @@
 #include "KeyManager.h"
 #include "SceneManager.h"
 #include "CameraManager.h"
+#include "TimeManager.h"
 
 #include "Core.h"
 #include "Object.h"
 #include "Player.h"
 #include "Texture.h"
+#include "StageScene.h"
 
 // 물리
 #include "RigidBody.h"
@@ -29,7 +31,7 @@ StartScene::StartScene()
 {
 	p_backGroundTexture = ResourceManager::GetInstance()->LoadTexture(L"Stage_1", L"Textures\\Stage\\Stage_1.bmp");
 }
-
+ 
 StartScene::~StartScene()
 {
 
@@ -76,14 +78,24 @@ void StartScene::Update()
 
 	Scene::Update();
 
-	/*if (KEY_TAP(KEY::ENTER))
+	if (KEY_TAP(KEY::UP))
 	{
-		ChangeScene(SCENE_TYPE::TOOL);
-	}*/
+		SceneManager::GetInstance()->UpStageNum();
+		UINT sn = SceneManager::GetInstance()->GetStageNum();
+		SCENE_TYPE s = static_cast<SCENE_TYPE>(sn);
+
+		StageScene* nextStage = new StageScene();
+
+		SceneManager::GetInstance()->SetSceneArr(s, nextStage);
+
+		ChangeScene(s);
+	}
 }
 
 void StartScene::Enter()
 {
+	Core::GetInstance()->DockMenu();
+
 	// Object 추가
 	Object* player = new Player();
 	player->SetObjectName(L"Player");
@@ -98,7 +110,6 @@ void StartScene::Enter()
 	ground->SetScale(Vector2(400.f, 100.f));
 	ground->SetPos(Vector2(640.f, 700.f));
 	AddObject(ground, GROUP_TYPE::GROUND);
-
 
 	Vector2 resolution = Core::GetInstance()->GetResolution();
 

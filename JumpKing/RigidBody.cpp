@@ -38,7 +38,6 @@ void RigidBody::FinalUpdate()
 		float accel = force / _mass;
 
 		_accel = _force * accel; 
-
 	}
 
 	// ============================================

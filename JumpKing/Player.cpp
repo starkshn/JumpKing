@@ -12,6 +12,7 @@
 #include "Animator.h"
 #include "RigidBody.h"
 #include "Gravity.h"
+#include "Sound.h"
 
 Player::Player()
 	:
@@ -112,6 +113,25 @@ Player::Player()
 
 	GetAnimator()->PlayAnimation(L"IDLE_RIGHT", true);
 
+	// =================================================================
+	// Sound Load
+	ResourceManager::GetInstance()->LoadSound(L"JUMP", L"Sounds\\jump.wav");
+	p_jump = ResourceManager::GetInstance()->FindSound(L"JUMP");
+	p_jump->SetPosition(50.f);
+
+	ResourceManager::GetInstance()->LoadSound(L"LAND", L"Sounds\\land.wav");
+	p_land = ResourceManager::GetInstance()->FindSound(L"LAND");
+	p_land->SetPosition(50.f);
+
+	ResourceManager::GetInstance()->LoadSound(L"BUMP", L"Sounds\\bump.wav");
+	p_bump = ResourceManager::GetInstance()->FindSound(L"BUMP");
+	p_bump->SetPosition(50.f);
+
+	ResourceManager::GetInstance()->LoadSound(L"FALL", L"Sounds\\fall.wav");
+	p_fall = ResourceManager::GetInstance()->FindSound(L"FALL");
+	p_fall->SetPosition(50.f);
+	// =================================================================
+
 	CreateRigidBody();
 	CreateGravity();
 }
@@ -175,6 +195,8 @@ void Player::UpdateState()
 	else if (KEY_AWAY(KEY::SPACE))
 	{
 		_curState = OBJECT_STATE::JUMP;
+
+		p_jump->Play();
 
 		if (GetRigidBody())
 		{

@@ -2,6 +2,7 @@
 #include "Object.h"
 
 class Texture;
+class Sound;
 
 class Player : public Object
 {
@@ -14,6 +15,11 @@ private:
 	int _dir;
 	int _prevDir;
 	bool _onJump;
+
+	Sound* p_jump;
+	Sound* p_land;
+	Sound* p_bump;
+	Sound* p_fall;
 
 public:
 	Player();

@@ -122,6 +122,9 @@
     <Filter Include="Engine\04_Objects\Tile">
       <UniqueIdentifier>{3499bdee-d8e4-4b4c-98fc-982af6888c1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\06_Scenes\StageScene">
+      <UniqueIdentifier>{5a3ccbc0-6b2f-4bd5-a30a-141ec2fab826}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -227,6 +230,9 @@
     <ClInclude Include="Tile.h">
       <Filter>Engine\04_Objects\Tile</Filter>
     </ClInclude>
+    <ClInclude Include="StageScene.h">
+      <Filter>Engine\06_Scenes\StageScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="JumpKing.rc">
@@ -326,6 +332,9 @@
     </ClCompile>
     <ClCompile Include="Tile.cpp">
       <Filter>Engine\04_Objects\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="StageScene.cpp">
+      <Filter>Engine\06_Scenes\StageScene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
