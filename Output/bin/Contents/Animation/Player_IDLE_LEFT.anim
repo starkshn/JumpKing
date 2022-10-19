@@ -1,0 +1,18 @@
+[Animation Name]
+IDLE_LEFT
+[Texture Name(Key)]
+PlayerAnimation_L.bmp
+[Texture Relative Path]
+Textures\Player\Animation\PlayerAnimation_L.bmp
+[Anim FrameCount Data]
+1
+[Frame Index]
+0
+LeftTopPos(Vector2)
+837 0 
+SliceSize(Vector2)
+93 103 
+Offset(Vector2)
+0 0 
+Duration(float)
+0.100000

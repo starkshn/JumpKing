@@ -1,0 +1,38 @@
+[Animation Name]
+MOVE_RIGHT
+[Texture Name(Key)]
+PlayerAnimation_R.bmp
+[Texture Relative Path]
+Textures\Player\Animation\PlayerAnimation_R.bmp
+[Anim FrameCount Data]
+3
+[Frame Index]
+0
+LeftTopPos(Vector2)
+93 0 
+SliceSize(Vector2)
+93 103 
+Offset(Vector2)
+0 0 
+Duration(float)
+0.100000
+[Frame Index]
+1
+LeftTopPos(Vector2)
+186 0 
+SliceSize(Vector2)
+93 103 
+Offset(Vector2)
+0 0 
+Duration(float)
+0.100000
+[Frame Index]
+2
+LeftTopPos(Vector2)
+279 0 
+SliceSize(Vector2)
+93 103 
+Offset(Vector2)
+0 0 
+Duration(float)
+0.100000
