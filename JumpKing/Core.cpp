@@ -135,6 +135,8 @@ void Core::CreateHbrush()
 	h_brushes[static_cast<UINT>(HBRUSH_TYPE::HOLLOW)] = static_cast<HBRUSH>(GetStockObject(HOLLOW_BRUSH));
 
 	h_brushes[static_cast<UINT>(HBRUSH_TYPE::BLACK)] = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
+
+	int a = 10;
 }
 
 void Core::CreateHpen()
