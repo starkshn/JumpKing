@@ -36,7 +36,6 @@ public:
 	}
 	void RegisterPlayer(Object* player) { p_player = player; }
 
-
 	void DeleteGroupObjects(GROUP_TYPE groupType);
 	void DeleteAllGroups();
 	void CreateTile(UINT xCount, UINT yCount);

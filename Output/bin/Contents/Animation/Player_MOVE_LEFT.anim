@@ -9,7 +9,7 @@ Textures\Player\Animation\PlayerAnimation_L.bmp
 [Frame Index]
 0
 LeftTopPos(Vector2)
-744 0 
+465 0 
 SliceSize(Vector2)
 93 103 
 Offset(Vector2)
@@ -19,7 +19,7 @@ Duration(float)
 [Frame Index]
 1
 LeftTopPos(Vector2)
-651 0 
+558 0 
 SliceSize(Vector2)
 93 103 
 Offset(Vector2)
@@ -29,7 +29,7 @@ Duration(float)
 [Frame Index]
 2
 LeftTopPos(Vector2)
-558 0 
+651 0 
 SliceSize(Vector2)
 93 103 
 Offset(Vector2)

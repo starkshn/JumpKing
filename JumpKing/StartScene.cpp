@@ -32,7 +32,6 @@ StartScene::StartScene()
 
 StartScene::~StartScene()
 {
-	// 씬 전부 삭제
 
 }
 
@@ -77,10 +76,10 @@ void StartScene::Update()
 
 	Scene::Update();
 
-	if (KEY_TAP(KEY::ENTER))
+	/*if (KEY_TAP(KEY::ENTER))
 	{
 		ChangeScene(SCENE_TYPE::TOOL);
-	}
+	}*/
 }
 
 void StartScene::Enter()
@@ -90,18 +89,22 @@ void StartScene::Enter()
 	player->SetObjectName(L"Player");
 	player->SetPos(Vector2(640.f, 384.f));
 	player->SetScale(Vector2(100.f, 100.f));
-
 	AddObject(player, GROUP_TYPE::PLAYER);
-
 	RegisterPlayer(player);
+
+	// Ground배치
+	Object* ground = new Ground();
+	ground->SetObjectName(L"Ground");
+	ground->SetScale(Vector2(400.f, 100.f));
+	ground->SetPos(Vector2(640.f, 700.f));
+	AddObject(ground, GROUP_TYPE::GROUND);
+
 
 	Vector2 resolution = Core::GetInstance()->GetResolution();
 
 	// ================================
 	// 충돌 지정
-	// Player 그룹과 Monster그룹 간의 충돌체크 ( Plyaer그룹과 Monster그룹이 충돌할 것이라고 알린다)
-	ColliderManager::GetInstance()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::MONSTER);
-
+	//
 	// 땅과 플레이어 충돌 지정
 	ColliderManager::GetInstance()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::GROUND);
 	// =================================
@@ -122,7 +125,6 @@ void StartScene::Enter()
 	// Init 함수 호출
 	Init();
 	// =======================================
-
 }
 
 void StartScene::Render(HDC dc)

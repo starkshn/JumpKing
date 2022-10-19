@@ -55,6 +55,8 @@ public:
 	void CreateRigidBody();
 	void CreateGravity();
 
+	void SaveAnimation(const wchar_t* animName);
+
 public:
 	Collider* GetCollider() { return p_collider; }
 	Animator* GetAnimator() { return p_animator; }

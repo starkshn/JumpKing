@@ -34,51 +34,81 @@ Player::Player()
 
 	CreateAnimator();
 
-	/*GetAnimator()->LoadAnimation(L"Animation\\Player_IDLE_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"Animation\\Player_IDLE_RIGHT.anim");
 	GetAnimator()->LoadAnimation(L"Animation\\Player_IDLE_LEFT.anim");
 	GetAnimator()->LoadAnimation(L"Animation\\Player_MOVE_RIGHT.anim");
 	GetAnimator()->LoadAnimation(L"Animation\\Player_MOVE_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"Animation\\Player_SQUAT_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"Animation\\Player_SQUAT_LEFT.anim");
 	GetAnimator()->LoadAnimation(L"Animation\\Player_JUMP_RIGHT.anim");
-	GetAnimator()->LoadAnimation(L"Animation\\Player_JUMP_LEFT.anim");*/
+	GetAnimator()->LoadAnimation(L"Animation\\Player_JUMP_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"Animation\\Player_FALL_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"Animation\\Player_FALL_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"Animation\\Player_FALLEN_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"Animation\\Player_FALLEN_LEFT.anim");
+	GetAnimator()->LoadAnimation(L"Animation\\Player_OFF_RIGHT.anim");
+	GetAnimator()->LoadAnimation(L"Animation\\Player_OFF_LEFT.anim");
 
-#pragma region "Animation 저장전"// 372
+#pragma region "애니매이션 로드 및 파일로 저장"
+	// ====================================================================
+	// 애니매이션 Load 부분
+	// 가로 93, 세로 103
 
-		// 가로 93, 세로 103
-		GetAnimator()->CreateAnimation(L"IDLE_RIGHT", p_textureRight, Vector2(0, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
-		GetAnimator()->CreateAnimation(L"IDLE_LEFT", p_textureLeft, Vector2(837, 0), Vector2(93, 103), Vector2(-93, 0), 0.1f, 1);
-	
-		// Move
-		GetAnimator()->CreateAnimation(L"MOVE_RIGHT", p_textureRight, Vector2(93, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 3);
-		GetAnimator()->CreateAnimation(L"MOVE_LEFT", p_textureLeft, Vector2(744, 0), Vector2(93, 103), Vector2(-93, 0), 0.1f, 3);
-	
-	    // Sqaut
-		GetAnimator()->CreateAnimation(L"SQUAT_RIGHT", p_textureRight, Vector2(372, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
-		GetAnimator()->CreateAnimation(L"SQUAT_LEFT", p_textureLeft, Vector2(465, 0), Vector2(93, 103), Vector2(-93, 0), 0.1f, 1);
-	
-		// Jump
-		GetAnimator()->CreateAnimation(L"JUMP_RIGHT", p_textureRight, Vector2(465, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
-		GetAnimator()->CreateAnimation(L"JUMP_LEFT", p_textureLeft, Vector2(372, 0), Vector2(93, 103), Vector2(-93, 0), 0.1f, 1);
+	// IDLE
+	//GetAnimator()->CreateAnimation(L"IDLE_RIGHT", p_textureRight, Vector2(0, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
+	//GetAnimator()->CreateAnimation(L"IDLE_LEFT", p_textureLeft, Vector2(744, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
+	//
+	//// MOVE
+	//GetAnimator()->CreateAnimation(L"MOVE_RIGHT", p_textureRight, Vector2(93, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 3);
+	//GetAnimator()->CreateAnimation(L"MOVE_LEFT", p_textureLeft, Vector2(465, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 3);
+	//
+	//// Squat
+	//GetAnimator()->CreateAnimation(L"SQUAT_RIGHT", p_textureRight, Vector2(372, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
+	//GetAnimator()->CreateAnimation(L"SQUAT_LEFT", p_textureLeft, Vector2(372, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
+	//
+	//// Jump
+	//GetAnimator()->CreateAnimation(L"JUMP_RIGHT", p_textureRight, Vector2(465, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
+	//GetAnimator()->CreateAnimation(L"JUMP_LEFT", p_textureLeft, Vector2(279, 0), Vector2(93, 103), Vector2(-93, 0), 0.1f, 1);
 
-		// Off
-		GetAnimator()->CreateAnimation(L"OFF_RIGHT", p_textureRight, Vector2(558, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
-		GetAnimator()->CreateAnimation(L"OFF_LEFT", p_textureLeft, Vector2(279, 0), Vector2(93, 103), Vector2(-93, 0), 0.1f, 1);
+	//// Off
+	//GetAnimator()->CreateAnimation(L"OFF_RIGHT", p_textureRight, Vector2(558, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
+	//GetAnimator()->CreateAnimation(L"OFF_LEFT", p_textureLeft, Vector2(186, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
 
-		// Fall
-		GetAnimator()->CreateAnimation(L"FALL_RIGHT", p_textureRight, Vector2(651, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
-		GetAnimator()->CreateAnimation(L"FALL_LEFT", p_textureLeft, Vector2(186, 0), Vector2(93, 103), Vector2(-93, 0), 0.1f, 1);
+	//// Fall
+	//GetAnimator()->CreateAnimation(L"FALL_RIGHT", p_textureRight, Vector2(651, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
+	//GetAnimator()->CreateAnimation(L"FALL_LEFT", p_textureLeft, Vector2(93, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
 
-		// Fallen
-		GetAnimator()->CreateAnimation(L"FALLEN_RIGHT", p_textureRight, Vector2(744, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
-		GetAnimator()->CreateAnimation(L"FALLEN_LEFT", p_textureLeft, Vector2(93, 0), Vector2(93, 103), Vector2(-93, 0), 0.1f, 1);
+	//// Fallen
+	//GetAnimator()->CreateAnimation(L"FALLEN_RIGHT", p_textureRight, Vector2(744, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
+	//GetAnimator()->CreateAnimation(L"FALLEN_LEFT", p_textureLeft, Vector2(0, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
+	//// ====================================================================
 
-	#pragma endregion
-	
-		GetAnimator()->FindAnimation(L"IDLE_RIGHT")->SaveAnim(L"Animation\\Player_IDLE_RIGHT.anim");
-		GetAnimator()->FindAnimation(L"IDLE_LEFT")->SaveAnim(L"Animation\\Player_IDLE_LEFT.anim");
-		GetAnimator()->FindAnimation(L"MOVE_RIGHT")->SaveAnim(L"Animation\\Player_MOVE_RIGHT.anim");
-		GetAnimator()->FindAnimation(L"MOVE_LEFT")->SaveAnim(L"Animation\\Player_MOVE_LEFT.anim");
-		GetAnimator()->FindAnimation(L"JUMP_RIGHT")->SaveAnim(L"Animation\\Player_JUMP_RIGHT.anim");
-		GetAnimator()->FindAnimation(L"JUMP_LEFT")->SaveAnim(L"Animation\\Player_JUMP_LEFT.anim");
+
+	//// ====================================================================
+	//// 애니매이션 파일로 저장하는 부분
+	//GetAnimator()->FindAnimation(L"IDLE_RIGHT")->SaveAnim(L"Animation\\Player_IDLE_RIGHT.anim");
+	////GetAnimator()->FindAnimation(L"IDLE_LEFT")->SaveAnim(L"Animation\\Player_IDLE_LEFT.anim");
+	//SaveAnimation(L"IDLE_LEFT");
+
+	//GetAnimator()->FindAnimation(L"MOVE_RIGHT")->SaveAnim(L"Animation\\Player_MOVE_RIGHT.anim");
+	//GetAnimator()->FindAnimation(L"MOVE_LEFT")->SaveAnim(L"Animation\\Player_MOVE_LEFT.anim");
+
+	//GetAnimator()->FindAnimation(L"SQUAT_RIGHT")->SaveAnim(L"Animation\\Player_SQUAT_RIGHT.anim");
+	//GetAnimator()->FindAnimation(L"SQUAT_LEFT")->SaveAnim(L"Animation\\Player_SQUAT_LEFT.anim");
+
+	//GetAnimator()->FindAnimation(L"JUMP_RIGHT")->SaveAnim(L"Animation\\Player_JUMP_RIGHT.anim");
+	//GetAnimator()->FindAnimation(L"JUMP_LEFT")->SaveAnim(L"Animation\\Player_JUMP_LEFT.anim");
+
+	//GetAnimator()->FindAnimation(L"OFF_RIGHT")->SaveAnim(L"Animation\\Player_OFF_RIGHT.anim");
+	//GetAnimator()->FindAnimation(L"OFF_LEFT")->SaveAnim(L"Animation\\Player_OFF_LEFT.anim");
+
+	//GetAnimator()->FindAnimation(L"FALL_RIGHT")->SaveAnim(L"Animation\\Player_FALL_RIGHT.anim");
+	//GetAnimator()->FindAnimation(L"FALL_LEFT")->SaveAnim(L"Animation\\Player_FALL_LEFT.anim");
+
+	//GetAnimator()->FindAnimation(L"FALLEN_RIGHT")->SaveAnim(L"Animation\\Player_FALLEN_RIGHT.anim");
+	//GetAnimator()->FindAnimation(L"FALLEN_LEFT")->SaveAnim(L"Animation\\Player_FALLEN_LEFT.anim");
+	// ====================================================================
+#pragma endregion
 
 	GetAnimator()->PlayAnimation(L"IDLE_RIGHT", true);
 
@@ -135,52 +165,160 @@ void Player::UpdateState()
 		}
 	}
 
-	if (KEY_TAP(KEY::SPACE))
+	if (KEY_TAP(KEY::SPACE) || KEY_HOLD(KEY::SPACE))
 	{
 		if (_onJump == false)
 		{
-			_curState = OBJECT_STATE::JUMP;
+			_curState = OBJECT_STATE::SQUAT;
+		}
+	}
+	else if (KEY_AWAY(KEY::SPACE))
+	{
+		_curState = OBJECT_STATE::JUMP;
 
-			if (GetRigidBody())
-			{
-				// ===================
-				// 이단 점프 구현하고 싶을 경우
-				/*Vector2 curVel = GetRigidBody()->GetVelocity();
-				GetRigidBody()->SetVelocity(Vector2(curVel._x, -200.f));*/
-				// ===================
+		if (GetRigidBody())
+		{
+			// ===================
+			// 이단 점프 구현하고 싶을 경우
+			/*Vector2 curVel = GetRigidBody()->GetVelocity();
+			GetRigidBody()->SetVelocity(Vector2(curVel._x, -200.f));*/
+			// ===================
 
-				GetRigidBody()->AddVelocity(Vector2(0.f, -200.f));
-			}
+			GetRigidBody()->AddVelocity(Vector2(0.f, -200.f));
 		}
 	}
 }
 
 void Player::UpdateMove()
 {
+	RigidBody* rd = GetRigidBody();
 
+	if (KEY_TAP(KEY::SPACE) || KEY_HOLD(KEY::SPACE))
+		return;
+
+	if (KEY_HOLD(KEY::A))
+	{
+		// rd->AddForce(Vector2(-200.f, 0.f));
+		rd->SetVelocity(Vector2(-250.f, rd->GetVelocity()._y));
+	}
+	if (KEY_HOLD(KEY::D))
+	{
+		// rd->AddForce(Vector2(200.f, 0.f));
+		rd->SetVelocity(Vector2(250.f, rd->GetVelocity()._y));
+	}
+
+	if (KEY_TAP(KEY::A))
+	{
+		// rd->AddVelocity(Vector2(-200.f, 0.f));
+		rd->SetVelocity(Vector2(-250.f, rd->GetVelocity()._y));
+
+	}
+	if (KEY_TAP(KEY::D))
+	{
+		// rd->AddVelocity(Vector2(200.f, 0.f));
+		rd->SetVelocity(Vector2(250.f, rd->GetVelocity()._y));
+	}
 }
 
 void Player::UpdateAnimation()
 {
+	if (_prevState == _curState && _prevDir == _dir)
+		return;
 
+	switch (_curState)
+	{
+	case OBJECT_STATE::IDLE:
+	{
+		if (_dir == 1)
+			GetAnimator()->PlayAnimation(L"IDLE_RIGHT", true);
+		else
+			GetAnimator()->PlayAnimation(L"IDLE_LEFT", true);
+	}
+	break;
+	case OBJECT_STATE::MOVE:
+	{
+		if (_dir == 1)
+			GetAnimator()->PlayAnimation(L"MOVE_RIGHT", true);
+		else
+			GetAnimator()->PlayAnimation(L"MOVE_LEFT", true);
+	}
+	break;
+	case OBJECT_STATE::SQUAT:
+	{
+		if (_dir == 1)
+			GetAnimator()->PlayAnimation(L"SQUAT_RIGHT", true);
+		else
+			GetAnimator()->PlayAnimation(L"SQUAT_LEFT", true);
+	}
+	break;
+	case OBJECT_STATE::JUMP:
+	{
+		if (_dir == 1)
+			GetAnimator()->PlayAnimation(L"JUMP_RIGHT", true);
+		else
+			GetAnimator()->PlayAnimation(L"JUMP_LEFT", true);
+	}
+	break;
+	case OBJECT_STATE::OFF:
+	{
+		if (_dir == 1)
+			GetAnimator()->PlayAnimation(L"OFF_RIGHT", true);
+		else
+			GetAnimator()->PlayAnimation(L"OFF_LEFT", true);
+	}
+	break;
+	case OBJECT_STATE::FALL:
+	{
+		if (_dir == 1)
+			GetAnimator()->PlayAnimation(L"FALL_RIGHT", true);
+		else
+			GetAnimator()->PlayAnimation(L"FALL_LEFT", true);
+	}
+	case OBJECT_STATE::FALLEN:
+	{
+		if (_dir == 1)
+			GetAnimator()->PlayAnimation(L"FALLEN_RIGHT", true);
+		else
+			GetAnimator()->PlayAnimation(L"FALLEN_LEFT", true);
+	}
+	break;
+	case OBJECT_STATE::END:
+	{
+	}
+	break;
+	default:
+	break;
+	}
 }
 
 void Player::UpdateGravity()
 {
-
+	GetRigidBody()->AddForce(Vector2(0.f, 500.f));
 }
 
 void Player::OnCollisionEnter(Collider* other)
 {
-
+	Object* otherObj = other->GetColliderOwner();
+	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
+	{
+		_onJump = false;
+		Vector2 pos = GetPos();
+		if (pos._y < otherObj->GetPos()._y)
+		{
+			_curState = OBJECT_STATE::IDLE;
+		}
+	}
 }
 
 void Player::OnCollisionStay(Collider* other)
 {
-
+	
 }
 
 void Player::OnCollisionExit(Collider* other)
 {
-
+	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
+	{
+		_onJump = true;
+	}
 }

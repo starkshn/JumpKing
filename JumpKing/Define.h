@@ -101,10 +101,11 @@ enum class OBJECT_STATE
 {
 	IDLE,
 	MOVE,
+	SQUAT,
 	JUMP,
-	ATTACK,
-	GETHIT,
-	DIE,
+	OFF,
+	FALL,
+	FALLEN,
 
 	END
 };

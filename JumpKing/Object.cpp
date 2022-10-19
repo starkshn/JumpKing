@@ -159,3 +159,9 @@ void Object::CreateGravity()
 	p_gravity = new Gravity();
 	p_gravity->p_owner = this;
 }
+
+void Object::SaveAnimation(const wchar_t* animName)
+{
+	wstring path = L"Animation\\Player_" + static_cast<wstring>(animName) + L".anim";
+	GetAnimator()->FindAnimation(animName)->SaveAnim(path);
+}
