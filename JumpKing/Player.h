@@ -14,7 +14,9 @@ private:
 
 	int _dir;
 	int _prevDir;
+
 	bool _onJump;
+
 
 	Vector2 _fallDir = { 0.f, 1.f };
 

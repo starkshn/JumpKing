@@ -164,7 +164,7 @@ void Player::Render(HDC dc)
 
 void Player::UpdateState()
 {
-	if (_curState == OBJECT_STATE::FALL)
+	if (_curState == OBJECT_STATE::FALL || _curState == OBJECT_STATE::OFF)
 		return;
 
 	if (_curState == OBJECT_STATE::JUMP)
@@ -230,10 +230,10 @@ void Player::UpdateState()
 
 void Player::UpdateMove()
 {
-	RigidBody* rd = GetRigidBody();
-
-	if (_curState == OBJECT_STATE::JUMP || _curState == OBJECT_STATE::SQUAT || _curState == OBJECT_STATE::FALL)
+	if (_curState == OBJECT_STATE::JUMP || _curState == OBJECT_STATE::SQUAT || _curState == OBJECT_STATE::FALL || _curState == OBJECT_STATE::OFF)
 		return;
+
+	RigidBody* rd = GetRigidBody();
 
 	if (KEY_HOLD(KEY::A))
 	{
@@ -342,10 +342,18 @@ void Player::OnCollisionEnter(Collider* other)
 	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
 	{
 		_onJump = false;
+
+		if (GetDownToUp())
+		{
+			_curState = OBJECT_STATE::OFF;
+			p_bump->Play();
+		}
+
 		Vector2 pos = GetPos();
 		if (pos._y < otherObj->GetPos()._y)
 		{
 			_curState = OBJECT_STATE::IDLE;
+			p_land->Play();
 		}
 	}
 }
@@ -360,6 +368,6 @@ void Player::OnCollisionExit(Collider* other)
 	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
 	{
 		_onJump = true;
-
+		OnDownToUp(false);
 	}
 }

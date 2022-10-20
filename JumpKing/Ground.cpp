@@ -3,6 +3,7 @@
 
 #include "Collider.h"
 #include "Gravity.h"
+#include "Player.h"
 
 Ground::Ground()
 {
@@ -38,12 +39,25 @@ void Ground::OnCollisionEnter(Collider* other)
 		Vector2 pos = GetCollider()->GetFinalPos();
 		Vector2 scale = GetCollider()->GetColliderScale();
 
-		float len = abs(objPos._y - pos._y);
-		float value = (objScale._y / 2.f + scale._y / 2.f) - len;
+		if (pos._y - objPos._y < 0)
+		{
+			otherObj->OnDownToUp(true);
 
-		// 충돌을 접한 상태를 유지하기 위해 의도적으로 1픽셀을 덜 올려줌.
-		objPos = otherObj->GetPos();
-		objPos._y -= value;
+			float lenY = abs(objPos._y - pos._y);
+			float valueY = ((objScale._y / 2.f) + (scale._y / 2.f)) - lenY;
+			objPos = otherObj->GetPos();
+			objPos._y += valueY;
+		}
+		else
+		{
+			// ================================================================
+			// 땅위에 착지했을 때
+			float lenY = abs(objPos._y - pos._y);
+			float valueY = ((objScale._y / 2.f) + (scale._y / 2.f)) - lenY;
+			objPos = otherObj->GetPos();
+			objPos._y -= valueY;
+			// ================================================================
+		}
 
 		otherObj->SetPos(objPos);
 	}
@@ -83,7 +97,6 @@ void Ground::OnCollisionExit(Collider* other)
 	{
 		otherObj->GetGravity()->SetOnGround(false);
 		// otherObj->GetGravity()->_onLand = false;
-
 	}
 }
 

@@ -10,7 +10,7 @@ private:
 	UINT		_ID = 0;
 	UINT		_colCount;
 
-	Object* p_owner;
+	Object*		p_owner;
 
 	Vector2		_offsetPos;
 	Vector2		_finalPos;

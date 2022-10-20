@@ -126,6 +126,24 @@ void StartScene::Enter()
 	ground->SetPos(Vector2(640.f, 700.f));
 	AddObject(ground, GROUP_TYPE::GROUND);
 
+	Object* ground2 = new Ground();
+	ground2->SetObjectName(L"Ground");
+	ground2->SetScale(Vector2(400.f, 100.f));
+	ground2->SetPos(Vector2(640.f, 500.f));
+	AddObject(ground2, GROUP_TYPE::GROUND);
+
+	Object* ground3 = new Ground();
+	ground3->SetObjectName(L"Ground");
+	ground3->SetScale(Vector2(200.f, 100.f));
+	ground3->SetPos(Vector2(440.f, 200.f));
+	AddObject(ground3, GROUP_TYPE::GROUND);
+
+	Object* ground4 = new Ground();
+	ground4->SetObjectName(L"Ground");
+	ground4->SetScale(Vector2(200.f, 100.f));
+	ground4->SetPos(Vector2(840.f, 200.f));
+	AddObject(ground4, GROUP_TYPE::GROUND);
+
 	Vector2 resolution = Core::GetInstance()->GetResolution();
 
 	// ================================

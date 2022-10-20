@@ -18,6 +18,8 @@ private:
 	bool _alive;
 
 	float _theta;
+
+	bool _onCollisionEnter;
 	
 	Vector2 _dir;
 	Vector2 _pos;
@@ -56,6 +58,10 @@ public:
 	void CreateGravity();
 
 	void SaveAnimation(const wchar_t* animName);
+
+public:
+	void OnDownToUp(bool e) { _onCollisionEnter = e; }
+	bool GetDownToUp() { return _onCollisionEnter; }
 
 public:
 	Collider* GetCollider() { return p_collider; }
