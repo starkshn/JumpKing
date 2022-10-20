@@ -30,8 +30,8 @@ Player::Player()
 
 	// IDLE 가로 : 32, 세로 39.2: 
 	// 텍스쳐 로딩
-	Texture* p_textureRight = GetAnim(L"PlayerAnimation_R.bmp");
-	Texture* p_textureLeft = GetAnim(L"PlayerAnimation_L.bmp");
+	Texture* p_textureRight = GetAnim(L"JumpKing_R.bmp");
+	Texture* p_textureLeft = GetAnim(L"JumpKing_L.bmp");
 
 	CreateAnimator();
 
@@ -82,10 +82,10 @@ Player::Player()
 	//// Fallen
 	//GetAnimator()->CreateAnimation(L"FALLEN_RIGHT", p_textureRight, Vector2(744, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
 	//GetAnimator()->CreateAnimation(L"FALLEN_LEFT", p_textureLeft, Vector2(0, 0), Vector2(93, 103), Vector2(93, 0), 0.1f, 1);
-	//// ====================================================================
+	////// ====================================================================
 
 
-	//// ====================================================================
+	////// ====================================================================
 	//// 애니매이션 파일로 저장하는 부분
 	//GetAnimator()->FindAnimation(L"IDLE_RIGHT")->SaveAnim(L"Animation\\Player_IDLE_RIGHT.anim");
 	////GetAnimator()->FindAnimation(L"IDLE_LEFT")->SaveAnim(L"Animation\\Player_IDLE_LEFT.anim");
@@ -164,6 +164,23 @@ void Player::Render(HDC dc)
 
 void Player::UpdateState()
 {
+	if (_curState == OBJECT_STATE::FALL)
+		return;
+
+	if (_curState == OBJECT_STATE::JUMP)
+	{
+		// 점프 하면은 방향 -1
+		Vector2 dir = GetRigidBody()->GetVelocity();
+		float f = dir.Length();
+
+		if (f < 3.5f && f > 1.f)
+		{
+			_curState = OBJECT_STATE::FALL;
+		}
+
+		return;
+	}
+
 	if (KEY_HOLD(KEY::A))
 	{
 		_dir = -1;
@@ -206,7 +223,7 @@ void Player::UpdateState()
 			GetRigidBody()->SetVelocity(Vector2(curVel._x, -200.f));*/
 			// ===================
 
-			GetRigidBody()->AddVelocity(Vector2(0.f, -200.f));
+			GetRigidBody()->AddVelocity(Vector2(0.f, -800.f));
 		}
 	}
 }
@@ -215,7 +232,7 @@ void Player::UpdateMove()
 {
 	RigidBody* rd = GetRigidBody();
 
-	if (KEY_TAP(KEY::SPACE) || KEY_HOLD(KEY::SPACE))
+	if (_curState == OBJECT_STATE::JUMP || _curState == OBJECT_STATE::SQUAT || _curState == OBJECT_STATE::FALL)
 		return;
 
 	if (KEY_HOLD(KEY::A))
@@ -295,6 +312,7 @@ void Player::UpdateAnimation()
 			GetAnimator()->PlayAnimation(L"FALL_RIGHT", true);
 		else
 			GetAnimator()->PlayAnimation(L"FALL_LEFT", true);
+	break;
 	}
 	case OBJECT_STATE::FALLEN:
 	{
@@ -342,5 +360,6 @@ void Player::OnCollisionExit(Collider* other)
 	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
 	{
 		_onJump = true;
+
 	}
 }

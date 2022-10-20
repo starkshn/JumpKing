@@ -5,7 +5,7 @@ class Object;
 class Gravity
 {
 private:
-	Object* p_owner;
+	Object*		p_owner;
 	bool		_ground;
 
 public:

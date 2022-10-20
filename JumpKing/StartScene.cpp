@@ -30,6 +30,8 @@ StartScene::StartScene()
 	_force(500.f)
 {
 	p_backGroundTexture = ResourceManager::GetInstance()->LoadTexture(L"Stage_1", L"Textures\\Stage\\Stage_1.bmp");
+
+	_resolution = Core::GetInstance()->GetResolution();
 }
  
 StartScene::~StartScene()
@@ -79,6 +81,19 @@ void StartScene::Update()
 	Scene::Update();
 
 	if (KEY_TAP(KEY::UP))
+	{
+		SceneManager::GetInstance()->UpStageNum();
+		UINT sn = SceneManager::GetInstance()->GetStageNum();
+		SCENE_TYPE s = static_cast<SCENE_TYPE>(sn);
+
+		StageScene* nextStage = new StageScene();
+
+		SceneManager::GetInstance()->SetSceneArr(s, nextStage);
+
+		ChangeScene(s);
+	}
+
+	if (GetCurPlayer()->GetPos()._y < 0)
 	{
 		SceneManager::GetInstance()->UpStageNum();
 		UINT sn = SceneManager::GetInstance()->GetStageNum();

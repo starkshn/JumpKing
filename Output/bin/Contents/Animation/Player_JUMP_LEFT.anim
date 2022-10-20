@@ -1,9 +1,9 @@
 [Animation Name]
 JUMP_LEFT
 [Texture Name(Key)]
-PlayerAnimation_L.bmp
+JumpKing_L.bmp
 [Texture Relative Path]
-Textures\Player\Animation\PlayerAnimation_L.bmp
+Textures\Player\Animation\JumpKing_L.bmp
 [Anim FrameCount Data]
 1
 [Frame Index]

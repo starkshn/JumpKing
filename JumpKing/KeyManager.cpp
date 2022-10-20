@@ -44,7 +44,7 @@ int g_arrVK[static_cast<int>(KEY::LAST)] =
 
 KeyManager::KeyManager()
 {
-
+	_vecKey.reserve(static_cast<UINT>(KEY::LAST));
 }
 
 KeyManager::~KeyManager()

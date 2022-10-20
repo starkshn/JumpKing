@@ -9,7 +9,7 @@
 
 EventManager::EventManager()
 {
-
+	_vecEvents.reserve(10);
 }
 
 EventManager::~EventManager()

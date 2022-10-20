@@ -32,7 +32,10 @@ void Gravity::SetOnGround(bool ground)
 	{
 		Vector2 v = p_owner->GetRigidBody()->GetVelocity();
 
-		// 2. 점프킹 처럼
-		p_owner->GetRigidBody()->SetVelocity(Vector2(v._x, 0.f));
+		// 일반 땅위
+		p_owner->GetRigidBody()->SetVelocity(Vector2(0.f, 0.f));
+
+		// 빙판위
+		// p_owner->GetRigidBody()->SetVelocity(Vector2(v._x, 0.f));
 	}
 }

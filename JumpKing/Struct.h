@@ -61,6 +61,18 @@ public:
 		_x = static_cast<float>(pt.x);
 		_y = static_cast<float>(pt.y);
 	}
+
+	bool operator == (const Vector2& other)
+	{
+		if (_x == other._x && _y == other._y)
+			return true;
+		return false;
+	}
+	bool operator != (const Vector2& other)
+	{
+		return !(*this == other);
+	}
+
 	Vector2 operator + (const Vector2& other)
 	{
 		return Vector2(_x + other._x, _y + other._y);

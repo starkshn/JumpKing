@@ -17,6 +17,8 @@ private:
 	float		_forceRadius;
 	float		_force;
 
+	Vector2		_resolution;
+
 public:
 	StartScene();
 	virtual ~StartScene() override;
