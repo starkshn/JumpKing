@@ -8,6 +8,8 @@
 
 #include "Core.h"
 #include "Texture.h"
+#include "Object.h"
+#include "Player.h"
 
 
 using namespace std;
@@ -31,7 +33,9 @@ StageScene::~StageScene()
 
 void StageScene::Enter()
 {
-
+	/*Object* player = GetCurPlayer();
+	Vector2 pos = player->GetPos();
+	player->SetPos(pos);*/
 }
 
 void StageScene::Update()

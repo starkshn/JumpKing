@@ -120,7 +120,6 @@ void ColliderManager::CollisionGroupUpdate(GROUP_TYPE left, GROUP_TYPE right)
 				else
 				{
 					// 이전에는 충돌하지 않았다. (딱 처음 충돌한 경우) Enter
-
 					if (!(vecLeft[i]->IsDead()) && !(vecRight[j]->IsDead()))
 					{
 						// 둘중하나가 삭제 예정이라면은, 충돌 하지 않은것으로 취급
@@ -128,7 +127,6 @@ void ColliderManager::CollisionGroupUpdate(GROUP_TYPE left, GROUP_TYPE right)
 						rightCollider->OnCollisionEnter(leftCollider);
 						iter->second = true;
 					}
-
 					// 일로오면은 그냥 충돌은 없었던 것이다.
 
 				}

@@ -19,7 +19,8 @@ private:
 
 	float _theta;
 
-	bool _onCollisionEnter;
+	bool _onCollision;
+	bool _onLeftRight;
 	
 	Vector2 _dir;
 	Vector2 _pos;
@@ -60,8 +61,11 @@ public:
 	void SaveAnimation(const wchar_t* animName);
 
 public:
-	void OnDownToUp(bool e) { _onCollisionEnter = e; }
-	bool GetDownToUp() { return _onCollisionEnter; }
+	void OnDownToUp(bool e) { _onCollision = e; }
+	void OnLeftRight(bool e) { _onLeftRight = e; }
+
+	bool GetDownToUpCol() { return _onCollision; }
+	bool GetLeftRightCol() { return _onLeftRight; }
 
 public:
 	Collider* GetCollider() { return p_collider; }

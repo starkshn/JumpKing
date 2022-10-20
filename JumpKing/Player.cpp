@@ -164,22 +164,20 @@ void Player::Render(HDC dc)
 
 void Player::UpdateState()
 {
-	if (_curState == OBJECT_STATE::FALL || _curState == OBJECT_STATE::OFF)
-		return;
-
 	if (_curState == OBJECT_STATE::JUMP)
 	{
 		// 점프 하면은 방향 -1
 		Vector2 dir = GetRigidBody()->GetVelocity();
 		float f = dir.Length();
 
-		if (f < 3.5f && f > 1.f)
+		if (f < 4.f && f > 1.f)
 		{
 			_curState = OBJECT_STATE::FALL;
 		}
-
-		return;
 	}
+
+	if (_curState == OBJECT_STATE::FALL || _curState == OBJECT_STATE::OFF)
+		return;
 
 	if (KEY_HOLD(KEY::A))
 	{
@@ -223,7 +221,7 @@ void Player::UpdateState()
 			GetRigidBody()->SetVelocity(Vector2(curVel._x, -200.f));*/
 			// ===================
 
-			GetRigidBody()->AddVelocity(Vector2(0.f, -800.f));
+			GetRigidBody()->AddVelocity(Vector2(_dir * 400.f, -800.f));
 		}
 	}
 }
@@ -343,10 +341,17 @@ void Player::OnCollisionEnter(Collider* other)
 	{
 		_onJump = false;
 
-		if (GetDownToUp())
+		if (GetDownToUpCol())
 		{
 			_curState = OBJECT_STATE::OFF;
 			p_bump->Play();
+		}
+
+		if (GetLeftRightCol())
+		{
+			_curState = OBJECT_STATE::OFF;
+			p_bump->Play();
+
 		}
 
 		Vector2 pos = GetPos();

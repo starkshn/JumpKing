@@ -4,6 +4,7 @@
 #include "Collider.h"
 #include "Gravity.h"
 #include "Player.h"
+#include "RigidBody.h"
 
 Ground::Ground()
 {
@@ -33,33 +34,83 @@ void Ground::OnCollisionEnter(Collider* other)
 		otherObj->GetGravity()->SetOnGround(true);
 		// otherObj->GetGravity()->_onLand = true;
 
-		Vector2 objPos = other->GetFinalPos();
-		Vector2 objScale = other->GetColliderScale();
+		Vector2 playerPos = other->GetFinalPos();
+		Vector2 playerScale = other->GetColliderScale();
+
+		float playerPX = playerPos._x + (playerScale._x / 2.f);
+		float playerMX = playerPos._x - (playerScale._x / 2.f);
+
+		float playerTopY = playerPos._y - (playerScale._y / 2.f);
+		float playerBottomY = playerPos._y + (playerScale._y / 2.f);
 
 		Vector2 pos = GetCollider()->GetFinalPos();
 		Vector2 scale = GetCollider()->GetColliderScale();
 
-		if (pos._y - objPos._y < 0)
-		{
-			otherObj->OnDownToUp(true);
+		float scalePX = pos._x + (scale._x / 2.f) + playerScale._x;
+		float scaleMX = pos._x - (scale._x / 2.f) - playerScale._x;
 
-			float lenY = abs(objPos._y - pos._y);
-			float valueY = ((objScale._y / 2.f) + (scale._y / 2.f)) - lenY;
-			objPos = otherObj->GetPos();
-			objPos._y += valueY;
-		}
-		else
+		float scaleTopY = pos._y - (scale._y / 2.f);
+		float scaleBottomY = pos._y + (scale._y / 2.f);
+
+		if ( (playerTopY + 1 > scaleBottomY))
 		{
-			// ================================================================
-			// ¶¥À§¿¡ ÂøÁöÇßÀ» ¶§
-			float lenY = abs(objPos._y - pos._y);
-			float valueY = ((objScale._y / 2.f) + (scale._y / 2.f)) - lenY;
-			objPos = otherObj->GetPos();
-			objPos._y -= valueY;
-			// ================================================================
+			if ((playerPX <= scalePX) && (playerMX >= scaleMX))
+			{
+				// ³ª(¶¥ ±âÁØ)ÀÇ ³ªÀÇ(¶¥ÀÇ) ¾Æ·§¸é¿¡ Ãæµ¹ÇßÀ» ¶§
+				otherObj->OnDownToUp(true);
+
+				float lenY = abs(playerPos._y - pos._y);
+				float valueY = ((playerScale._y / 2.f) + (scale._y / 2.f)) - lenY;
+				playerPos = otherObj->GetPos();
+				playerPos._y += valueY;
+
+				otherObj->SetPos(playerPos);
+			}
+			return;
+		}
+		// + (playerScale._y / 2.f)
+		if ( ( (playerBottomY) <= scaleTopY) && (playerPX <= scalePX && playerMX >= scaleMX))
+		{
+			// ³ª(¶¥ÀÇ)ÀÇ ¶¥ÀÇ À­¸é¿¡ Ãæµ¹ÇßÀ» ¶§ (¶¥¿¡ ¼­ÀÖÀ» ¶§)
+			float lenY = abs(playerPos._y - pos._y);
+			float valueY = ((playerScale._y / 2.f) + (scale._y / 2.f)) - lenY;
+			playerPos = otherObj->GetPos();
+			playerPos._y -= valueY;
+			otherObj->SetPos(playerPos);
+			
+			return;
+		}
+		
+		if (pos._x - (scale._x / 2.f) >= (playerPX - 1) && abs(playerPos._y - pos._y) < (playerScale._y / 2.f + scale._y / 2.f))
+		{
+			// Ãæµ¹À» Çß´Âµ¥ ³ª(¶¥ÀÇ) ¿ÞÂÊ¸é¿¡ ºÎµúÇûÀ» ¶§
+			otherObj->OnLeftRight(true);
+
+			float lenX = abs(playerPos._x - pos._x);
+			float valueX = ((playerScale._x / 2.f) + (scale._x / 2.f)) - lenX;
+
+			playerPos = otherObj->GetPos();
+			playerPos._x -= lenX;
+
+			otherObj->GetRigidBody()->SetVelocity(Vector2(-500.f, 0.f));
+			return;
 		}
 
-		otherObj->SetPos(objPos);
+		if (pos._x + (scale._x / 2.f) <= (playerMX + 1) && abs(playerPos._y - pos._y) < (playerScale._y / 2.f + scale._y / 2.f))
+		{
+			// Ãæµ¹À» Çß´Âµ¥ ³ª(¶¥ÀÇ) ¿À¸¥ÂÊ¸é¿¡  ºÎµúÇûÀ» ¶§
+			otherObj->OnLeftRight(true);
+
+			float lenX = abs(playerPos._x - pos._x);
+			float valueX = ((playerScale._x / 2.f) + (scale._x / 2.f)) - lenX;
+
+			playerPos = otherObj->GetPos();
+			playerPos._x += lenX;
+
+			otherObj->GetRigidBody()->SetVelocity(Vector2(500.f, 0.f));
+			return;
+		}
+
 	}
 }
 
