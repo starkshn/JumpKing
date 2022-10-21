@@ -44,7 +44,15 @@ public:
 
 	void SetSceneArr(SCENE_TYPE type, Scene* scene)
 	{
-		p_scenes[static_cast<UINT>(type)] = scene; 
+		if (nullptr != p_scenes[static_cast<UINT>(type)])
+		{
+			delete scene;
+			return;
+		}
+		else
+		{
+			p_scenes[static_cast<UINT>(type)] = scene;
+		}
 	}
 
 	// Tile

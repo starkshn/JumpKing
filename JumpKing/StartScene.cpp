@@ -99,9 +99,9 @@ void StartScene::Update()
 		UINT sn = SceneManager::GetInstance()->GetStageNum();
 		SCENE_TYPE s = static_cast<SCENE_TYPE>(sn);
 
-		StageScene* nextStage = new StageScene();
+		StageScene* prevStage = new StageScene();
 
-		SceneManager::GetInstance()->SetSceneArr(s, nextStage);
+		SceneManager::GetInstance()->SetSceneArr(s, prevStage);
 
 		ChangeScene(s);
 	}
