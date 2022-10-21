@@ -32,8 +32,6 @@
 // PaenlUI Page
 #define PAGE_INDEX 35
 
-
-
 enum class GROUP_TYPE
 {
 	DEFAULT,

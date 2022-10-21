@@ -7,7 +7,7 @@ class CMonster;
 class StartScene : public Scene
 {
 private:
-	Texture* p_backGroundTexture;
+	Texture*	p_backGroundTexture;
 
 	Vector2		_mouseForcePos;
 
@@ -24,10 +24,11 @@ public:
 	virtual ~StartScene() override;
 
 private:
-	virtual void Enter() override;
+	virtual void Enter(Object* player) override;
+	virtual void Exit(Object* player) override;
 	virtual void Update() override;
 	virtual void Render(HDC dc) override;
-	virtual void Exit() override;
+
 
 public:
 	void CreateForce();

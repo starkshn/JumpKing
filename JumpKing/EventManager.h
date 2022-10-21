@@ -7,6 +7,7 @@ struct Event
 	EVENT_TYPE	_eventType;
 	DWORD_PTR	_lParam;
 	DWORD_PTR	_rParam;
+	Object*		p_obj;
 };
 
 class EventManager

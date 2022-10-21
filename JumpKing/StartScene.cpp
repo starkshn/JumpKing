@@ -82,7 +82,7 @@ void StartScene::Update()
 
 	if (KEY_TAP(KEY::UP))
 	{
-		SceneManager::GetInstance()->UpStageNum();
+		/*SceneManager::GetInstance()->UpStageNum();
 		UINT sn = SceneManager::GetInstance()->GetStageNum();
 		SCENE_TYPE s = static_cast<SCENE_TYPE>(sn);
 
@@ -90,7 +90,7 @@ void StartScene::Update()
 
 		SceneManager::GetInstance()->SetSceneArr(s, nextStage);
 
-		ChangeScene(s);
+		ChangeScene(s);*/
 	}
 
 	if (GetCurPlayer()->GetPos()._y < 0)
@@ -99,25 +99,30 @@ void StartScene::Update()
 		UINT sn = SceneManager::GetInstance()->GetStageNum();
 		SCENE_TYPE s = static_cast<SCENE_TYPE>(sn);
 
-		StageScene* prevStage = new StageScene();
+		Scene* nextStage = nullptr;
 
-		SceneManager::GetInstance()->SetSceneArr(s, prevStage);
+		Object* playerPtr = GetCurPlayer();
+		
+		nextStage = SceneManager::GetInstance()->GetSceneArr(s, nextStage);
 
-		ChangeScene(s);
+		if (nextStage == nullptr)
+			assert(nullptr);
+		else
+			ChangeScene(s, playerPtr);
 	}
 }
 
-void StartScene::Enter()
+void StartScene::Enter(Object* player)
 {
 	Core::GetInstance()->DockMenu();
 
 	// Object 추가
-	Object* player = new Player();
-	player->SetObjectName(L"Player");
-	player->SetPos(Vector2(640.f, 384.f));
-	player->SetScale(Vector2(100.f, 100.f));
-	AddObject(player, GROUP_TYPE::PLAYER);
-	RegisterPlayer(player);
+	Object* Pplayer = new Player();
+	Pplayer->SetObjectName(L"Player");
+	Pplayer->SetPos(Vector2(640.f, 384.f));
+	Pplayer->SetScale(Vector2(90.f, 103.f));
+	AddObject(Pplayer, GROUP_TYPE::PLAYER);
+	RegisterPlayer(Pplayer);
 
 	// Ground배치
 	Object* ground = new Ground();
@@ -212,12 +217,12 @@ void StartScene::Render(HDC dc)
 	Scene::Render(dc);
 }
 
-void StartScene::Exit()
+void StartScene::Exit(Object* player)
 {
-	DeleteAllGroups();
+	//DeleteAllGroups();
 
-	// 기존의 그룹의 충돌 그룹 해제(씬이 변경될 것이니까)
-	ColliderManager::GetInstance()->ResetGroup();
+	//// 기존의 그룹의 충돌 그룹 해제(씬이 변경될 것이니까)
+	//ColliderManager::GetInstance()->ResetGroup();
 }
 
 void StartScene::CreateForce()

@@ -26,8 +26,8 @@ public:
 	virtual void Render(HDC dc);
 	void RenderTile(HDC dc);
 
-	virtual void Enter() abstract; // 해당 Scene 에 진입시 호출
-	virtual void Exit() abstract; // 해당 Scene 을 탈출 시 사용
+	virtual void Enter(Object* player) abstract; // 해당 Scene 에 진입시 호출
+	virtual void Exit(Object* player) abstract; // 해당 Scene 을 탈출 시 사용
 
 public:
 	void AddObject(Object* obj, GROUP_TYPE type)

@@ -3,6 +3,7 @@
 #include "Scene.h"
 
 class StageScene;
+class Object;
 
 class SceneManager
 {
@@ -22,7 +23,7 @@ private:
 
 
 private:
-	void ChangeRealScene(SCENE_TYPE sceneType);
+	void ChangeRealScene(SCENE_TYPE sceneType, Object* player);
 	static UINT g_stageNumber;
 
 public:
@@ -42,17 +43,14 @@ public:
 public:
 	Scene* GetCurScene() { return p_curScene; }
 
-	void SetSceneArr(SCENE_TYPE type, Scene* scene)
+	Scene* GetSceneArr(SCENE_TYPE type, Scene* scene)
 	{
 		if (nullptr != p_scenes[static_cast<UINT>(type)])
-		{
 			delete scene;
-			return;
-		}
 		else
-		{
 			p_scenes[static_cast<UINT>(type)] = scene;
-		}
+		
+		return p_scenes[static_cast<UINT>(type)];
 	}
 
 	// Tile

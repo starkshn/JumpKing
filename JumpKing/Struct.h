@@ -2,11 +2,13 @@
 
 #include <assert.h>
 
+class Texture;
+class Object;
+
 struct Vector2
 {
 	float _x;
 	float _y;
-
 
 public:
 	Vector2()
@@ -131,7 +133,4 @@ public:
 		assert(!(0.f == value));
 		return Vector2(_x / value, _y / value);
 	}
-
-	
-
 };

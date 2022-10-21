@@ -7,6 +7,8 @@
 #include <math.h>
 #include <assert.h>
 
+using namespace std;
+
 #include <vector>
 using std::vector;
 

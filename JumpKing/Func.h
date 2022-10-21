@@ -6,7 +6,7 @@ void CreateObjectEvent(Object* obj, GROUP_TYPE groupType);
 
 void DeleteObjectEvent(Object* objectPtr);
 
-void ChangeScene(SCENE_TYPE changeSceneType);
+void ChangeScene(SCENE_TYPE changeSceneType, Object* obj);
 
 template <typename T>
 void SafeDeleteVector(vector<T>& vector)

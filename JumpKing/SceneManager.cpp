@@ -4,7 +4,10 @@
 #include "StartScene.h"
 #include "StageScene.h"
 
-UINT SceneManager::g_stageNumber = 1;
+#include "Object.h"
+
+
+UINT SceneManager::g_stageNumber = 2;
 
 SceneManager::SceneManager() 
 	: 
@@ -29,12 +32,20 @@ void SceneManager::Init()
 {
 	// Scene 생성
 	p_scenes[static_cast<unsigned int>(SCENE_TYPE::STAGE_01)] = new StartScene;
-	p_scenes[static_cast<unsigned int>(SCENE_TYPE::STAGE_01)]->SetName(L"StartScene");
+	p_scenes[static_cast<unsigned int>(SCENE_TYPE::STAGE_01)]->SetName(L"STAGE_1");
 
+	for (UINT i = static_cast<unsigned int>(SCENE_TYPE::STAGE_02); i < static_cast<unsigned int>(SCENE_TYPE::END); ++i)
+	{
+		string str = to_string(i);
+		wstring strP = wstring(str.begin(), str.end());
+
+		p_scenes[static_cast<unsigned int>((SCENE_TYPE)(i))] = new StageScene;
+		p_scenes[static_cast<unsigned int>((SCENE_TYPE)(i))]->SetName(L"STAGE_" + strP);
+	}
 
 	// 현재 씬 지정
 	p_curScene = p_scenes[static_cast<unsigned int>(SCENE_TYPE::STAGE_01)];
-	p_curScene->Enter();
+	p_curScene->Enter(nullptr);
 }
 
 void SceneManager::Update()
@@ -48,12 +59,12 @@ void SceneManager::Render(HDC sceneDC)
 	p_curScene->Render(sceneDC);
 }
 
-void SceneManager::ChangeRealScene(SCENE_TYPE sceneType)
+void SceneManager::ChangeRealScene(SCENE_TYPE sceneType, Object* player)
 {
-	p_curScene->Exit();
+	p_curScene->Exit(nullptr);
 
 	p_curScene = p_scenes[static_cast<UINT>(sceneType)];
 
-	p_curScene->Enter();
+	p_curScene->Enter(player);
 }
 

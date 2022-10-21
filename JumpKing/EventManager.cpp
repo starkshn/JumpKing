@@ -5,6 +5,7 @@
 #include "UIManager.h"
 
 #include "Object.h"
+#include "Texture.h"
 #include "Scene.h"
 
 EventManager::EventManager()
@@ -72,7 +73,7 @@ void EventManager::ExcuteEvent(const Event& event)
 	case EVENT_TYPE::SCENE_CHANGE:
 	{
 		// _objectPtr : nextScene
-		SceneManager::GetInstance()->ChangeRealScene((SCENE_TYPE)event._lParam);
+		SceneManager::GetInstance()->ChangeRealScene((SCENE_TYPE)event._lParam, event.p_obj);
 
 		// 포커스  UI 해제 (이전 Scene의 FocusUI를 들고 있기 때문에)
 		UIManager::GetInstance()->SetFocusUI(nullptr);

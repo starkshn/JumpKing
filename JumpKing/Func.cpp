@@ -10,6 +10,7 @@ void CreateObjectEvent(Object* objectPtr, GROUP_TYPE groupType)
 	evt._eventType = EVENT_TYPE::CREATE_OBJECT;
 	evt._lParam = (DWORD_PTR)objectPtr;
 	evt._rParam = (DWORD_PTR)groupType;
+	evt.p_obj = nullptr;
 
 	EventManager::GetInstance()->AddEvent(evt);
 }
@@ -19,16 +20,18 @@ void DeleteObjectEvent(Object* objectPtr)
 	Event evt = {};
 	evt._eventType = EVENT_TYPE::DELETE_OBJECT;
 	evt._lParam = (DWORD_PTR)objectPtr;
+	evt.p_obj = nullptr;
 
 	EventManager::GetInstance()->AddEvent(evt);
 }
 
-void ChangeScene(SCENE_TYPE changeSceneType)
+void ChangeScene(SCENE_TYPE changeSceneType, Object* obj)
 {
 	// 이번프레임에서는 이벤트 등록을 하고 다음 프레임에 씬을 변경을 할 것이다.
 	Event evt = {};
 	evt._eventType = EVENT_TYPE::SCENE_CHANGE;
 	evt._lParam = (DWORD_PTR)changeSceneType;
+	evt.p_obj = obj;
 
 	EventManager::GetInstance()->AddEvent(evt);
 }

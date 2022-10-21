@@ -5,6 +5,8 @@
 #include "ResourceManager.h"
 #include "TimeManager.h"
 #include "KeyManager.h"
+#include "ColliderManager.h"
+#include "CameraManager.h"
 
 #include "Core.h"
 #include "Texture.h"
@@ -31,16 +33,34 @@ StageScene::~StageScene()
 
 }
 
-void StageScene::Enter()
+void StageScene::Enter(Object* player)
 {
-	/*Object* player = GetCurPlayer();
-	Vector2 pos = player->GetPos();
-	player->SetPos(pos);*/
+	Vector2 resolution = Core::GetInstance()->GetResolution();
+
+	player->SetPos(Vector2(resolution._x / 2.f, resolution._y / 2.f));
+	player->SetObjectName(L"Player");
+	player->SetPos(Vector2(640.f, 384.f));
+	player->SetScale(Vector2(90.f, 103.f));
+	AddObject(player, GROUP_TYPE::PLAYER);
+
+	// 땅과 플레이어 충돌 지정
+	ColliderManager::GetInstance()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::GROUND);
+	// =================================
+
+	// =================================
+	// Camera Look 지정
+	CameraManager::GetInstance()->SetLookAtPos(resolution / 2.f);
+	// =================================
+
+
+	// Init 함수 호출
+	Init();
+	// =======================================
 }
 
 void StageScene::Update()
 {
-	if (KEY_TAP(KEY::UP))
+	/*if (KEY_TAP(KEY::UP))
 	{
 		SceneManager::GetInstance()->UpStageNum();
 		UINT sn = SceneManager::GetInstance()->GetStageNum();
@@ -69,7 +89,19 @@ void StageScene::Update()
 		}
 
 		ChangeScene(s);
+	}*/
+
+	for (unsigned int i = 0; i < static_cast<unsigned int>(GROUP_TYPE::END); ++i)
+	{
+		const vector<Object*>& vecObj = GetGroupObjects((GROUP_TYPE)i);
+
+		for (size_t j = 0; j < vecObj.size(); ++j)
+		{
+			vecObj[j]->Update();
+		}
 	}
+
+	Scene::Update();
 }
 
 void StageScene::Render(HDC dc)
@@ -85,9 +117,11 @@ void StageScene::Render(HDC dc)
 		p_backGroundTexture->GetDC(),
 		0, 0, SRCCOPY
 	);
+
+	Scene::Render(dc);
 }
 
-void StageScene::Exit()
+void StageScene::Exit(Object* player)
 {
 
 }
