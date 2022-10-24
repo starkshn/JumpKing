@@ -145,6 +145,8 @@ void Scene::DeleteAllGroups()
 {
 	for (size_t i = 0; i < static_cast<UINT>(GROUP_TYPE::END); ++i)
 	{
+		if (static_cast<UINT>(GROUP_TYPE::PLAYER) == i)
+			continue;
 		// 모든 오브젝트 싹다 삭제.
 		DeleteGroupObjects(static_cast<GROUP_TYPE>(i));
 	}

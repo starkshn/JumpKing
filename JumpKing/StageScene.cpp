@@ -37,10 +37,10 @@ void StageScene::Enter(Object* player)
 {
 	Vector2 resolution = Core::GetInstance()->GetResolution();
 
-	player->SetPos(Vector2(resolution._x / 2.f, resolution._y / 2.f));
-	player->SetObjectName(L"Player");
-	player->SetPos(Vector2(640.f, 384.f));
-	player->SetScale(Vector2(90.f, 103.f));
+	Vector2 prevPos = player->GetPos();
+	float curPosY = resolution._y - prevPos._y;
+
+	player->SetPos(Vector2(prevPos._x, curPosY));
 	AddObject(player, GROUP_TYPE::PLAYER);
 
 	// 땅과 플레이어 충돌 지정
@@ -60,37 +60,6 @@ void StageScene::Enter(Object* player)
 
 void StageScene::Update()
 {
-	/*if (KEY_TAP(KEY::UP))
-	{
-		SceneManager::GetInstance()->UpStageNum();
-		UINT sn = SceneManager::GetInstance()->GetStageNum();
-		SCENE_TYPE s = static_cast<SCENE_TYPE>(sn);
-
-		if (nullptr == SceneManager::GetInstance()->GetSceneArr(s))
-		{
-			StageScene* nextStage = new StageScene();
-
-			SceneManager::GetInstance()->SetSceneArr(s, nextStage);
-		}
-
-		ChangeScene(s);
-	}
-	if (KEY_TAP(KEY::DOWN))
-	{
-		SceneManager::GetInstance()->DownStageNum();
-		UINT sn = SceneManager::GetInstance()->GetStageNum();
-		SCENE_TYPE s = static_cast<SCENE_TYPE>(sn);
-
-		if (nullptr == SceneManager::GetInstance()->GetSceneArr(s))
-		{
-			StageScene* nextStage = new StageScene();
-
-			SceneManager::GetInstance()->SetSceneArr(s, nextStage);
-		}
-
-		ChangeScene(s);
-	}*/
-
 	for (unsigned int i = 0; i < static_cast<unsigned int>(GROUP_TYPE::END); ++i)
 	{
 		const vector<Object*>& vecObj = GetGroupObjects((GROUP_TYPE)i);
@@ -123,5 +92,5 @@ void StageScene::Render(HDC dc)
 
 void StageScene::Exit(Object* player)
 {
-
+	// DeleteAllGroups();
 }

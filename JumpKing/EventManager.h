@@ -31,7 +31,7 @@ private:
 public:
 	void AddEvent(const Event& e)
 	{
-		_vecEvents.push_back(e);
+		_vecEvents.emplace_back(e);
 	}
 };
 

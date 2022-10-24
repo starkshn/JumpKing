@@ -219,9 +219,9 @@ void StartScene::Render(HDC dc)
 
 void StartScene::Exit(Object* player)
 {
-	//DeleteAllGroups();
+	DeleteAllGroups();
 
-	//// 기존의 그룹의 충돌 그룹 해제(씬이 변경될 것이니까)
+	// 기존의 그룹의 충돌 그룹 해제(씬이 변경될 것이니까)
 	//ColliderManager::GetInstance()->ResetGroup();
 }
 
