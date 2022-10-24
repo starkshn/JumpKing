@@ -32,6 +32,8 @@ StartScene::StartScene()
 	p_backGroundTexture = ResourceManager::GetInstance()->LoadTexture(L"Stage_1", L"Textures\\Stage\\Stage_1.bmp");
 
 	_resolution = Core::GetInstance()->GetResolution();
+
+	SetSceneName(L"STAGE_1");
 }
  
 StartScene::~StartScene()
@@ -74,7 +76,6 @@ void StartScene::Update()
 			}
 
 			vecObj[j]->Update();
-
 		}
 	}
 

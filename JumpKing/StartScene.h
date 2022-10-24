@@ -29,7 +29,6 @@ private:
 	virtual void Update() override;
 	virtual void Render(HDC dc) override;
 
-
 public:
 	void CreateForce();
 };

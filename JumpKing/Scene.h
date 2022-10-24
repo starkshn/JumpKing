@@ -9,11 +9,15 @@ class Scene
 private:
 	vector<Object*> _objects[static_cast<unsigned int>(GROUP_TYPE::END)]; // 오브젝트들을 저장 및 관리할 벡터를 그룹 갯수만큼 선언
 	wstring		_sceneName;
+
 	UINT		_tileXCount;
 	UINT		_tileYCount;
 
 	// 컨텐츠 상 그냥 플레이어를 기억하도록 하자.
-	Object* p_player;
+	Object*		p_player;
+
+	static UINT		g_stageSceneNumber;
+	UINT			_ownStageNum;
 
 public:
 	Scene();
@@ -41,11 +45,16 @@ public:
 	void CreateTile(UINT xCount, UINT yCount);
 
 public:
-	void SetName(wstring strName) { _sceneName = strName; }
+	void SetSceneName(wstring strName) { _sceneName = strName; }
 	Vector2 SetUICenterPos(Vector2 parent, Vector2 child);
+	void SetCurPlayer(Object* player) { p_player = player; }
 
 public:
-	const wstring& GetName() const { return _sceneName; }
+	const wstring& GetSceneName() const { return _sceneName; }
+	Scene* GetCurrentScene() { return this; }
+	UINT GetStageNum() { return g_stageSceneNumber; }
+	UINT GetOwnStageNum() { return _ownStageNum; }
+
 	const vector<Object*>& GetGroupObjects(const GROUP_TYPE& type)
 	{
 		return _objects[static_cast<UINT>(type)];

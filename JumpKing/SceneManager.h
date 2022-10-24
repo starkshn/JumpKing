@@ -21,10 +21,12 @@ private:
 	UINT		_maxTileRow;
 	UINT		_maxTileCol;
 
+	// StageNumber
+	static UINT g_stageNumber;
+	static UINT g_staticStage;
 
 private:
 	void ChangeRealScene(SCENE_TYPE sceneType, Object* player);
-	static UINT g_stageNumber;
 
 public:
 	void Init();
@@ -41,7 +43,13 @@ public:
 	void SetTileMaxCol(UINT col) { _maxTileCol = col; }
 
 public:
-	Scene* GetCurScene() { return p_curScene; }
+	Scene* GetCurScene() 
+	{
+		if (p_curScene != nullptr)
+			return p_curScene;
+		else
+			return nullptr;
+	}
 
 	Scene* GetSceneArr(SCENE_TYPE type, Scene* scene)
 	{
@@ -58,6 +66,7 @@ public:
 	UINT GetTileMaxCol() { return _maxTileCol; }
 
 	UINT GetStageNum() { return g_stageNumber; }
+	UINT GetStaticStage() { return g_staticStage; }
 
 	Scene* GetSceneArr(SCENE_TYPE type) 
 	{

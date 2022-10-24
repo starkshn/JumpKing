@@ -11,27 +11,44 @@
 #include "Texture.h"
 #include "Tile.h"
 
+UINT Scene::g_stageSceneNumber = 0;
+
 Scene::Scene()
 	:
 	_tileXCount(),
 	_tileYCount(),
 	p_player(nullptr)
 {
-
+	g_stageSceneNumber++;
+	_ownStageNum = g_stageSceneNumber;
 }
 
 Scene::~Scene()
 {
+	UINT staticStage = SceneManager::GetInstance()->GetStaticStage();
+	UINT curStage = GetOwnStageNum();
+
+	int a = 10;
+
+
 	for (unsigned int i = 0; i < static_cast<unsigned int>(GROUP_TYPE::END); ++i)
 	{
 		for (size_t j = 0; j < _objects[i].size(); ++j)
 		{
-			if (nullptr != _objects[i][j])
-				delete _objects[i][j];
+			if (nullptr != _objects[i][j] || _objects[i].size() != 0)
+			{
+				if (staticStage != curStage)
+					break;
+				else
+				{
+					delete _objects[i][j];
+					_objects[i][j] = nullptr;
+					_objects[i].clear();
+				}
+			}
 		}
 	}
 }
-
 
 void Scene::Init()
 {
@@ -147,6 +164,7 @@ void Scene::DeleteAllGroups()
 	{
 		if (static_cast<UINT>(GROUP_TYPE::PLAYER) == i)
 			continue;
+
 		// 모든 오브젝트 싹다 삭제.
 		DeleteGroupObjects(static_cast<GROUP_TYPE>(i));
 	}

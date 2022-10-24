@@ -7,8 +7,15 @@ private:
 	Texture*	p_backGroundTexture;
 
 	StageScene* p_vecStages[static_cast<UINT>(SCENE_TYPE::END)];
-	
-	UINT _stageNum;
+
+	Vector2		_mouseForcePos;
+	Vector2		_resolution;
+
+	bool		_useForce;
+
+	float		_forceCurRadius;
+	float		_forceRadius;
+	float		_force;
 
 public:
 	StageScene();
@@ -19,6 +26,10 @@ private:
 	virtual void Exit(Object* player) override;
 	virtual void Update() override;
 	virtual void Render(HDC dc) override;
+
+
+public:
+	void CreateForce();
 
 };
 

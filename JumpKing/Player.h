@@ -17,7 +17,6 @@ private:
 
 	bool _onJump;
 
-
 	Vector2 _fallDir = { 0.f, 1.f };
 
 	Sound* p_jump;
