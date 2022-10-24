@@ -221,7 +221,7 @@ void Player::UpdateState()
 			GetRigidBody()->SetVelocity(Vector2(curVel._x, -200.f));*/
 			// ===================
 
-			GetRigidBody()->AddVelocity(Vector2(_dir * 400.f, -800.f));
+			GetRigidBody()->AddVelocity(Vector2(_dir * 400.f, -2000.f));
 		}
 	}
 }

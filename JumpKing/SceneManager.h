@@ -24,6 +24,7 @@ private:
 	// StageNumber
 	static UINT g_stageNumber;
 	static UINT g_staticStage;
+	static UINT g_prevStageNum;
 
 private:
 	void ChangeRealScene(SCENE_TYPE sceneType, Object* player);
@@ -54,7 +55,7 @@ public:
 	Scene* GetSceneArr(SCENE_TYPE type, Scene* scene)
 	{
 		if (nullptr != p_scenes[static_cast<UINT>(type)])
-			delete scene;
+			return p_scenes[static_cast<UINT>(type)];
 		else
 			p_scenes[static_cast<UINT>(type)] = scene;
 		
@@ -67,6 +68,7 @@ public:
 
 	UINT GetStageNum() { return g_stageNumber; }
 	UINT GetStaticStage() { return g_staticStage; }
+	UINT GetPrevStage() { return g_prevStageNum; }
 
 	Scene* GetSceneArr(SCENE_TYPE type) 
 	{

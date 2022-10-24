@@ -58,7 +58,6 @@ void CameraManager::Update()
 	//if (KEY_HOLD(KEY::RIGHT))
 	//	_lookAtPos._x += 500.f * DeltaTime_F;
 
-
 	// 화면 중앙좌표와 LookAt 좌표간의 차이값계산
 	CalDiff();
 }

@@ -8,6 +8,7 @@ class Scene
 {
 private:
 	vector<Object*> _objects[static_cast<unsigned int>(GROUP_TYPE::END)]; // 오브젝트들을 저장 및 관리할 벡터를 그룹 갯수만큼 선언
+
 	wstring		_sceneName;
 
 	UINT		_tileXCount;

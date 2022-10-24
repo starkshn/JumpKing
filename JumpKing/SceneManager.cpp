@@ -8,6 +8,7 @@
 
 UINT SceneManager::g_stageNumber = 0;
 UINT SceneManager::g_staticStage = 0;
+UINT SceneManager::g_prevStageNum = 0;
 
 SceneManager::SceneManager()
 	: 
@@ -31,10 +32,6 @@ SceneManager::~SceneManager()
 
 void SceneManager::Init()
 {
-	// Scene 持失
-	//p_scenes[static_cast<unsigned int>(SCENE_TYPE::STAGE_01)] = new StartScene;
-	//p_scenes[static_cast<unsigned int>(SCENE_TYPE::STAGE_01)]->SetSceneName(L"STAGE_1");
-
 	// Scene 持失
 	for (UINT i = static_cast<unsigned int>(SCENE_TYPE::STAGE_01); i < static_cast<unsigned int>(SCENE_TYPE::END); ++i)
 	{
@@ -65,6 +62,7 @@ void SceneManager::ChangeRealScene(SCENE_TYPE sceneType, Object* player)
 {
 	p_curScene->Exit(nullptr);
 
+	g_prevStageNum = p_curScene->GetOwnStageNum();
 	p_curScene = p_scenes[static_cast<UINT>(sceneType)];
 	g_staticStage = p_curScene->GetOwnStageNum();
 

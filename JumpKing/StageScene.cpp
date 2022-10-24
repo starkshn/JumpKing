@@ -24,6 +24,8 @@ StageScene::StageScene()
 	wstring strP = wstring(str.begin(), str.end());
 
 	p_backGroundTexture = ResourceManager::GetInstance()->LoadTexture(L"Stage_" + strP, L"Textures\\Stage\\Stage_" + strP + L".bmp");
+
+	_changePos = CameraManager::GetInstance()->GetLookPos();
 }
 
 StageScene::~StageScene()
@@ -33,7 +35,7 @@ StageScene::~StageScene()
 
 void StageScene::Enter(Object* player)
 {
-	Vector2 resolution = Core::GetInstance()->GetResolution();
+	_resolution = Core::GetInstance()->GetResolution();
 
 	// Object 추가
 	if (player == nullptr)
@@ -74,10 +76,30 @@ void StageScene::Enter(Object* player)
 	}
 	else
 	{
-		// Player 있을 경우
-		Vector2 prevPos = player->GetPos();
-		float curPosY = resolution._y - prevPos._y;
+		UINT cur = GetOwnStageNum();
+		UINT prev = SceneManager::GetInstance()->GetPrevStage();
 
+		Vector2 prevPos;
+		float curPosY = 0;
+		
+		// Player 있을 경우
+		if (cur > prev)
+		{
+			// 현재가 이전보다 크다 == 위로 올라감
+			prevPos = player->GetPos();
+			curPosY = _resolution._y - (prevPos._y + player->GetScale()._y / 2.f);
+
+			int a = 10;
+		}
+
+		if (cur < prev)
+		{
+			// 현재가 이번보다 작다. == 밑으로 내려감
+			prevPos = player->GetPos();
+			curPosY = _resolution._y + (prevPos._y + player->GetScale()._y / 2.f);
+
+		}
+		
 		player->SetPos(Vector2(prevPos._x, curPosY));
 		AddObject(player, GROUP_TYPE::PLAYER);
 		RegisterPlayer(player);
@@ -89,7 +111,7 @@ void StageScene::Enter(Object* player)
 
 	// =================================
 	// Camera Look 지정
-	CameraManager::GetInstance()->SetLookAtPos(resolution / 2.f);
+	CameraManager::GetInstance()->SetLookAtPos(_resolution / 2.f);
 	// =================================
 
 	// Init 함수 호출
@@ -135,21 +157,7 @@ void StageScene::Update()
 		}
 	}
 
-	if (GetCurPlayer()->GetPos()._y < 0)
-	{
-		SceneManager::GetInstance()->UpStageNum();
-		UINT sn = SceneManager::GetInstance()->GetStageNum();
-		SCENE_TYPE s = static_cast<SCENE_TYPE>(sn);
-
-		Scene* nextStage = nullptr;
-
-		nextStage = SceneManager::GetInstance()->GetSceneArr(s, nextStage);
-
-		if (nextStage == nullptr)
-			assert(nullptr);
-		else
-			ChangeScene(s, GetCurPlayer());
-	}
+	ChangeStandPos(GetCurPlayer()->GetPos(), GetCurPlayer());
 
 	Scene::Update();
 }
@@ -181,4 +189,53 @@ void StageScene::Exit(Object* player)
 void StageScene::CreateForce()
 {
 	_mouseForcePos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
+}
+
+void StageScene::ChangeStandPos(Vector2 playerPos, Object* player)
+{
+	Vector2 resolution = Core::GetInstance()->GetResolution();
+	Vector2 playerRenderPos = CameraManager::GetInstance()->GetRenderPos(playerPos);
+	
+	if (playerRenderPos._y < 0.f)
+	{
+		// 위로 올라감
+		SceneManager::GetInstance()->UpStageNum();
+		UINT sn = SceneManager::GetInstance()->GetStageNum();
+
+		if (sn > static_cast<UINT>(SCENE_TYPE::STAGE_43))
+			return;
+
+		SCENE_TYPE s = static_cast<SCENE_TYPE>(sn);
+
+		Scene* nextStage = nullptr;
+
+		nextStage = SceneManager::GetInstance()->GetSceneArr(s, nextStage);
+
+		if (nextStage == nullptr)
+			assert(nullptr);
+		else
+			ChangeScene(s, GetCurPlayer());
+	}
+
+	if (playerRenderPos._y > resolution._y)
+	{
+		// 밑으로 내려감
+
+		SceneManager::GetInstance()->DownStageNum();
+		UINT sn = SceneManager::GetInstance()->GetStageNum();
+
+		if (sn < static_cast<UINT>(SCENE_TYPE::STAGE_01))
+			return;
+
+		SCENE_TYPE s = static_cast<SCENE_TYPE>(sn);
+
+		Scene* nextStage = nullptr;
+
+		nextStage = SceneManager::GetInstance()->GetSceneArr(s, nextStage);
+
+		if (nextStage == nullptr)
+			assert(nullptr);
+		else
+			ChangeScene(s, player);
+	}
 }

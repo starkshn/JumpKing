@@ -10,7 +10,7 @@ RigidBody::RigidBody()
 	p_owner(nullptr),
 	_mass(1.f),
 	_frictCoeff(250.f),
-	_maxVelocity(Vector2(200.f, 600.f))
+	_maxVelocity(Vector2(200.f, 1000.f))
 {
 
 }

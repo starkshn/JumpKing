@@ -10,6 +10,7 @@ private:
 
 	Vector2		_mouseForcePos;
 	Vector2		_resolution;
+	Vector2		_changePos;
 
 	bool		_useForce;
 
@@ -26,6 +27,9 @@ private:
 	virtual void Exit(Object* player) override;
 	virtual void Update() override;
 	virtual void Render(HDC dc) override;
+
+public:
+	void ChangeStandPos(Vector2 plauerPos, Object* player);
 
 
 public:

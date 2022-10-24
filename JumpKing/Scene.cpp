@@ -28,9 +28,6 @@ Scene::~Scene()
 	UINT staticStage = SceneManager::GetInstance()->GetStaticStage();
 	UINT curStage = GetOwnStageNum();
 
-	int a = 10;
-
-
 	for (unsigned int i = 0; i < static_cast<unsigned int>(GROUP_TYPE::END); ++i)
 	{
 		for (size_t j = 0; j < _objects[i].size(); ++j)
@@ -38,7 +35,12 @@ Scene::~Scene()
 			if (nullptr != _objects[i][j] || _objects[i].size() != 0)
 			{
 				if (staticStage != curStage)
-					break;
+				{
+					if (_objects[i][j]->GetObjectName() == L"Player")
+						break;
+
+					delete _objects[i][j];
+				}
 				else
 				{
 					delete _objects[i][j];

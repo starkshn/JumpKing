@@ -64,7 +64,7 @@ public:
 
 public:
 	Vector2		GetLookPos() { return _corLookPos; } // 현재 보고있는 위치
-	Object* GetTarget() { return _targetObject; }
+	Object*		GetTarget() { return _targetObject; }
 	Vector2		GetRenderPos(Vector2 objPos) { return (objPos - _diff); }
 	Vector2		GetRealPos(Vector2 renderPos) { return (renderPos + _diff); }
 
