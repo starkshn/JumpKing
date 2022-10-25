@@ -29,7 +29,7 @@ private:
 	virtual void Render(HDC dc) override;
 
 public:
-	void ChangeStandPos(Vector2 plauerPos, Object* player, bool upDown);
+	void ChangeStandPos(Vector2 playerPos, Object* player, bool upDown);
 
 public:
 	void CreateForce();

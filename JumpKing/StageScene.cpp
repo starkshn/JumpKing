@@ -21,13 +21,14 @@ StageScene::StageScene(UINT stageNumber)
 	p_backGroundTexture(nullptr)
 {
 	SetStageNumber(stageNumber);
+
 	UINT sn = GetStageNumber();
 
 	string str = to_string(sn);
 	wstring strP = wstring(str.begin(), str.end());
 	SetSceneName(L"Stage_" + strP);
 	
-	p_backGroundTexture = ResourceManager::GetInstance()->LoadTexture(GetSceneName(), L"Textures\\Stage\\" + strP + L".bmp");
+	p_backGroundTexture = ResourceManager::GetInstance()->LoadTexture(GetSceneName(), L"Textures\\Stage\\Stage_" + strP + L".bmp");
 
 	_changePos = CameraManager::GetInstance()->GetLookPos();
 }
@@ -40,6 +41,8 @@ StageScene::~StageScene()
 void StageScene::Enter(Object* player)
 {
 	_resolution = Core::GetInstance()->GetResolution();
+	UINT sn = GetStageNumber();
+	SceneManager::GetInstance()->SetStaticStage(sn);
 
 	// Object 추가
 	if (player == nullptr)
@@ -79,29 +82,8 @@ void StageScene::Enter(Object* player)
 		AddObject(ground4, GROUP_TYPE::GROUND);
 	}
 	else
-	{
-		UINT curStageNumber = GetStageNumber();
-		UINT prevStageNumber = SceneManager::GetInstance()->GetPrevStage();
-
-		Vector2 prevPos;
-		float curPosY = 0;
-		
-		// Player 있을 경우
-		if (curStageNumber > prevStageNumber)
-		{
-			// 현재가 이전보다 크다 == 위로 올라감
-			prevPos = player->GetPos();
-			curPosY = _resolution._y - (prevPos._y + player->GetScale()._y / 2.f);
-		}
-
-		if (curStageNumber < prevStageNumber)
-		{
-			// 현재가 이번보다 작다. == 밑으로 내려감
-			prevPos = player->GetPos();
-			curPosY = _resolution._y + (prevPos._y + player->GetScale()._y / 2.f);
-		}
-		
-		player->SetPos(Vector2(prevPos._x, curPosY));
+	{		
+		player->SetPos(Vector2(player->GetPos()._x, player->GetPos()._y));
 		AddObject(player, GROUP_TYPE::PLAYER);
 		RegisterPlayer(player);
 	}
@@ -176,14 +158,36 @@ void StageScene::Update()
 		}
 	}
 
-	if (GetCurPlayer()->GetPos()._y < 0.f)
+	if (KEY_TAP(KEY::DOWN))
 	{
-		ChangeStandPos(GetCurPlayer()->GetPos(), GetCurPlayer(), true);
+		// 위로 올라감
+		UINT curStageNumber = GetStageNumber();
+		UINT nextStageNumber = --curStageNumber;
+
+		if (nextStageNumber >= static_cast<UINT>(SCENE_TYPE::END))
+			return;
+
+		SCENE_TYPE nextST = static_cast<SCENE_TYPE>(nextStageNumber);
+
+		// Scene이 있는지 없는지 확인 하는 작업
+		if (SceneManager::GetInstance()->GetScene(nextST) != nullptr)
+		{
+			ChangeScene(nextST, GetCurPlayer());
+		}
 	}
 
-	if (GetCurPlayer()->GetPos()._y > _resolution._y)
+	Vector2 playerRenderPos = CameraManager::GetInstance()->GetRenderPos(GetCurPlayer()->GetPos());
+
+	if (playerRenderPos._y < 0.f)
 	{
-		ChangeStandPos(GetCurPlayer()->GetPos(), GetCurPlayer(), false);
+		// 위로 갈 때
+  		ChangeStandPos(playerRenderPos, GetCurPlayer(), true);
+	}
+
+	if (playerRenderPos._y > _resolution._y)
+	{
+		// 아래로 갈 때
+		ChangeStandPos(playerRenderPos, GetCurPlayer(), false);
 	}
 
 	Scene::Update();
@@ -221,38 +225,50 @@ void StageScene::CreateForce()
 void StageScene::ChangeStandPos(Vector2 playerPos, Object* player, bool upDown)
 {
 	Vector2 resolution = Core::GetInstance()->GetResolution();
-	Vector2 playerRenderPos = CameraManager::GetInstance()->GetRenderPos(playerPos);
 
 	if (upDown)
 	{
 		UINT curStageNumber = GetStageNumber();
-		UINT nextStageNumber = ++curStageNumber;
+		UINT nextStageNumber = curStageNumber + 1;
 
-		if (nextStageNumber >= static_cast<UINT>(SCENE_TYPE::END))
-			return;
-
-		SCENE_TYPE nextST = static_cast<SCENE_TYPE>(nextStageNumber);
-
-		// Scene이 있는지 없는지 확인 하는 작업
-		if (SceneManager::GetInstance()->GetScene(nextST) != nullptr)
+		if (curStageNumber + 1 == nextStageNumber)
 		{
-			ChangeScene(nextST, GetCurPlayer());
+			if (nextStageNumber >= static_cast<UINT>(SCENE_TYPE::END))
+				return;
+
+			SCENE_TYPE nextST = static_cast<SCENE_TYPE>(nextStageNumber);
+
+			// Scene이 있는지 없는지 확인 하는 작업
+			if (SceneManager::GetInstance()->GetScene(nextST) != nullptr)
+			{
+				// 현재가 이전보다 크다 == 위로 올라감
+				float curPosY = _resolution._y - (playerPos._y + player->GetScale()._y / 2.f);
+				player->SetPos(Vector2(playerPos._x, curPosY));
+
+				ChangeScene(nextST, GetCurPlayer());
+			}
 		}
 	}
 	else
 	{
 		UINT curStageNumber = GetStageNumber();
-		UINT nextStageNumber = --curStageNumber;
+		UINT nextStageNumber = curStageNumber - 1;
 
-		if (nextStageNumber < static_cast<UINT>(SCENE_TYPE::STAGE_1))
-			return;
-
-		SCENE_TYPE nextST = static_cast<SCENE_TYPE>(nextStageNumber);
-
-		// Scene이 있는지 없는지 확인 하는 작업
-		if (SceneManager::GetInstance()->GetScene(nextST) != nullptr)
+		if (curStageNumber - 1 == nextStageNumber)
 		{
-			ChangeScene(nextST, player);
+			if (nextStageNumber < static_cast<UINT>(SCENE_TYPE::STAGE_1))
+				return;
+
+			SCENE_TYPE nextST = static_cast<SCENE_TYPE>(nextStageNumber);
+
+			// Scene이 있는지 없는지 확인 하는 작업
+			if (SceneManager::GetInstance()->GetScene(nextST) != nullptr)
+			{
+				// 현재가 이번보다 작다. == 밑으로 내려감
+				float curPosY = (playerPos._y + player->GetScale()._y / 2.f) - _resolution._y;
+				player->SetPos(Vector2(playerPos._x, curPosY));
+				ChangeScene(nextST, player);
+			}
 		}
 	}
 }

@@ -43,6 +43,8 @@ public:
 	void SetTileMaxRow(UINT row) { _maxTileRow = row; }
 	void SetTileMaxCol(UINT col) { _maxTileCol = col; }
 
+	void SetStaticStage(UINT stageNumber) { g_staticStage = stageNumber; }
+
 public:
 	Scene* GetCurScene() 
 	{

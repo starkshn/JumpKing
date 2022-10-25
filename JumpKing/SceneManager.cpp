@@ -31,9 +31,9 @@ SceneManager::~SceneManager()
 void SceneManager::Init()
 {
 	// Scene »ý¼º
-	_vecScenes.reserve(static_cast<UINT>(SCENE_TYPE::END));
+	_vecScenes.reserve(static_cast<UINT>(SCENE_TYPE::END) + 1);
 
-	for (UINT i = static_cast<unsigned int>(SCENE_TYPE::STAGE_1); i < static_cast<unsigned int>(SCENE_TYPE::STAGE_43); ++i)
+	for (UINT i = 0; i < static_cast<unsigned int>(SCENE_TYPE::END); ++i)
 	{
 		_vecScenes.emplace_back(new StageScene(i));
 	}

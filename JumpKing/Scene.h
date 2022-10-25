@@ -11,13 +11,13 @@ private:
 
 	wstring		_sceneName;
 
-	UINT		_stageNumber;
+	UINT		_stageNumber = 0;
 
-	UINT		_tileXCount;
-	UINT		_tileYCount;
+	UINT		_tileXCount = 0;
+	UINT		_tileYCount = 0;
 
 	// 컨텐츠 상 그냥 플레이어를 기억하도록 하자.
-	Object*		p_player;
+	Object*		p_player = nullptr;
 
 public:
 	Scene();

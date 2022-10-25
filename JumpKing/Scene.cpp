@@ -22,8 +22,8 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-	UINT staticStage = SceneManager::GetInstance()->GetStaticStage();
 	UINT curStage = GetStageNumber();
+	UINT staticStage = SceneManager::GetInstance()->GetStaticStage();
 
 	for (unsigned int i = 0; i < static_cast<unsigned int>(GROUP_TYPE::END); ++i)
 	{
