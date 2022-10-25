@@ -6,13 +6,14 @@
 
 #include "Object.h"
 
-UINT SceneManager::g_stageNumber = 0;
+UINT SceneManager::g_nextStage = 0;
 UINT SceneManager::g_staticStage = 0;
 UINT SceneManager::g_prevStageNum = 0;
 
 SceneManager::SceneManager()
-	: 
-	p_scenes{},
+	:
+	_vecScenes(),
+	// p_scenes{},
 	p_curScene(nullptr)
 {
 
@@ -20,30 +21,25 @@ SceneManager::SceneManager()
 
 SceneManager::~SceneManager()
 {
-	for (unsigned int i = 0; i < static_cast<unsigned int>(SCENE_TYPE::END); ++i)
-	{
-		if (p_scenes[i] != nullptr)
-		{
-			delete p_scenes[i];
-			p_scenes[i] = nullptr;
-		}
-	}
+	SafeDeleteVector(_vecScenes);
+
+	int size = _vecScenes.size();
+
+	int a = 10;
 }
 
 void SceneManager::Init()
 {
 	// Scene 생성
-	for (UINT i = static_cast<unsigned int>(SCENE_TYPE::STAGE_01); i < static_cast<unsigned int>(SCENE_TYPE::END); ++i)
-	{
-		string str = to_string(i);
-		wstring strP = wstring(str.begin(), str.end());
+	_vecScenes.reserve(static_cast<UINT>(SCENE_TYPE::END));
 
-		p_scenes[static_cast<unsigned int>((SCENE_TYPE)(i)) - 1] = new StageScene;
-		p_scenes[static_cast<unsigned int>((SCENE_TYPE)(i)) - 1]->SetSceneName(L"STAGE_" + strP);
+	for (UINT i = static_cast<unsigned int>(SCENE_TYPE::STAGE_1); i < static_cast<unsigned int>(SCENE_TYPE::STAGE_43); ++i)
+	{
+		_vecScenes.emplace_back(new StageScene(i));
 	}
 
 	// 현재 씬 지정
-	p_curScene = p_scenes[static_cast<unsigned int>(SCENE_TYPE::STAGE_01) - 1];
+	p_curScene = *(_vecScenes.begin());
 	p_curScene->Enter(nullptr);
 }
 
@@ -62,9 +58,9 @@ void SceneManager::ChangeRealScene(SCENE_TYPE sceneType, Object* player)
 {
 	p_curScene->Exit(nullptr);
 
-	g_prevStageNum = p_curScene->GetOwnStageNum();
-	p_curScene = p_scenes[static_cast<UINT>(sceneType)];
-	g_staticStage = p_curScene->GetOwnStageNum();
+	g_prevStageNum = p_curScene->GetStageNumber();
+	p_curScene = _vecScenes[static_cast<UINT>(sceneType)];
+	g_staticStage = p_curScene->GetStageNumber();
 
 	p_curScene->Enter(player);
 }

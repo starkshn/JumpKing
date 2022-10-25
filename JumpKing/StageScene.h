@@ -19,7 +19,7 @@ private:
 	float		_force;
 
 public:
-	StageScene();
+	StageScene(UINT stageNumber);
 	virtual ~StageScene() override;
 
 private:
@@ -29,8 +29,7 @@ private:
 	virtual void Render(HDC dc) override;
 
 public:
-	void ChangeStandPos(Vector2 plauerPos, Object* player);
-
+	void ChangeStandPos(Vector2 plauerPos, Object* player, bool upDown);
 
 public:
 	void CreateForce();

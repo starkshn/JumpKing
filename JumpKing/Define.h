@@ -46,15 +46,15 @@ enum class GROUP_TYPE
 
 enum class SCENE_TYPE
 {
-	STAGE_01 = 1,
-	STAGE_02,
-	STAGE_03,
-	STAGE_04,
-	STAGE_05,
-	STAGE_06,
-	STAGE_07,
-	STAGE_08,
-	STAGE_09,
+	STAGE_1 = 0,
+	STAGE_2,
+	STAGE_3,
+	STAGE_4,
+	STAGE_5,
+	STAGE_6,
+	STAGE_7,
+	STAGE_8,
+	STAGE_9,
 	STAGE_10,
 	STAGE_12,
 	STAGE_13,
@@ -87,8 +87,8 @@ enum class SCENE_TYPE
 	STAGE_40,
 	STAGE_41,
 	STAGE_42,
-	STAGE_43,
-	END = 44
+	STAGE_43 = 42,
+	END = 43
 };
 
 enum class HBRUSH_TYPE

@@ -94,10 +94,10 @@ void StartScene::Update()
 		ChangeScene(s);*/
 	}
 
-	if (GetCurPlayer()->GetPos()._y < 0)
+	/*if (GetCurPlayer()->GetPos()._y < 0)
 	{
-		SceneManager::GetInstance()->UpStageNum();
-		UINT sn = SceneManager::GetInstance()->GetStageNum();
+		SceneManager::GetInstance()->UpNextStage();
+		UINT sn = SceneManager::GetInstance()->GetNextStage();
 		SCENE_TYPE s = static_cast<SCENE_TYPE>(sn);
 
 		Scene* nextStage = nullptr;
@@ -110,7 +110,7 @@ void StartScene::Update()
 			assert(nullptr);
 		else
 			ChangeScene(s, playerPtr);
-	}
+	}*/
 }
 
 void StartScene::Enter(Object* player)

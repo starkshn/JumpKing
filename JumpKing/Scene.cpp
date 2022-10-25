@@ -11,22 +11,19 @@
 #include "Texture.h"
 #include "Tile.h"
 
-UINT Scene::g_stageSceneNumber = 0;
-
 Scene::Scene()
 	:
 	_tileXCount(),
 	_tileYCount(),
 	p_player(nullptr)
 {
-	g_stageSceneNumber++;
-	_ownStageNum = g_stageSceneNumber;
+
 }
 
 Scene::~Scene()
 {
 	UINT staticStage = SceneManager::GetInstance()->GetStaticStage();
-	UINT curStage = GetOwnStageNum();
+	UINT curStage = GetStageNumber();
 
 	for (unsigned int i = 0; i < static_cast<unsigned int>(GROUP_TYPE::END); ++i)
 	{

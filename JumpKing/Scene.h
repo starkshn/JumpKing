@@ -11,14 +11,13 @@ private:
 
 	wstring		_sceneName;
 
+	UINT		_stageNumber;
+
 	UINT		_tileXCount;
 	UINT		_tileYCount;
 
 	// 컨텐츠 상 그냥 플레이어를 기억하도록 하자.
 	Object*		p_player;
-
-	static UINT		g_stageSceneNumber;
-	UINT			_ownStageNum;
 
 public:
 	Scene();
@@ -47,19 +46,21 @@ public:
 
 public:
 	void SetSceneName(wstring strName) { _sceneName = strName; }
-	Vector2 SetUICenterPos(Vector2 parent, Vector2 child);
 	void SetCurPlayer(Object* player) { p_player = player; }
+	void SetStageNumber(UINT stageNumber) { _stageNumber = stageNumber; }
 
 public:
+	Object* GetCurPlayer() { return p_player; }
+
 	const wstring& GetSceneName() const { return _sceneName; }
 	Scene* GetCurrentScene() { return this; }
-	UINT GetStageNum() { return g_stageSceneNumber; }
-	UINT GetOwnStageNum() { return _ownStageNum; }
+	UINT GetStageNumber() { return _stageNumber; }
 
 	const vector<Object*>& GetGroupObjects(const GROUP_TYPE& type)
 	{
 		return _objects[static_cast<UINT>(type)];
 	}
+
 	vector<Object*>& GetUIGroups(const GROUP_TYPE& type)
 	{
 		return _objects[static_cast<UINT>(GROUP_TYPE::UI)];
@@ -67,11 +68,6 @@ public:
 
 	UINT GetTileX() { return _tileXCount; };
 	UINT GetTileY() { return _tileYCount; };
-
-	Object* GetCurPlayer() { return p_player; }
-
-public:
-	void LoadTile(const wstring& relativePath);
 
 };
 

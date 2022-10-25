@@ -14,7 +14,7 @@ private:
 	~SceneManager();
 
 private:
-	Scene* p_scenes[static_cast<unsigned int>(SCENE_TYPE::END)]; // ¸ðµç ¾À µî·Ï
+	vector<Scene*> _vecScenes; // ¸ðµç ¾À µî·Ï
 	Scene* p_curScene; // ÇöÀç ¾À
 
 	// Tile
@@ -22,7 +22,7 @@ private:
 	UINT		_maxTileCol;
 
 	// StageNumber
-	static UINT g_stageNumber;
+	static UINT g_nextStage;
 	static UINT g_staticStage;
 	static UINT g_prevStageNum;
 
@@ -35,8 +35,8 @@ public:
 	void Render(HDC sceneDC);
 
 public:
-	void UpStageNum() { g_stageNumber++; }
-	void DownStageNum() { g_stageNumber--; }
+	UINT UpNextStage() { return ++g_nextStage; }
+	UINT DownNextStage() { return --g_nextStage; }
 
 public:
 	// Tile
@@ -52,29 +52,25 @@ public:
 			return nullptr;
 	}
 
-	Scene* GetSceneArr(SCENE_TYPE type, Scene* scene)
+	Scene* GetScene(SCENE_TYPE type)
 	{
-		if (nullptr != p_scenes[static_cast<UINT>(type)])
-			return p_scenes[static_cast<UINT>(type)];
-		else
-			p_scenes[static_cast<UINT>(type)] = scene;
+		UINT idx = static_cast<UINT>(type);
 		
-		return p_scenes[static_cast<UINT>(type)];
+		if (idx < 0 || idx >= static_cast<UINT>(SCENE_TYPE::END))
+		{
+			return nullptr;
+		}
+
+		return _vecScenes[static_cast<UINT>(type)];
 	}
 
 	// Tile
 	UINT GetTileMaxRow() { return _maxTileRow; }
 	UINT GetTileMaxCol() { return _maxTileCol; }
 
-	UINT GetStageNum() { return g_stageNumber; }
+	UINT GetNextStage() { return g_nextStage; }
 	UINT GetStaticStage() { return g_staticStage; }
 	UINT GetPrevStage() { return g_prevStageNum; }
-
-	Scene* GetSceneArr(SCENE_TYPE type) 
-	{
-		return p_scenes[static_cast<UINT>(type)];
-	}
-
 
 	friend class EventManager;
 };
