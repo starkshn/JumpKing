@@ -22,15 +22,15 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-	UINT curStage = GetStageNumber();
-	UINT staticStage = SceneManager::GetInstance()->GetStaticStage();
-
 	for (unsigned int i = 0; i < static_cast<unsigned int>(GROUP_TYPE::END); ++i)
 	{
 		for (size_t j = 0; j < _objects[i].size(); ++j)
 		{
 			if (nullptr != _objects[i][j] || _objects[i].size() != 0)
 			{
+				UINT curStage = GetStageNumber();
+				UINT staticStage = SceneManager::GetInstance()->GetStaticStage();
+
 				if (staticStage != curStage)
 				{
 					if (_objects[i][j]->GetObjectName() == L"Player")
@@ -43,6 +43,8 @@ Scene::~Scene()
 					delete _objects[i][j];
 					_objects[i][j] = nullptr;
 					_objects[i].clear();
+
+					int a = 10;
 				}
 			}
 		}
@@ -99,7 +101,6 @@ void Scene::Render(HDC dc)
 		}
 
 		vector<Object*>::iterator iter = _objects[i].begin();
-		// auto iter = _objects[i].begin();
 
 		for (iter = _objects[i].begin(); iter != _objects[i].end();)
 		{
@@ -163,7 +164,6 @@ void Scene::DeleteAllGroups()
 	{
 		if (static_cast<UINT>(GROUP_TYPE::PLAYER) == i)
 			continue;
-
 		// 모든 오브젝트 싹다 삭제.
 		DeleteGroupObjects(static_cast<GROUP_TYPE>(i));
 	}

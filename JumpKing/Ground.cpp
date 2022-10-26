@@ -18,6 +18,7 @@ Ground::~Ground()
 
 void Ground::Init()
 {
+	CreateCollider();
 	GetCollider()->SetColliderScale(Vector2(GetScale()));
 }
 

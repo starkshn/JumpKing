@@ -14,8 +14,8 @@ private:
 	~SceneManager();
 
 private:
-	vector<Scene*> _vecScenes; // ¸ðµç ¾À µî·Ï
-	Scene* p_curScene; // ÇöÀç ¾À
+	vector<Scene*>	_vecScenes; // ¸ðµç ¾À µî·Ï
+	Scene*			p_curScene; // ÇöÀç ¾À
 
 	// Tile
 	UINT		_maxTileRow;
@@ -24,7 +24,6 @@ private:
 	// StageNumber
 	static UINT g_nextStage;
 	static UINT g_staticStage;
-	static UINT g_prevStageNum;
 
 private:
 	void ChangeRealScene(SCENE_TYPE sceneType, Object* player);
@@ -72,7 +71,6 @@ public:
 
 	UINT GetNextStage() { return g_nextStage; }
 	UINT GetStaticStage() { return g_staticStage; }
-	UINT GetPrevStage() { return g_prevStageNum; }
 
 	friend class EventManager;
 };

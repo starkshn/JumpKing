@@ -8,12 +8,10 @@
 
 UINT SceneManager::g_nextStage = 0;
 UINT SceneManager::g_staticStage = 0;
-UINT SceneManager::g_prevStageNum = 0;
 
 SceneManager::SceneManager()
 	:
 	_vecScenes(),
-	// p_scenes{},
 	p_curScene(nullptr)
 {
 
@@ -22,10 +20,6 @@ SceneManager::SceneManager()
 SceneManager::~SceneManager()
 {
 	SafeDeleteVector(_vecScenes);
-
-	int size = _vecScenes.size();
-
-	int a = 10;
 }
 
 void SceneManager::Init()
@@ -58,9 +52,7 @@ void SceneManager::ChangeRealScene(SCENE_TYPE sceneType, Object* player)
 {
 	p_curScene->Exit(nullptr);
 
-	g_prevStageNum = p_curScene->GetStageNumber();
 	p_curScene = _vecScenes[static_cast<UINT>(sceneType)];
-	g_staticStage = p_curScene->GetStageNumber();
 
 	p_curScene->Enter(player);
 }

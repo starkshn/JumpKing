@@ -40,9 +40,11 @@ StageScene::~StageScene()
 
 void StageScene::Enter(Object* player)
 {
-	_resolution = Core::GetInstance()->GetResolution();
+	// 종료할 때를 위한 g_staticScene 번호 저장
 	UINT sn = GetStageNumber();
 	SceneManager::GetInstance()->SetStaticStage(sn);
+
+	_resolution = Core::GetInstance()->GetResolution();
 
 	// Object 추가
 	if (player == nullptr)
@@ -55,38 +57,32 @@ void StageScene::Enter(Object* player)
 		AddObject(Pplayer, GROUP_TYPE::PLAYER);
 		SetCurPlayer(Pplayer);
 		RegisterPlayer(Pplayer);
-
-		// Ground배치
-		Object* ground = new Ground();
-		ground->SetObjectName(L"Ground");
-		ground->SetScale(Vector2(400.f, 100.f));
-		ground->SetPos(Vector2(640.f, 700.f));
-		AddObject(ground, GROUP_TYPE::GROUND);
-
-		Object* ground2 = new Ground();
-		ground2->SetObjectName(L"Ground");
-		ground2->SetScale(Vector2(400.f, 100.f));
-		ground2->SetPos(Vector2(640.f, 500.f));
-		AddObject(ground2, GROUP_TYPE::GROUND);
-
-		Object* ground3 = new Ground();
-		ground3->SetObjectName(L"Ground");
-		ground3->SetScale(Vector2(200.f, 100.f));
-		ground3->SetPos(Vector2(340.f, 200.f));
-		AddObject(ground3, GROUP_TYPE::GROUND);
-
-		Object* ground4 = new Ground();
-		ground4->SetObjectName(L"Ground");
-		ground4->SetScale(Vector2(200.f, 100.f));
-		ground4->SetPos(Vector2(940.f, 200.f));
-		AddObject(ground4, GROUP_TYPE::GROUND);
 	}
 	else
-	{		
+	{
 		player->SetPos(Vector2(player->GetPos()._x, player->GetPos()._y));
 		AddObject(player, GROUP_TYPE::PLAYER);
 		RegisterPlayer(player);
 	}
+
+	// Ground배치
+	Object* ground = new Ground();
+	ground->SetObjectName(L"Ground");
+	ground->SetScale(Vector2(200.f, 100.f));
+	ground->SetPos(Vector2(640.f, 700.f));
+	AddObject(ground, GROUP_TYPE::GROUND);
+
+	Object* ground2 = new Ground();
+	ground2->SetObjectName(L"Ground");
+	ground2->SetScale(Vector2(200.f, 100.f));
+	ground2->SetPos(Vector2(340.f, 300.f));
+	AddObject(ground2, GROUP_TYPE::GROUND);
+
+	Object* ground3 = new Ground();
+	ground3->SetObjectName(L"Ground");
+	ground3->SetScale(Vector2(200.f, 100.f));
+	ground3->SetPos(Vector2(940.f, 300.f));
+	AddObject(ground3, GROUP_TYPE::GROUND);
 
 	// 땅과 플레이어 충돌 지정
 	ColliderManager::GetInstance()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::GROUND);
@@ -104,42 +100,6 @@ void StageScene::Enter(Object* player)
 
 void StageScene::Update()
 {
-	if (KEY_HOLD(KEY::LBTN))
-	{
-		_useForce = true;
-
-		CreateForce();
-	}
-	else
-	{
-		_useForce = false;
-	}
-
-	for (unsigned int i = 0; i < static_cast<unsigned int>(GROUP_TYPE::END); ++i)
-	{
-		const vector<Object*>& vecObj = GetGroupObjects((GROUP_TYPE)i);
-
-		for (size_t j = 0; j < vecObj.size(); ++j)
-		{
-			if (_useForce && nullptr != vecObj[j]->GetRigidBody())
-			{
-				Vector2 diff = vecObj[j]->GetPos() - _mouseForcePos;
-				float len = diff.Length();
-				Vector2 tempDiff = diff;
-
-				if (len < _forceRadius)
-				{
-					float ratio = 1.f - (len / _forceRadius);
-					float force = _force * ratio;
-
-					vecObj[j]->GetRigidBody()->AddForce(tempDiff.Normalize() * force);
-				}
-			}
-
-			vecObj[j]->Update();
-		}
-	}
-
 	if (KEY_TAP(KEY::UP))
 	{
 		// 위로 올라감

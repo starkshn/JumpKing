@@ -36,7 +36,12 @@ public:
 public:
 	void AddObject(Object* obj, GROUP_TYPE type)
 	{
+		if (type == GROUP_TYPE::PLAYER && _objects[static_cast<unsigned int>(type)].size() > 1)
+			return;
+		
 		_objects[static_cast<unsigned int>(type)].push_back(obj);
+
+		int a = 10;
 	}
 	void RegisterPlayer(Object* player) { p_player = player; }
 
@@ -57,6 +62,11 @@ public:
 	UINT GetStageNumber() { return _stageNumber; }
 
 	const vector<Object*>& GetGroupObjects(const GROUP_TYPE& type)
+	{
+		return _objects[static_cast<UINT>(type)];
+	}
+
+	vector<Object*>& GetGroupObjectsForPlayer(const GROUP_TYPE& type)
 	{
 		return _objects[static_cast<UINT>(type)];
 	}

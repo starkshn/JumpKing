@@ -15,12 +15,12 @@ class Object
 {
 private:
 	wstring _objectName;
-	bool _alive;
+	bool	_alive;
 
-	float _theta;
+	float	_theta;
 
-	bool _onCollision;
-	bool _onLeftRight;
+	bool	_onCollision;
+	bool	_onLeftRight;
 	
 	Vector2 _dir;
 	Vector2 _pos;
