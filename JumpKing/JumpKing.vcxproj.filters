@@ -83,9 +83,6 @@
     <Filter Include="Engine\05_Resources\Texture">
       <UniqueIdentifier>{ba8b0369-c58c-4c96-91db-e5ea58694a7d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\06_Scenes\StartScene">
-      <UniqueIdentifier>{576ee594-223c-4eb8-8f83-a6779eddc1b5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\07_Components\Animator">
       <UniqueIdentifier>{826ee00c-8855-4a08-ab11-17e59ed89b79}</UniqueIdentifier>
     </Filter>
@@ -224,9 +221,6 @@
     <ClInclude Include="Sound.h">
       <Filter>Engine\05_Resources\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="StartScene.h">
-      <Filter>Engine\06_Scenes\StartScene</Filter>
-    </ClInclude>
     <ClInclude Include="Tile.h">
       <Filter>Engine\04_Objects\Tile</Filter>
     </ClInclude>
@@ -326,9 +320,6 @@
     </ClCompile>
     <ClCompile Include="Sound.cpp">
       <Filter>Engine\05_Resources\Sound</Filter>
-    </ClCompile>
-    <ClCompile Include="StartScene.cpp">
-      <Filter>Engine\06_Scenes\StartScene</Filter>
     </ClCompile>
     <ClCompile Include="Tile.cpp">
       <Filter>Engine\04_Objects\Tile</Filter>

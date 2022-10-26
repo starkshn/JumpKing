@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "SceneManager.h"
 
-#include "StartScene.h"
 #include "StageScene.h"
 
 #include "Object.h"

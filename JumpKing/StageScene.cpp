@@ -174,6 +174,8 @@ void StageScene::Exit(Object* player)
 {
 	DeleteAllGroups();
 
+	ColliderManager::GetInstance()->ResetGroup();
+
 	SetCurPlayer(nullptr);
 }
 

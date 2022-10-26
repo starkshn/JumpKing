@@ -71,9 +71,6 @@
 #include "C:\Users\stark\Desktop\CPP\Project\JumpKing\JumpKing\StageScene.cpp"
 
 
-#include "C:\Users\stark\Desktop\CPP\Project\JumpKing\JumpKing\StartScene.cpp"
-
-
 #include "C:\Users\stark\Desktop\CPP\Project\JumpKing\JumpKing\Texture.cpp"
 
 

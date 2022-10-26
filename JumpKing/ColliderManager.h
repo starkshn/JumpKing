@@ -33,8 +33,5 @@ public:
 private:
 	void CollisionGroupUpdate(GROUP_TYPE left, GROUP_TYPE right);
 	bool IsCollision(Collider* leftCol, Collider* rightCol);
-
-
-
 };
 
