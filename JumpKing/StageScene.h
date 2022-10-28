@@ -30,6 +30,7 @@ private:
 
 public:
 	void ChangeStandPos(Vector2 playerPos, Object* player, bool upDown);
+	void CheckGroundType();
 
 public:
 	void CreateForce();

@@ -152,3 +152,10 @@ void Ground::OnCollisionExit(Collider* other)
 	}
 }
 
+// =========================
+// Ground Create Window Proc
+// =========================
+//INT_PTR __stdcall GroundCreate(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+//{
+//	
+//}

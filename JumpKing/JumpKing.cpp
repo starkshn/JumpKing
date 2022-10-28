@@ -4,7 +4,11 @@
 #include "framework.h"
 #include "JumpKing.h"
 
+#include "SceneManager.h"
+
 #include "Core.h"
+#include "Scene.h"
+#include "StageScene.h"
 
 #define MAX_LOADSTRING 100
 
@@ -19,6 +23,8 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+
+INT_PTR CALLBACK CheckGroundType(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -165,7 +171,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
-                
+            case ID_GROUND_TYPE:
+                DialogBox(hInst, MAKEINTRESOURCE(ID_CHECK_GROUND_TYPE), hWnd, CheckGroundType);
+                break;
             case IDM_EXIT:
                 DestroyWindow(hWnd);
                 break;
@@ -202,6 +210,41 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+        {
+            EndDialog(hDlg, LOWORD(wParam));
+            return (INT_PTR)TRUE;
+        }
+        break;
+    }
+    return (INT_PTR)FALSE;
+}
+
+// =========================
+// Ground Create Window Proc
+// =========================
+INT_PTR CALLBACK CheckGroundType(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    UNREFERENCED_PARAMETER(lParam);
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        return (INT_PTR)TRUE;
+
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDOK)
+        {
+            // 사각형, 삼각형 Check Box확인
+            bool sqaure = false;
+            bool triangle = false;
+
+            sqaure = IsDlgButtonChecked(hDlg, IDC_CHECK1);
+            triangle = IsDlgButtonChecked(hDlg, IDC_CHECK2);
+
+
+            EndDialog(hDlg, LOWORD(wParam));
+            return (INT_PTR)TRUE;
+        }
+        else if (LOWORD(wParam) == IDCANCEL)
         {
             EndDialog(hDlg, LOWORD(wParam));
             return (INT_PTR)TRUE;
