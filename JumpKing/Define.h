@@ -37,11 +37,10 @@ enum class GROUP_TYPE
 	DEFAULT,
 	TILE,
 	PLAYER,
-	MONSTER,
 	GROUND,
 
-	UI = 31,
-	END = 32,
+	UI,
+	END = 6,
 };
 
 enum class SCENE_TYPE

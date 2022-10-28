@@ -15,6 +15,7 @@ private:
 
 private:
 	vector<Scene*>	_vecScenes; // 모든 씬 등록
+	vector<Object*>	_objects[static_cast<UINT>(GROUP_TYPE::END)]; // 모든 오브젝트
 	Scene*			p_curScene; // 현재 씬
 
 	// Tile
@@ -38,6 +39,12 @@ public:
 	UINT DownNextStage() { return --g_nextStage; }
 
 public:
+	void AddObject(Object* obj, GROUP_TYPE type)
+	{
+		_objects[static_cast<unsigned int>(type)].push_back(obj);	
+	}
+
+public:
 	// Tile
 	void SetTileMaxRow(UINT row) { _maxTileRow = row; }
 	void SetTileMaxCol(UINT col) { _maxTileCol = col; }
@@ -45,7 +52,19 @@ public:
 	void SetStaticStage(UINT stageNumber) { g_staticStage = stageNumber; }
 
 public:
-	Scene* GetCurScene() 
+	vector<Object*>& GetObjectsVec(UINT idx) { return _objects[idx]; }
+
+	const vector<Object*>& GetGroupObjects(const GROUP_TYPE& type)
+	{
+		return _objects[static_cast<UINT>(type)];
+	}
+
+	vector<Object*>& GetUIGroups(const GROUP_TYPE& type)
+	{
+		return _objects[static_cast<UINT>(GROUP_TYPE::UI)];
+	}
+
+	Scene* GetCurScene()
 	{
 		if (p_curScene != nullptr)
 			return p_curScene;
@@ -56,7 +75,7 @@ public:
 	Scene* GetScene(SCENE_TYPE type)
 	{
 		UINT idx = static_cast<UINT>(type);
-		
+
 		if (idx < 0 || idx >= static_cast<UINT>(SCENE_TYPE::END))
 		{
 			return nullptr;
@@ -64,6 +83,7 @@ public:
 
 		return _vecScenes[static_cast<UINT>(type)];
 	}
+
 
 	// Tile
 	UINT GetTileMaxRow() { return _maxTileRow; }

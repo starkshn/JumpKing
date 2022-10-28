@@ -53,7 +53,8 @@ void EventManager::ExcuteEvent(const Event& event)
 		Object* newObjPtr = (Object*)event._lParam;
 		GROUP_TYPE newObjGroupType = (GROUP_TYPE)event._rParam;
 
-		SceneManager::GetInstance()->GetCurScene()->AddObject(newObjPtr, newObjGroupType);
+		// SceneManager::GetInstance()->GetCurScene()->AddObject(newObjPtr, newObjGroupType);
+		SceneManager::GetInstance()->AddObject(newObjPtr, newObjGroupType);
 
 	}
 	break;

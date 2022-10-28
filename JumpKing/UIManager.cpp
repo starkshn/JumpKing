@@ -71,7 +71,8 @@ void UIManager::SetFocusUI(UI* ui)
 	_focusedUI = ui;
 
 	Scene* curScene = SceneManager::GetInstance()->GetCurScene();
-	vector<Object*>& vecUI = curScene->GetUIGroups(GROUP_TYPE::UI);
+	// vector<Object*>& vecUI = curScene->GetUIGroups(GROUP_TYPE::UI);
+	vector<Object*>& vecUI = SceneManager::GetInstance()->GetUIGroups(GROUP_TYPE::UI);
 
 	vector<Object*>::iterator iter = vecUI.begin();
 
@@ -90,7 +91,8 @@ void UIManager::SetFocusUI(UI* ui)
 UI* UIManager::GetFocusUI()
 {
 	Scene* curScene = SceneManager::GetInstance()->GetCurScene();
-	vector<Object*>& vecUI = curScene->GetUIGroups(GROUP_TYPE::UI);
+	// vector<Object*>& vecUI = curScene->GetUIGroups(GROUP_TYPE::UI);
+	vector<Object*>& vecUI = SceneManager::GetInstance()->GetUIGroups(GROUP_TYPE::UI);
 
 	bool tapLbtn = KEY_TAP(KEY::LBTN);
 

@@ -1,8 +1,9 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output 디렉터리가 슬래시로 끝나지 않습니다. Output 디렉터리의 적절한 평가를 허용하는 데 필요하므로 이 빌드 인스턴스에서 슬래시를 추가합니다.
   unity_0EBJPSOP6KO0YOYR.cpp
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-C:\Users\stark\Desktop\CPP\Project\JumpKing\JumpKing\Scene.cpp(141,34): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\stark\Desktop\CPP\Project\JumpKing\JumpKing\Scene.cpp(141,73): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\stark\Desktop\CPP\Project\JumpKing\JumpKing\Scene.cpp(135,34): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\stark\Desktop\CPP\Project\JumpKing\JumpKing\Scene.cpp(135,73): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\stark\Desktop\CPP\Project\JumpKing\JumpKing\Scene.cpp(156,6): warning C4267: '인수': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\stark\Desktop\CPP\Project\JumpKing\JumpKing\Sound.cpp(159,26): warning C4244: '인수': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\xstring(2584,23): warning C4244: '인수': 'wchar_t'에서 'const _Elem'(으)로 변환하면서 데이터가 손실될 수 있습니다.
           with

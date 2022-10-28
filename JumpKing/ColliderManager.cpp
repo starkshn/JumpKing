@@ -5,7 +5,7 @@
 
 #include "Object.h"
 #include "Scene.h"
-
+#include "Collider.h"
 
 ColliderManager::ColliderManager()
 {
@@ -29,7 +29,6 @@ void ColliderManager::Update()
 			}
 		}
 	}
-
 }
 
 void ColliderManager::CheckGroup(GROUP_TYPE left, GROUP_TYPE right)
@@ -58,9 +57,9 @@ void ColliderManager::ResetGroup()
 
 void ColliderManager::CollisionGroupUpdate(GROUP_TYPE left, GROUP_TYPE right)
 {
-	Scene* curScene = SceneManager::GetInstance()->GetCurScene();
-	const vector<Object*>& vecLeft = curScene->GetGroupObjects(left);
-	const vector<Object*>& vecRight = curScene->GetGroupObjects(right);
+	// Scene* curScene = SceneManager::GetInstance()->GetCurScene();
+	const vector<Object*>& vecLeft = SceneManager::GetInstance()->GetGroupObjects(left);
+	const vector<Object*>& vecRight = SceneManager::GetInstance()->GetGroupObjects(right);
 	map<ULONGLONG, bool>::iterator iter;
 
 	for (size_t i = 0; i < vecLeft.size(); ++i)

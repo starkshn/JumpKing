@@ -54,14 +54,13 @@ void StageScene::Enter(Object* player)
 		Pplayer->SetObjectName(L"Player");
 		Pplayer->SetPos(Vector2(640.f, 384.f));
 		Pplayer->SetScale(Vector2(90.f, 103.f));
-		AddObject(Pplayer, GROUP_TYPE::PLAYER);
+		SceneManager::GetInstance()->AddObject(Pplayer, GROUP_TYPE::PLAYER);
 		SetCurPlayer(Pplayer);
 		RegisterPlayer(Pplayer);
 	}
 	else
 	{
 		player->SetPos(Vector2(player->GetPos()._x, player->GetPos()._y));
-		AddObject(player, GROUP_TYPE::PLAYER);
 		RegisterPlayer(player);
 	}
 
@@ -70,19 +69,19 @@ void StageScene::Enter(Object* player)
 	ground->SetObjectName(L"Ground");
 	ground->SetScale(Vector2(200.f, 100.f));
 	ground->SetPos(Vector2(640.f, 700.f));
-	AddObject(ground, GROUP_TYPE::GROUND);
+	SceneManager::GetInstance()->AddObject(ground, GROUP_TYPE::GROUND);
 
 	Object* ground2 = new Ground();
 	ground2->SetObjectName(L"Ground");
 	ground2->SetScale(Vector2(200.f, 100.f));
 	ground2->SetPos(Vector2(340.f, 300.f));
-	AddObject(ground2, GROUP_TYPE::GROUND);
+	SceneManager::GetInstance()->AddObject(ground2, GROUP_TYPE::GROUND);
 
 	Object* ground3 = new Ground();
 	ground3->SetObjectName(L"Ground");
 	ground3->SetScale(Vector2(200.f, 100.f));
 	ground3->SetPos(Vector2(940.f, 300.f));
-	AddObject(ground3, GROUP_TYPE::GROUND);
+	SceneManager::GetInstance()->AddObject(ground3, GROUP_TYPE::GROUND);
 
 	// 땅과 플레이어 충돌 지정
 	ColliderManager::GetInstance()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::GROUND);
@@ -229,6 +228,7 @@ void StageScene::ChangeStandPos(Vector2 playerPos, Object* player, bool upDown)
 				// 현재가 이번보다 작다. == 밑으로 내려감
 				float curPosY = (playerPos._y + player->GetScale()._y / 2.f) - _resolution._y;
 				player->SetPos(Vector2(playerPos._x, curPosY));
+
 				ChangeScene(nextST, player);
 			}
 		}

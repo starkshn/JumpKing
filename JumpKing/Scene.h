@@ -7,10 +7,11 @@ class Player;
 class Scene
 {
 private:
-	vector<Object*> _objects[static_cast<unsigned int>(GROUP_TYPE::END)]; // 오브젝트들을 저장 및 관리할 벡터를 그룹 갯수만큼 선언
-
+	// vector<Object*> _objects[static_cast<unsigned int>(GROUP_TYPE::END)]; // 오브젝트들을 저장 및 관리할 벡터를 그룹 갯수만큼 선언
+	
 	wstring		_sceneName;
 
+	// 각각의 StageScene number를 저장할 변수
 	UINT		_stageNumber = 0;
 
 	UINT		_tileXCount = 0;
@@ -34,15 +35,6 @@ public:
 	virtual void Exit(Object* player) abstract; // 해당 Scene 을 탈출 시 사용
 
 public:
-	void AddObject(Object* obj, GROUP_TYPE type)
-	{
-		if (type == GROUP_TYPE::PLAYER && _objects[static_cast<unsigned int>(type)].size() > 1)
-			return;
-		
-		_objects[static_cast<unsigned int>(type)].push_back(obj);
-
-		int a = 10;
-	}
 	void RegisterPlayer(Object* player) { p_player = player; }
 
 	void DeleteGroupObjects(GROUP_TYPE groupType);
@@ -60,21 +52,6 @@ public:
 	const wstring& GetSceneName() const { return _sceneName; }
 	Scene* GetCurrentScene() { return this; }
 	UINT GetStageNumber() { return _stageNumber; }
-
-	const vector<Object*>& GetGroupObjects(const GROUP_TYPE& type)
-	{
-		return _objects[static_cast<UINT>(type)];
-	}
-
-	vector<Object*>& GetGroupObjectsForPlayer(const GROUP_TYPE& type)
-	{
-		return _objects[static_cast<UINT>(type)];
-	}
-
-	vector<Object*>& GetUIGroups(const GROUP_TYPE& type)
-	{
-		return _objects[static_cast<UINT>(GROUP_TYPE::UI)];
-	}
 
 	UINT GetTileX() { return _tileXCount; };
 	UINT GetTileY() { return _tileYCount; };

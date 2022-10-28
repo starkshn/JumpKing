@@ -24,28 +24,14 @@ Scene::~Scene()
 {
 	for (unsigned int i = 0; i < static_cast<unsigned int>(GROUP_TYPE::END); ++i)
 	{
-		for (size_t j = 0; j < _objects[i].size(); ++j)
+		vector<Object*>& vec = SceneManager::GetInstance()->GetObjectsVec(i);
+
+		for (size_t j = 0; j < vec.size(); ++j)
 		{
-			if (nullptr != _objects[i][j] || _objects[i].size() != 0)
+			if (nullptr != vec[j] && vec.size() != 0)
 			{
-				UINT curStage = GetStageNumber();
-				UINT staticStage = SceneManager::GetInstance()->GetStaticStage();
-
-				if (staticStage != curStage)
-				{
-					if (_objects[i][j]->GetObjectName() == L"Player")
-						break;
-
-					delete _objects[i][j];
-				}
-				else
-				{
-					delete _objects[i][j];
-					_objects[i][j] = nullptr;
-					_objects[i].clear();
-
-					int a = 10;
-				}
+				delete vec[j];
+				vec[j] = nullptr;
 			}
 		}
 	}
@@ -55,11 +41,13 @@ void Scene::Init()
 {
 	for (unsigned int i = 0; i < static_cast<unsigned int>(GROUP_TYPE::END); ++i)
 	{
-		for (size_t j = 0; j < _objects[i].size(); ++j)
+		vector<Object*>& vec = SceneManager::GetInstance()->GetObjectsVec(i);
+
+		for (size_t j = 0; j < vec.size(); ++j)
 		{
-			if (!_objects[i][j]->IsDead())
+			if (!vec[j]->IsDead())
 			{
-				_objects[i][j]->Init();
+				vec[j]->Init();
 			}
 		}
 	}
@@ -69,11 +57,13 @@ void Scene::Update()
 {
 	for (unsigned int i = 0; i < static_cast<unsigned int>(GROUP_TYPE::END); ++i)
 	{
-		for (size_t j = 0; j < _objects[i].size(); ++j)
+		vector<Object*>& vec = SceneManager::GetInstance()->GetObjectsVec(i);
+
+		for (size_t j = 0; j < vec.size(); ++j)
 		{
-			if (!_objects[i][j]->IsDead())
+			if (!vec[j]->IsDead())
 			{
-				_objects[i][j]->Update();
+				vec[j]->Update();
 			}
 		}
 	}
@@ -83,9 +73,11 @@ void Scene::FinalUpdate()
 {
 	for (UINT i = 0; i < static_cast<UINT>(GROUP_TYPE::END); ++i)
 	{
-		for (size_t j = 0; j < _objects[i].size(); ++j)
+		vector<Object*>& vec = SceneManager::GetInstance()->GetObjectsVec(i);
+
+		for (size_t j = 0; j < vec.size(); ++j)
 		{
-			_objects[i][j]->FinalUpdate();
+			vec[j]->FinalUpdate();
 		}
 	}
 }
@@ -94,15 +86,17 @@ void Scene::Render(HDC dc)
 {
 	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{
+		vector<Object*>& vec = SceneManager::GetInstance()->GetObjectsVec(i);
+
 		if (i == (UINT)GROUP_TYPE::TILE)
 		{
 			RenderTile(dc);
 			continue;
 		}
 
-		vector<Object*>::iterator iter = _objects[i].begin();
+		vector<Object*>::iterator iter = vec.begin();
 
-		for (iter = _objects[i].begin(); iter != _objects[i].end();)
+		for (iter = vec.begin(); iter != vec.end();)
 		{
 			if (!(*iter)->IsDead())
 			{
@@ -111,7 +105,7 @@ void Scene::Render(HDC dc)
 			}
 			else
 			{
-				iter = _objects[i].erase(iter);
+				iter = vec.erase(iter);
 			}
 		}
 	}
@@ -119,7 +113,7 @@ void Scene::Render(HDC dc)
 
 void Scene::RenderTile(HDC dc)
 {
-	const vector<Object*>& vecTile = GetGroupObjects(GROUP_TYPE::TILE);
+	const vector<Object*>& vecTile = SceneManager::GetInstance()->GetObjectsVec(static_cast<UINT>(GROUP_TYPE::TILE));
 
 	Vector2 cameraLookPos = CameraManager::GetInstance()->GetLookPos();
 	Vector2 resolution = Core::GetInstance()->GetResolution();
@@ -150,23 +144,24 @@ void Scene::RenderTile(HDC dc)
 	}
 }
 
-void Scene::DeleteGroupObjects(GROUP_TYPE groupType)
-{
-	// SafeDeleteVector(_objects[static_cast<UINT>(groupType)]);
-
-	// 밑에처럼 명시적으로 호출하는 것이 원래는 정석이다.
-	SafeDeleteVector<Object*>(_objects[static_cast<UINT>(groupType)]);
-}
 
 void Scene::DeleteAllGroups()
 {
 	for (size_t i = 0; i < static_cast<UINT>(GROUP_TYPE::END); ++i)
-	{
+	{		
 		if (static_cast<UINT>(GROUP_TYPE::PLAYER) == i)
 			continue;
+
 		// 모든 오브젝트 싹다 삭제.
-		DeleteGroupObjects(static_cast<GROUP_TYPE>(i));
+		if (SceneManager::GetInstance()->GetObjectsVec(i).size() > 0)
+			DeleteGroupObjects(static_cast<GROUP_TYPE>(i));
 	}
+}
+
+void Scene::DeleteGroupObjects(GROUP_TYPE groupType)
+{
+	vector<Object*>& vec = SceneManager::GetInstance()->GetObjectsVec(static_cast<UINT>(groupType));
+	SafeDeleteVector<Object*>(vec);
 }
 
 void Scene::CreateTile(UINT xCount, UINT yCount)
@@ -194,7 +189,7 @@ void Scene::CreateTile(UINT xCount, UINT yCount)
 
 			tile->SetTileTexture(tileTexture);
 
-			AddObject(tile, GROUP_TYPE::TILE);
+			SceneManager::GetInstance()->AddObject(tile, GROUP_TYPE::TILE);
 		}
 	}
 }

@@ -12,9 +12,9 @@ enum class CAMERA_EFFECT
 
 struct CameraEffect
 {
-	CAMERA_EFFECT	_effectType;	// 카메라 효과
 	float			_duration;		// 효과 지속 시간
 	float			_curTime;		// 카메라 효과 현재 진행된 시간
+	CAMERA_EFFECT	_effectType;	// 카메라 효과
 };
 
 class CameraManager
