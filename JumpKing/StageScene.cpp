@@ -102,36 +102,31 @@ void StageScene::Update()
 	if (KEY_TAP(KEY::UP))
 	{
 		// 위로 올라감
-		UINT curStageNumber = GetStageNumber();
-		UINT nextStageNumber = ++curStageNumber;
-
-		if (nextStageNumber >= static_cast<UINT>(SCENE_TYPE::END))
-			return;
-
-		SCENE_TYPE nextST = static_cast<SCENE_TYPE>(nextStageNumber);
-
-		// Scene이 있는지 없는지 확인 하는 작업
-		if (SceneManager::GetInstance()->GetScene(nextST) != nullptr)
+		if (SceneManager::GetInstance()->UpStageByVec() != nullptr)
 		{
-			ChangeScene(nextST, GetCurPlayer());
+			ChangeScene(static_cast<SCENE_TYPE>((SceneManager::GetInstance()->GetSceneByVec())->GetStageNumber()), GetCurPlayer());
 		}
+
+		//UINT curStageNumber = GetStageNumber();
+		//UINT nextStageNumber = ++curStageNumber;
+
+		//if (nextStageNumber >= static_cast<UINT>(SCENE_TYPE::END))
+		//	return;
+
+		//SCENE_TYPE nextST = static_cast<SCENE_TYPE>(nextStageNumber);
+
+		//// Scene이 있는지 없는지 확인 하는 작업
+		//if (SceneManager::GetInstance()->GetScene(nextST) != nullptr)
+		//{
+		//	ChangeScene(nextST, GetCurPlayer());
+		//}
 	}
 
 	if (KEY_TAP(KEY::DOWN))
 	{
-		// 위로 올라감
-		UINT curStageNumber = GetStageNumber();
-		UINT nextStageNumber = --curStageNumber;
-
-		if (nextStageNumber >= static_cast<UINT>(SCENE_TYPE::END))
-			return;
-
-		SCENE_TYPE nextST = static_cast<SCENE_TYPE>(nextStageNumber);
-
-		// Scene이 있는지 없는지 확인 하는 작업
-		if (SceneManager::GetInstance()->GetScene(nextST) != nullptr)
+		if (SceneManager::GetInstance()->DownStageByVec() != nullptr)
 		{
-			ChangeScene(nextST, GetCurPlayer());
+			ChangeScene(static_cast<SCENE_TYPE>((SceneManager::GetInstance()->GetSceneByVec())->GetStageNumber()), GetCurPlayer());
 		}
 	}
 
@@ -189,6 +184,14 @@ void StageScene::ChangeStandPos(Vector2 playerPos, Object* player, bool upDown)
 
 	if (upDown)
 	{
+		//// 현재가 이전보다 크다 == 위로 올라감
+		//float curPosY = _resolution._y - (playerPos._y + player->GetScale()._y / 2.f);
+		//player->SetPos(Vector2(playerPos._x, curPosY));
+
+		//ChangeScene(nextST, GetCurPlayer());
+
+
+
 		UINT curStageNumber = GetStageNumber();
 		UINT nextStageNumber = curStageNumber + 1;
 

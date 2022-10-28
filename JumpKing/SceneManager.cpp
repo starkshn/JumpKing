@@ -24,7 +24,7 @@ SceneManager::~SceneManager()
 void SceneManager::Init()
 {
 	// Scene 생성
-	_vecScenes.reserve(static_cast<UINT>(SCENE_TYPE::END) + 1);
+	_vecScenes.reserve(static_cast<UINT>(SCENE_TYPE::END));
 
 	for (UINT i = 0; i < static_cast<unsigned int>(SCENE_TYPE::END); ++i)
 	{
@@ -33,6 +33,9 @@ void SceneManager::Init()
 
 	// 현재 씬 지정
 	p_curScene = *(_vecScenes.begin());
+
+	_stageIter = _vecScenes.begin();
+
 	p_curScene->Enter(nullptr);
 }
 

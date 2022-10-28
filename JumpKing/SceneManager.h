@@ -26,6 +26,8 @@ private:
 	static UINT g_nextStage;
 	static UINT g_staticStage;
 
+	vector<Scene*>::iterator _stageIter;
+	
 private:
 	void ChangeRealScene(SCENE_TYPE sceneType, Object* player);
 
@@ -84,7 +86,6 @@ public:
 		return _vecScenes[static_cast<UINT>(type)];
 	}
 
-
 	// Tile
 	UINT GetTileMaxRow() { return _maxTileRow; }
 	UINT GetTileMaxCol() { return _maxTileCol; }
@@ -92,6 +93,24 @@ public:
 	UINT GetNextStage() { return g_nextStage; }
 	UINT GetStaticStage() { return g_staticStage; }
 
+	// vector iter를 Scene에다가 적용
+	Scene*	GetSceneByVec() { return *_stageIter; }
+
+	Scene*	UpStageByVec() 
+	{ 
+		if (_stageIter == _vecScenes.end() || (*_stageIter)->GetStageNumber() >= (UINT)SCENE_TYPE::END - 1)
+			return nullptr;
+		if (_stageIter != _vecScenes.end())
+			return *(++_stageIter);
+	}
+	Scene* DownStageByVec()
+	{
+		if ((*_stageIter)->GetStageNumber() <= (UINT)SCENE_TYPE::STAGE_1)
+			return nullptr;
+		if (_stageIter != _vecScenes.end())
+			return *(--_stageIter);
+	}
+	
 	friend class EventManager;
 };
 
