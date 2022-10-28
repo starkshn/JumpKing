@@ -233,13 +233,40 @@ INT_PTR CALLBACK CheckGroundType(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK)
         {
-            // 사각형, 삼각형 Check Box확인
-            bool sqaure = false;
-            bool triangle = false;
+            // 사각형, 삼각형, 선인지 Check Box확인
 
-            sqaure = IsDlgButtonChecked(hDlg, IDC_CHECK1);
-            triangle = IsDlgButtonChecked(hDlg, IDC_CHECK2);
+            if (IsDlgButtonChecked(hDlg, IDC_CHECK1))
+            {
+                COLLIDER_TYPE_INFO typeInfo;
+                typeInfo._check = IsDlgButtonChecked(hDlg, IDC_CHECK1);
+                typeInfo._type = static_cast<UINT>(COLLIDER_TYPE::SQUARE);
 
+                StageScene* stagePtr = dynamic_cast<StageScene*>(SceneManager::GetInstance()->GetSceneByVec());
+
+                stagePtr->SetGroundTypeInfo(typeInfo);  
+            }
+
+            if (IsDlgButtonChecked(hDlg, IDC_CHECK2))
+            {
+                COLLIDER_TYPE_INFO typeInfo;
+                typeInfo._check = IsDlgButtonChecked(hDlg, IDC_CHECK1);
+                typeInfo._type = static_cast<UINT>(COLLIDER_TYPE::TRIANGLE);
+
+                StageScene* stagePtr = dynamic_cast<StageScene*>(SceneManager::GetInstance()->GetSceneByVec());
+
+                stagePtr->SetGroundTypeInfo(typeInfo);
+            }
+
+            if (IsDlgButtonChecked(hDlg, IDC_CHECK3))
+            {
+                COLLIDER_TYPE_INFO typeInfo;
+                typeInfo._check = IsDlgButtonChecked(hDlg, IDC_CHECK1);
+                typeInfo._type = static_cast<UINT>(COLLIDER_TYPE::LINE);
+
+                StageScene* stagePtr = dynamic_cast<StageScene*>(SceneManager::GetInstance()->GetSceneByVec());
+
+                stagePtr->SetGroundTypeInfo(typeInfo);
+            }
 
             EndDialog(hDlg, LOWORD(wParam));
             return (INT_PTR)TRUE;

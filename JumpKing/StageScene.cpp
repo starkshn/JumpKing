@@ -136,11 +136,17 @@ void StageScene::Update()
 		}
 	}
 
-	if (KEY_TAP(KEY::G))
+	if (GetSGround())
 	{
-		// CreateGround
-		// Mouse 움직여서 Ground생성
-		
+		// 사각형을 선택하기로 한 상태
+		// 이때 마우스 클릭 -> 드래그 -> AWAY 반복
+	}
+
+	if (GetTGround())
+	{
+		// 삼각형을 선택하기로 한 상태
+		// 이때 마우스 클릭 -> 드래그 -> AWAY 반복
+
 	}
 
 

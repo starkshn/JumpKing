@@ -32,6 +32,19 @@
 // PaenlUI Page
 #define PAGE_INDEX 35
 
+struct COLLIDER_TYPE_INFO
+{
+	bool	_check;
+	UINT	_type;
+};
+
+enum class COLLIDER_TYPE
+{
+	SQUARE,
+	TRIANGLE,
+	LINE,
+};
+
 enum class GROUP_TYPE
 {
 	DEFAULT,
