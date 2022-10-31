@@ -136,20 +136,62 @@ void StageScene::Update()
 		}
 	}
 
-	if (GetSGround())
+	if (CheckGroundType())
 	{
-		// 사각형을 선택하기로 한 상태
-		// 이때 마우스 클릭 -> 드래그 -> AWAY 반복
+		// 클릭을 통해서 데이터를 받았을 경우
+		if (_colTypeInfo._check && _colTypeInfo._type == COLLIDER_TYPE::NONE)
+			return;
+
+		if (_colTypeInfo._check && _colTypeInfo._type == COLLIDER_TYPE::SQUARE)
+		{
+			if (KEY_TAP(KEY::LBTN))
+			{
+				_colliderPos._startPos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
+			}
+
+			if (KEY_AWAY(KEY::LBTN))
+			{
+				_colliderPos._endPos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
+
+				Vector2 colScale = Vector2(abs(_colliderPos._startPos._x - _colliderPos._endPos._x), abs(_colliderPos._startPos._y - _colliderPos._endPos._y));
+				Vector2 colPos = Vector2(_colliderPos._endPos._x - (colScale._x / 2.f), _colliderPos._endPos._y - (colScale._y / 2.f));
+				
+				Object* ground = new Ground();
+				ground->SetObjectName(L"Ground");
+				ground->SetScale(colScale);
+				ground->SetPos(colPos);
+				SceneManager::GetInstance()->AddObject(ground, GROUP_TYPE::GROUND);
+			}
+		}
+
+		if (_colTypeInfo._check && _colTypeInfo._type == COLLIDER_TYPE::TRIANGLE)
+		{
+			if (KEY_TAP(KEY::LBTN))
+			{
+				_colliderPos._startPos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
+			}
+
+			if (KEY_AWAY(KEY::LBTN))
+			{
+				_colliderPos._endPos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
+			}
+		}
+
+		if (_colTypeInfo._check && _colTypeInfo._type == COLLIDER_TYPE::LINE)
+		{
+			if (KEY_TAP(KEY::LBTN))
+			{
+				_colliderPos._startPos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
+			}
+
+			if (KEY_AWAY(KEY::LBTN))
+			{
+				_colliderPos._endPos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
+			}
+		}
+
 	}
-
-	if (GetTGround())
-	{
-		// 삼각형을 선택하기로 한 상태
-		// 이때 마우스 클릭 -> 드래그 -> AWAY 반복
-
-	}
-
-
+	
 	Vector2 playerRenderPos = CameraManager::GetInstance()->GetRenderPos(GetCurPlayer()->GetPos());
 
 	if (playerRenderPos._y < 0.f)

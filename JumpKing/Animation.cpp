@@ -165,7 +165,6 @@ void Animation::LoadAnim(const wstring& relativePath)
 
 	char buffer[256] = {};
 
-
 	// [Animation Name]
 	string str;
 	FScanf(buffer, file); // 필드 읽어옴
@@ -173,13 +172,11 @@ void Animation::LoadAnim(const wstring& relativePath)
 	str = buffer;
 	_animationName = wstring(str.begin(), str.end());
 
-
 	// [Texture Name]
 	FScanf(buffer, file); // 필드 읽어옴 Texture 필드
 	FScanf(buffer, file); // 이름 읽어옴
 	str = buffer;
 	wstring strTexKey = wstring(str.begin(), str.end());
-
 
 	// [FrameCount Data]
 	FScanf(buffer, file); // 필드 읽어옴 Texture 필드
@@ -190,11 +187,9 @@ void Animation::LoadAnim(const wstring& relativePath)
 	// 있으면 찾아서 반환하고 없다면 로딩한다.
 	p_texture = ResourceManager::GetInstance()->LoadTexture(strTexKey, strTexRelativePath);
 
-
 	FScanf(buffer, file); // [Anim FrameCount Data]
 	int frameCount = 0;
 	fscanf_s(file, "%d", &frameCount);
-
 
 	// [5. 프레임 정보 가져오기]
 	AnimFrame frm = {};

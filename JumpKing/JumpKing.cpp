@@ -239,7 +239,7 @@ INT_PTR CALLBACK CheckGroundType(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             {
                 COLLIDER_TYPE_INFO typeInfo;
                 typeInfo._check = IsDlgButtonChecked(hDlg, IDC_CHECK1);
-                typeInfo._type = static_cast<UINT>(COLLIDER_TYPE::SQUARE);
+                typeInfo._type = COLLIDER_TYPE::SQUARE;
 
                 StageScene* stagePtr = dynamic_cast<StageScene*>(SceneManager::GetInstance()->GetSceneByVec());
 
@@ -250,7 +250,7 @@ INT_PTR CALLBACK CheckGroundType(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             {
                 COLLIDER_TYPE_INFO typeInfo;
                 typeInfo._check = IsDlgButtonChecked(hDlg, IDC_CHECK1);
-                typeInfo._type = static_cast<UINT>(COLLIDER_TYPE::TRIANGLE);
+                typeInfo._type = COLLIDER_TYPE::TRIANGLE;
 
                 StageScene* stagePtr = dynamic_cast<StageScene*>(SceneManager::GetInstance()->GetSceneByVec());
 
@@ -261,7 +261,7 @@ INT_PTR CALLBACK CheckGroundType(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             {
                 COLLIDER_TYPE_INFO typeInfo;
                 typeInfo._check = IsDlgButtonChecked(hDlg, IDC_CHECK1);
-                typeInfo._type = static_cast<UINT>(COLLIDER_TYPE::LINE);
+                typeInfo._type = COLLIDER_TYPE::LINE;
 
                 StageScene* stagePtr = dynamic_cast<StageScene*>(SceneManager::GetInstance()->GetSceneByVec());
 
