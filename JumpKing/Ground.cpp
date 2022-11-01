@@ -8,7 +8,7 @@
 
 Ground::Ground()
 {
-	CreateCollider();
+	
 }
 
 Ground::~Ground()
@@ -26,6 +26,22 @@ void Ground::Update()
 {
 
 }
+
+//void Ground::Render(HDC dc)
+//{
+//	Vector2 renderPos = CameraManager::GetInstance()->GetRenderPos(_pos);
+//
+//	Rectangle
+//	(
+//		dc,
+//		static_cast<int>(renderPos._x),
+//		static_cast<int>(renderPos._y),
+//		static_cast<int>(renderPos._x + _scale._x),
+//		static_cast<int>(renderPos._y + _scale._y)
+//	);
+//
+//	ComponentRender(dc);
+//}
 
 void Ground::OnCollisionEnter(Collider* other)
 {
@@ -151,11 +167,3 @@ void Ground::OnCollisionExit(Collider* other)
 		// otherObj->GetGravity()->_onLand = false;
 	}
 }
-
-// =========================
-// Ground Create Window Proc
-// =========================
-//INT_PTR __stdcall GroundCreate(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-//{
-//	
-//}

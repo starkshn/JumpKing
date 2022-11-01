@@ -110,7 +110,6 @@ void Object::Render(HDC dc)
 	);
 
 	ComponentRender(dc);
-
 }
 
 void Object::ComponentRender(HDC dc)

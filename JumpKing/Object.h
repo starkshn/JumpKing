@@ -79,8 +79,8 @@ public:
 	virtual void OnCollisionExit(Collider* other) {}
 
 public:
-	void SetPos(Vector2 pos) { _pos = pos; }
-	void SetScale(Vector2 scale) { _scale = scale; }
+	virtual void SetPos(Vector2 pos) { _pos = pos; }
+	virtual void SetScale(Vector2 scale) { _scale = scale; }
 	void SetTheta(float theta) { _theta = theta; }
 	void SetDir(Vector2 dir) { _dir = dir; _dir.Normalize(); }
 	void SetObjectName(const wstring& name) { _objectName = name; }

@@ -18,6 +18,8 @@ private:
 
 	bool		_active;
 
+	COLLIDER_TYPE_INFO _colTypeInfo;
+
 public:
 	Collider();
 	Collider(const Collider& origin);

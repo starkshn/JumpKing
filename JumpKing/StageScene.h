@@ -33,6 +33,9 @@ private:
 	// Collider 그릴 위치
 	COLLIDER_POS _colliderPos;
 
+	// Ground
+	Object* ground = nullptr;
+
 public:
 	StageScene(UINT stageNumber);
 	virtual ~StageScene() override;

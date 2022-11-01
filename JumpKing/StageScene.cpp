@@ -147,20 +147,35 @@ void StageScene::Update()
 			if (KEY_TAP(KEY::LBTN))
 			{
 				_colliderPos._startPos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
+
+				ground = new Ground();
+				ground->SetObjectName(L"Ground");
+				ground->SetScale(Vector2(1, 1));
+				ground->SetPos(_colliderPos._startPos);
+				
+				SceneManager::GetInstance()->AddObject(ground, GROUP_TYPE::GROUND);
+			}
+
+			if (KEY_HOLD(KEY::LBTN))
+			{
+				Vector2 _curMousePos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
+
+				float xScale = abs(_colliderPos._startPos._x - _curMousePos._x);
+				float yScale = abs(_colliderPos._startPos._y - _curMousePos._y);
+			
+				
+				ground->SetScale(Vector2(xScale, yScale));
 			}
 
 			if (KEY_AWAY(KEY::LBTN))
 			{
 				_colliderPos._endPos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
 
-				Vector2 colScale = Vector2(abs(_colliderPos._startPos._x - _colliderPos._endPos._x), abs(_colliderPos._startPos._y - _colliderPos._endPos._y));
-				Vector2 colPos = Vector2(_colliderPos._endPos._x - (colScale._x / 2.f), _colliderPos._endPos._y - (colScale._y / 2.f));
-				
-				Object* ground = new Ground();
-				ground->SetObjectName(L"Ground");
-				ground->SetScale(colScale);
-				ground->SetPos(colPos);
-				SceneManager::GetInstance()->AddObject(ground, GROUP_TYPE::GROUND);
+				float xScale = abs(_colliderPos._startPos._x - _colliderPos._endPos._x);
+				float yScale = abs(_colliderPos._startPos._y - _colliderPos._endPos._y);
+
+				ground->SetScale(Vector2(xScale, yScale));
+				ground->Init();
 			}
 		}
 

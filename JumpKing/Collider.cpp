@@ -2,9 +2,12 @@
 #include "Collider.h"
 
 #include "CameraManager.h"
+#include "SceneManager.h"
 
 #include "Object.h"
 #include "Core.h"
+#include "Scene.h"
+#include "StageScene.h"
 #include "GDI.h"
 
 UINT Collider::g_ID = 0;
@@ -59,6 +62,37 @@ void Collider::Render(HDC dc)
 
 	Vector2 renderPos = CameraManager::GetInstance()->GetRenderPos(_finalPos);
 
+	/*if (p_owner->GetObjectName() == L"Ground")
+	{
+		StageScene* stageScene = dynamic_cast<StageScene*>(SceneManager::GetInstance()->GetCurScene());
+
+		_colTypeInfo = stageScene->GetGroundTypeInfo();
+
+		if (_colTypeInfo._check && _colTypeInfo._type == COLLIDER_TYPE::SQUARE)
+		{
+			Rectangle
+			(
+				dc,
+				static_cast<int>(renderPos._x - _colliderScale._x),
+				static_cast<int>(renderPos._y - _colliderScale._y),
+				static_cast<int>(renderPos._x + _colliderScale._x),
+				static_cast<int>(renderPos._y + _colliderScale._y)
+			);
+		}
+	}*/
+
+	/*if (p_owner->GetObjectName() != L"Ground")
+	{
+		Rectangle
+		(
+			dc,
+			static_cast<int>(renderPos._x - _colliderScale._x / 2.f),
+			static_cast<int>(renderPos._y - _colliderScale._y / 2.f),
+			static_cast<int>(renderPos._x + _colliderScale._x / 2.f),
+			static_cast<int>(renderPos._y + _colliderScale._y / 2.f)
+		);
+	}*/
+
 	Rectangle
 	(
 		dc,
@@ -67,6 +101,7 @@ void Collider::Render(HDC dc)
 		static_cast<int>(renderPos._x + _colliderScale._x / 2.f),
 		static_cast<int>(renderPos._y + _colliderScale._y / 2.f)
 	);
+	
 }
 
 void Collider::OnCollisionEnter(Collider* other)
