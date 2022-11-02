@@ -42,7 +42,6 @@ private:
 
 	list<CameraEffect> _listCameraEffect;
 
-
 public:
 	void Init();
 	void Update();

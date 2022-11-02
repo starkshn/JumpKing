@@ -20,7 +20,8 @@
 
 StageScene::StageScene(UINT stageNumber)
 	:
-	p_backGroundTexture(nullptr)
+	p_backGroundTexture(nullptr),
+	_colTypeInfo{}
 {
 	Core::GetInstance()->DockMenu();
 
@@ -67,6 +68,19 @@ void StageScene::Enter(Object* player)
 		player->SetPos(Vector2(player->GetPos()._x, player->GetPos()._y));
 		RegisterPlayer(player);
 	}
+
+	// Side Ground 배치
+	Object* leftSideGround = new Ground();
+	leftSideGround->SetObjectName(L"Ground");
+	leftSideGround->SetScale(Vector2(20.f, _resolution._y));
+	leftSideGround->SetPos(Vector2(10.f, _resolution._y / 2.f));
+	SceneManager::GetInstance()->AddObject(leftSideGround, GROUP_TYPE::GROUND);
+
+	Object* rightSideGround = new Ground();
+	rightSideGround->SetObjectName(L"Ground");
+	rightSideGround->SetScale(Vector2(20.f, _resolution._y));
+	rightSideGround->SetPos(Vector2(_resolution._x - 10.f, _resolution._y / 2.f));
+	SceneManager::GetInstance()->AddObject(rightSideGround, GROUP_TYPE::GROUND);
 
 	// Ground배치
 	Object* ground = new Ground();
@@ -146,7 +160,7 @@ void StageScene::Update()
 		{
 			if (KEY_TAP(KEY::LBTN))
 			{
-				_colliderPos._startPos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
+				_colliderPos._startPos = CameraManager::GetInstance()->GetRenderPos(MOUSE_POS);
 
 				ground = new Ground();
 				ground->SetObjectName(L"Ground");
@@ -162,8 +176,7 @@ void StageScene::Update()
 
 				float xScale = abs(_colliderPos._startPos._x - _curMousePos._x);
 				float yScale = abs(_colliderPos._startPos._y - _curMousePos._y);
-			
-				
+
 				ground->SetScale(Vector2(xScale, yScale));
 			}
 
