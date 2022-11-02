@@ -34,7 +34,8 @@ private:
 	COLLIDER_POS _colliderPos;
 
 	// Ground
-	Object* ground = nullptr;
+	Object* p_ground = nullptr;
+	Object* p_targetGround = nullptr;
 
 public:
 	StageScene(UINT stageNumber);

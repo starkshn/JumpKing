@@ -162,12 +162,12 @@ void StageScene::Update()
 			{
 				_colliderPos._startPos = CameraManager::GetInstance()->GetRenderPos(MOUSE_POS);
 
-				ground = new Ground();
-				ground->SetObjectName(L"Ground");
-				ground->SetScale(Vector2(1, 1));
-				ground->SetPos(_colliderPos._startPos);
+				p_ground = new Ground();
+				p_ground->SetObjectName(L"Ground");
+				p_ground->SetScale(Vector2(1, 1));
+				p_ground->SetPos(_colliderPos._startPos);
 				
-				SceneManager::GetInstance()->AddObject(ground, GROUP_TYPE::GROUND);
+				SceneManager::GetInstance()->AddObject(p_ground, GROUP_TYPE::GROUND);
 			}
 
 			if (KEY_HOLD(KEY::LBTN))
@@ -177,7 +177,7 @@ void StageScene::Update()
 				float xScale = abs(_colliderPos._startPos._x - _curMousePos._x);
 				float yScale = abs(_colliderPos._startPos._y - _curMousePos._y);
 
-				ground->SetScale(Vector2(xScale, yScale));
+				p_ground->SetScale(Vector2(xScale, yScale));
 			}
 
 			if (KEY_AWAY(KEY::LBTN))
@@ -187,8 +187,8 @@ void StageScene::Update()
 				float xScale = abs(_colliderPos._startPos._x - _colliderPos._endPos._x);
 				float yScale = abs(_colliderPos._startPos._y - _colliderPos._endPos._y);
 
-				ground->SetScale(Vector2(xScale, yScale));
-				ground->Init();
+				p_ground->SetScale(Vector2(xScale, yScale));
+				p_ground->Init();
 			}
 		}
 
@@ -217,7 +217,48 @@ void StageScene::Update()
 				_colliderPos._endPos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
 			}
 		}
+	}
 
+	if (KEY_TAP(KEY::RBTN))
+	{
+		p_targetGround = nullptr;
+
+		_mouseForcePos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
+
+		vector<Object*> vecGrounds = SceneManager::GetInstance()->GetObjectsVec(static_cast<UINT>(GROUP_TYPE::GROUND));
+
+		for (int i = 0; i < vecGrounds.size(); ++i)
+		{
+			Vector2 gPos = vecGrounds[i]->GetPos();
+			Vector2 gScale = vecGrounds[i]->GetScale();
+
+			float rightXRange = gPos._x + gScale._x / 2.f;
+			float leftXRange = gPos._x - gScale._x / 2.f;
+			float topYRange = gPos._y - gScale._y / 2.f;
+			float bottomYRange = gPos._y + gScale._y / 2.f;
+
+			if (leftXRange <= _mouseForcePos._x && _mouseForcePos._x <= rightXRange && topYRange <= _mouseForcePos._y && _mouseForcePos._y <= bottomYRange)
+			{
+				if (vecGrounds[i]->GetObjectName() == L"Ground")
+					p_targetGround = vecGrounds[i];
+			}
+		}
+	}
+
+	if (KEY_HOLD(KEY::RBTN))
+	{
+		_mouseForcePos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
+
+		p_targetGround->SetPos(_mouseForcePos);
+	}
+
+	if (KEY_AWAY(KEY::RBTN))
+	{
+		_mouseForcePos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
+
+		p_targetGround->SetPos(_mouseForcePos);
+
+		p_targetGround = nullptr;
 	}
 	
 	Vector2 playerRenderPos = CameraManager::GetInstance()->GetRenderPos(GetCurPlayer()->GetPos());
