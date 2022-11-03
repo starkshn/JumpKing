@@ -24,19 +24,27 @@ StageScene::StageScene(UINT stageNumber)
 	p_backGroundTexture(nullptr),
 	_colTypeInfo{}
 {
+	// [Menu Bar Setting]
 	Core::GetInstance()->DockMenu();
 
+	// [StageSceneNumber Setting]
 	SetStageNumber(stageNumber);
-
 	UINT sn = GetStageNumber();
 
 	_str = to_string(sn);
 	_strP = wstring(_str.begin(), _str.end());
 	SetSceneName(L"Stage_" + _strP);
 
+	// [Load Texture]
 	p_backGroundTexture = ResourceManager::GetInstance()->LoadTexture(GetSceneName(), L"Textures\\Stage\\Stage_" + _strP + L".bmp");
-
 	_changePos = CameraManager::GetInstance()->GetLookPos();
+
+	// [Load Ground Infomation]
+	if (sn < 4)
+	{
+		wstring path = L"Stage\\Stage_" + _strP + L".stage";
+		LoadGroundInfo(path);
+	}
 }
 
 StageScene::~StageScene()
@@ -51,10 +59,6 @@ void StageScene::Enter(Object* player)
 	SceneManager::GetInstance()->SetStaticStage(sn);
 
 	_resolution = Core::GetInstance()->GetResolution();
-
-	wstring path = L"Stage\\Stage_" + _strP + L".stage";
-
-	LoadGroundInfo(path);
 
 	// Object 추가
 	if (player == nullptr)
@@ -74,38 +78,14 @@ void StageScene::Enter(Object* player)
 		RegisterPlayer(player);
 	}
 
-	// Side Ground 배치
-	Object* leftSideGround = new Ground();
-	leftSideGround->SetObjectName(L"Ground");
-	leftSideGround->SetScale(Vector2(20.f, _resolution._y));
-	leftSideGround->SetPos(Vector2(10.f, _resolution._y / 2.f));
-	SceneManager::GetInstance()->AddObject(leftSideGround, GROUP_TYPE::GROUND);
-
-	Object* rightSideGround = new Ground();
-	rightSideGround->SetObjectName(L"Ground");
-	rightSideGround->SetScale(Vector2(20.f, _resolution._y));
-	rightSideGround->SetPos(Vector2(_resolution._x - 10.f, _resolution._y / 2.f));
-	SceneManager::GetInstance()->AddObject(rightSideGround, GROUP_TYPE::GROUND);
-
-	// Ground배치
-	Object* ground = new Ground();
-	ground->SetObjectName(L"Ground");
-	ground->SetScale(Vector2(200.f, 100.f));
-	ground->SetPos(Vector2(640.f, 700.f));
-	SceneManager::GetInstance()->AddObject(ground, GROUP_TYPE::GROUND);
-
-	Object* ground2 = new Ground();
-	ground2->SetObjectName(L"Ground");
-	ground2->SetScale(Vector2(200.f, 100.f));
-	ground2->SetPos(Vector2(340.f, 300.f));
-	SceneManager::GetInstance()->AddObject(ground2, GROUP_TYPE::GROUND);
-
-	Object* ground3 = new Ground();
-	ground3->SetObjectName(L"Ground");
-	ground3->SetScale(Vector2(200.f, 100.f));
-	ground3->SetPos(Vector2(940.f, 300.f));
-	SceneManager::GetInstance()->AddObject(ground3, GROUP_TYPE::GROUND);
-
+	for (int i = 0; i < _vecGroundInfo.size(); ++i)
+	{
+		Object* ground = new Ground();
+		ground->SetObjectName(L"Ground");
+		ground->SetScale(_vecGroundInfo[i]._scale);
+		ground->SetPos(_vecGroundInfo[i]._pos);
+		SceneManager::GetInstance()->AddObject(ground, GROUP_TYPE::GROUND);
+	}
 	// 땅과 플레이어 충돌 지정
 	ColliderManager::GetInstance()->CheckGroup(GROUP_TYPE::PLAYER, GROUP_TYPE::GROUND);
 	// =================================
@@ -115,9 +95,10 @@ void StageScene::Enter(Object* player)
 	CameraManager::GetInstance()->SetLookAtPos(_resolution / 2.f);
 	// =================================
 
+	// =================================
 	// Init 함수 호출
 	Init();
-	// =======================================
+	// =================================
 }
 
 void StageScene::Update()
@@ -224,10 +205,17 @@ void StageScene::Update()
 		}
 	}
 
+	// 생성한 그라운드 삭제
+	if (KEY_TAP(KEY::Z))
+	{
+		if (p_targetGround == nullptr)
+			return;
+		DeleteObjectEvent(p_targetGround);
+	}
+
+	// Ground 클릭후 움직이는 부분
 	if (KEY_TAP(KEY::RBTN))
 	{
-		p_targetGround = nullptr;
-
 		_mouseForcePos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
 
 		vector<Object*> vecGrounds = SceneManager::GetInstance()->GetObjectsVec(static_cast<UINT>(GROUP_TYPE::GROUND));
@@ -250,6 +238,7 @@ void StageScene::Update()
 		}
 	}
 
+	// Ground 클릭후 움직이는 부분
 	if (KEY_HOLD(KEY::RBTN))
 	{
 		_mouseForcePos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
@@ -257,13 +246,12 @@ void StageScene::Update()
 		p_targetGround->SetPos(_mouseForcePos);
 	}
 
+	// Ground 클릭후 움직이는 부분
 	if (KEY_AWAY(KEY::RBTN))
 	{
 		_mouseForcePos = CameraManager::GetInstance()->GetRealPos(MOUSE_POS);
 
 		p_targetGround->SetPos(_mouseForcePos);
-
-		p_targetGround = nullptr;
 	}
 	
 	Vector2 playerRenderPos = CameraManager::GetInstance()->GetRenderPos(GetCurPlayer()->GetPos());
@@ -280,6 +268,7 @@ void StageScene::Update()
 		ChangeStandPos(playerRenderPos, GetCurPlayer(), false);
 	}
 
+	// StageScene Ground Information Save
 	if (KEY_TAP(KEY::CTRL))
 	{
 		string p = "Stage\\Stage_" + _str + ".stage";
@@ -442,6 +431,9 @@ void StageScene::LoadGroundInfo(const wstring& relativePath)
 		POINT pt = {};
 		GROUND_INFO gi = {};
 
+		if (i >= 1)
+			FScanf(buffer, file); // '\n' 읽어들임.
+
 		FScanf(buffer, file); // [Ground Pos]
 		if (!strcmp("[Ground Pos](Vector2)", buffer)) // 같으면 0을 반환
 		{
@@ -466,5 +458,10 @@ void StageScene::LoadGroundInfo(const wstring& relativePath)
 	}
 
 	fclose(file);
+}
+
+void StageScene::DeleteGround()
+{
+	
 }
 

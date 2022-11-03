@@ -71,6 +71,8 @@ public:
 public:
 	void CreateForce();
 
+	void DeleteGround();
+
 public:
 	void SaveGroundInfo(const wstring& relativePath);
 	void LoadGroundInfo(const wstring& relativePath);
