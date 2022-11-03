@@ -107,7 +107,7 @@ Player::Player()
 	//GetAnimator()->FindAnimation(L"FALL_LEFT")->SaveAnim(L"Animation\\Player_FALL_LEFT.anim");
 
 	//GetAnimator()->FindAnimation(L"FALLEN_RIGHT")->SaveAnim(L"Animation\\Player_FALLEN_RIGHT.anim");
-	//GetAnimator()->FindAnimation(L"FALLEN_LEFT")->SaveAnim(L"Animation\\Player_FALLEN_LEFT.anim");
+	// GetAnimator()->FindAnimation(L"FALLEN_LEFT")->SaveAnim(L"Animation\\Player_FALLEN_LEFT.anim");
 	// ====================================================================
 #pragma endregion
 

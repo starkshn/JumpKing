@@ -7,6 +7,7 @@
 #include "KeyManager.h"
 #include "ColliderManager.h"
 #include "CameraManager.h"
+#include "PathManager.h"
 
 #include "Core.h"
 #include "Texture.h"
@@ -29,11 +30,11 @@ StageScene::StageScene(UINT stageNumber)
 
 	UINT sn = GetStageNumber();
 
-	string str = to_string(sn);
-	wstring strP = wstring(str.begin(), str.end());
-	SetSceneName(L"Stage_" + strP);
-	
-	p_backGroundTexture = ResourceManager::GetInstance()->LoadTexture(GetSceneName(), L"Textures\\Stage\\Stage_" + strP + L".bmp");
+	_str = to_string(sn);
+	_strP = wstring(_str.begin(), _str.end());
+	SetSceneName(L"Stage_" + _strP);
+
+	p_backGroundTexture = ResourceManager::GetInstance()->LoadTexture(GetSceneName(), L"Textures\\Stage\\Stage_" + _strP + L".bmp");
 
 	_changePos = CameraManager::GetInstance()->GetLookPos();
 }
@@ -50,6 +51,10 @@ void StageScene::Enter(Object* player)
 	SceneManager::GetInstance()->SetStaticStage(sn);
 
 	_resolution = Core::GetInstance()->GetResolution();
+
+	wstring path = L"Stage\\Stage_" + _strP + L".stage";
+
+	LoadGroundInfo(path);
 
 	// Object 추가
 	if (player == nullptr)
@@ -275,6 +280,13 @@ void StageScene::Update()
 		ChangeStandPos(playerRenderPos, GetCurPlayer(), false);
 	}
 
+	if (KEY_TAP(KEY::CTRL))
+	{
+		string p = "Stage\\Stage_" + _str + ".stage";
+		wstring path = wstring(p.begin(), p.end());
+		SaveGroundInfo(path);
+	}
+
 	Scene::Update();
 }
 
@@ -381,5 +393,78 @@ void StageScene::ChangeStandPos(Vector2 playerPos, Object* player, bool upDown)
 		//}
 #pragma endregion
 	}
+}
+
+void StageScene::SaveGroundInfo(const wstring& relativePath)
+{
+	wstring filePath = PathManager::GetInstance()->GetAbsolutePath();
+	filePath += relativePath; // contents 경로 + 상대경로 => 최종 경로
+
+	vector<Object*> vecGrounds = SceneManager::GetInstance()->GetObjectsVec(static_cast<UINT>(GROUP_TYPE::GROUND));
+
+	FILE* file = nullptr;
+	_wfopen_s(&file, filePath.c_str(), L"wb");
+	assert(file);
+
+	fprintf(file, "[Ground Count](UINT)\n");
+	fprintf(file, "%d\n", static_cast<UINT>(vecGrounds.size()));
+
+	for (int i = 0; i < vecGrounds.size(); ++i)
+	{
+		fprintf(file, "[Ground Pos](Vector2)\n");
+		fprintf(file, "%d %d\n", static_cast<int>(vecGrounds[i]->GetPos()._x), static_cast<int>(vecGrounds[i]->GetPos()._y));
+		fprintf(file, "[Ground Scale](Vector2)\n");
+		fprintf(file, "%d %d\n", static_cast<int>(vecGrounds[i]->GetScale()._x), static_cast<int>(vecGrounds[i]->GetScale()._y));
+	}
+
+	fclose(file);
+}
+
+void StageScene::LoadGroundInfo(const wstring& relativePath)
+{
+	wstring filePath = PathManager::GetInstance()->GetAbsolutePath();
+	filePath += relativePath; // contents 경로 + 상대경로 => 최종 경로
+
+	FILE* file = nullptr;
+	_wfopen_s(&file, filePath.c_str(), L"rb");
+	assert(file);
+
+	char buffer[256] = {};
+
+	string str;
+	FScanf(buffer, file); // [Ground Count](UINT)
+	FScanf(buffer, file); // 갯수
+	str = buffer;
+
+	UINT gc = std::stoi(str);
+	for (int i = 0; i < gc; ++i)
+	{
+		POINT pt = {};
+		GROUND_INFO gi = {};
+
+		FScanf(buffer, file); // [Ground Pos]
+		if (!strcmp("[Ground Pos](Vector2)", buffer)) // 같으면 0을 반환
+		{
+			fscanf_s(file, "%d", &pt.x);
+			fscanf_s(file, "%d", &pt.y);
+
+			gi._pos = Vector2(pt);
+		}
+
+		FScanf(buffer, file); // '\n' 보이지않는 '\n' 읽어들임.
+		FScanf(buffer, file); // [Ground Scale]
+
+		if (!strcmp("[Ground Scale](Vector2)", buffer)) // 같으면 0을 반환
+		{
+			fscanf_s(file, "%d", &pt.x);
+			fscanf_s(file, "%d", &pt.y);
+
+			gi._scale = Vector2(pt);
+		}
+
+		_vecGroundInfo.push_back(gi);
+	}
+
+	fclose(file);
 }
 

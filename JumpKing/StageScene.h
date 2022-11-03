@@ -7,12 +7,19 @@ struct COLLIDER_POS
 	Vector2 _endPos;
 };
 
+struct GROUND_INFO
+{
+	Vector2 _pos;
+	Vector2 _scale;
+};
+
 class StageScene : public Scene
 {
 private:
 	Texture*	p_backGroundTexture;
 
 	StageScene* p_vecStages[static_cast<UINT>(SCENE_TYPE::END)];
+	vector<GROUND_INFO> _vecGroundInfo = {};
 
 	Vector2		_mouseForcePos;
 	Vector2		_resolution;
@@ -26,6 +33,9 @@ private:
 	float		_forceCurRadius;
 	float		_forceRadius;
 	float		_force;
+
+	wstring		_strP;
+	string		_str;
 
 	// 메뉴바에서 입력받은 타입
 	COLLIDER_TYPE_INFO _colTypeInfo;
@@ -61,5 +71,8 @@ public:
 public:
 	void CreateForce();
 
+public:
+	void SaveGroundInfo(const wstring& relativePath);
+	void LoadGroundInfo(const wstring& relativePath);
 };
 

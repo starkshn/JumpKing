@@ -150,7 +150,6 @@ void Animation::SaveAnim(const wstring& relativePath)
 		fprintf(file, "\n");
 	}
 
-
 	fclose(file);
 }
 
