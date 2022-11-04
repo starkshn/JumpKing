@@ -256,13 +256,13 @@ void StageScene::Update()
 	
 	Vector2 playerRenderPos = CameraManager::GetInstance()->GetRenderPos(GetCurPlayer()->GetPos());
 
-	if (playerRenderPos._y < 0.f)
+	if (playerRenderPos._y - (GetCurPlayer()->GetScale()._y / 4.f) < 0.f)
 	{
 		// 위로 갈 때
   		ChangeStandPos(playerRenderPos, GetCurPlayer(), true);
 	}
 
-	if (playerRenderPos._y > _resolution._y)
+	if (playerRenderPos._y + (GetCurPlayer()->GetScale()._y / 4.f) > _resolution._y)
 	{
 		// 아래로 갈 때
 		ChangeStandPos(playerRenderPos, GetCurPlayer(), false);
@@ -319,68 +319,23 @@ void StageScene::ChangeStandPos(Vector2 playerPos, Object* player, bool upDown)
 		// 위로 올라감
 		if (SceneManager::GetInstance()->UpStageByVec() != nullptr)
 		{
-			// 현재가 이전보다 크다 == 위로 올라감
-			float curPosY = _resolution._y - (playerPos._y + player->GetScale()._y / 2.f);
-			player->SetPos(Vector2(playerPos._x, curPosY));
-
 			ChangeScene(static_cast<SCENE_TYPE>((SceneManager::GetInstance()->GetSceneByVec())->GetStageNumber()), GetCurPlayer());
+
+			// 현재가 이전보다 크다 == 위로 올라감
+			float curPosY = _resolution._y - (player->GetScale()._y / 4.f);
+			player->SetPos(Vector2(playerPos._x, curPosY));
 		}
-		
-#pragma region "iter 안쓴 버전"
-		//UINT curStageNumber = GetStageNumber();
-		//UINT nextStageNumber = curStageNumber + 1;
-
-		//if (curStageNumber + 1 == nextStageNumber)
-		//{
-		//	if (nextStageNumber >= static_cast<UINT>(SCENE_TYPE::END))
-		//		return;
-
-		//	SCENE_TYPE nextST = static_cast<SCENE_TYPE>(nextStageNumber);
-
-		//	// Scene이 있는지 없는지 확인 하는 작업
-		//	if (SceneManager::GetInstance()->GetScene(nextST) != nullptr)
-		//	{
-		//		// 현재가 이전보다 크다 == 위로 올라감
-		//		float curPosY = _resolution._y - (playerPos._y + player->GetScale()._y / 2.f);
-		//		player->SetPos(Vector2(playerPos._x, curPosY));
-
-		//		ChangeScene(nextST, GetCurPlayer());
-		//	}
-		//}
-#pragma endregion
 	}
 	else
 	{
+		// 밑으로 내려감
 		if (SceneManager::GetInstance()->DownStageByVec() != nullptr)
 		{
-			float curPosY = (playerPos._y + player->GetScale()._y / 2.f) - _resolution._y;
-			player->SetPos(Vector2(playerPos._x, curPosY));
-
 			ChangeScene(static_cast<SCENE_TYPE>((SceneManager::GetInstance()->GetSceneByVec())->GetStageNumber()), GetCurPlayer());
+
+			float curPosY = (player->GetScale()._y / 4.f);
+			player->SetPos(Vector2(playerPos._x, curPosY));
 		}
-
-#pragma region "iter 안 쓴 버젼"
-		//UINT curStageNumber = GetStageNumber();
-		//UINT nextStageNumber = curStageNumber - 1;
-
-		//if (curStageNumber - 1 == nextStageNumber)
-		//{
-		//	if (nextStageNumber < static_cast<UINT>(SCENE_TYPE::STAGE_1))
-		//		return;
-
-		//	SCENE_TYPE nextST = static_cast<SCENE_TYPE>(nextStageNumber);
-
-		//	// Scene이 있는지 없는지 확인 하는 작업
-		//	if (SceneManager::GetInstance()->GetScene(nextST) != nullptr)
-		//	{
-		//		// 현재가 이번보다 작다. == 밑으로 내려감
-		//		float curPosY = (playerPos._y + player->GetScale()._y / 2.f) - _resolution._y;
-		//		player->SetPos(Vector2(playerPos._x, curPosY));
-
-		//		ChangeScene(nextST, player);
-		//	}
-		//}
-#pragma endregion
 	}
 }
 

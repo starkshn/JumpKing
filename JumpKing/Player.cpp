@@ -23,8 +23,8 @@ Player::Player()
 	_onJump(false)
 {
 	CreateCollider();
-	GetCollider()->SetOffsetPos(Vector2{ 0.f, 0.f });
-	GetCollider()->SetColliderScale(Vector2{ 90.f, 103.f });
+	GetCollider()->SetOffsetPos(Vector2{ 0.f, 10.f });
+	GetCollider()->SetColliderScale(Vector2{ 60.f, 80.f });
 
 	SetObjectName(L"Player");
 
@@ -205,10 +205,15 @@ void Player::UpdateState()
 		if (_onJump == false)
 		{
 			_curState = OBJECT_STATE::SQUAT;
+			GetCollider()->SetOffsetPos(Vector2{ 0.f, 30.f });
+			GetCollider()->SetColliderScale(Vector2{ 60.f, 40.f });
 		}
 	}
 	else if (KEY_AWAY(KEY::SPACE))
 	{
+		GetCollider()->SetOffsetPos(Vector2{ 0.f, 10.f });
+		GetCollider()->SetColliderScale(Vector2{ 60.f, 80.f });
+
 		_curState = OBJECT_STATE::JUMP;
 
 		p_jump->Play();
@@ -351,7 +356,6 @@ void Player::OnCollisionEnter(Collider* other)
 		{
 			_curState = OBJECT_STATE::OFF;
 			p_bump->Play();
-
 		}
 
 		Vector2 pos = GetPos();
