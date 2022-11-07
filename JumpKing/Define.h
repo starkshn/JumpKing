@@ -32,6 +32,22 @@
 // PaenlUI Page
 #define PAGE_INDEX 35
 
+struct PLAYER_COL_INFO
+{
+	bool _left;
+	bool _right;
+	bool _bottom;
+	bool _top;
+
+	void operator = (const PLAYER_COL_INFO& other)
+	{
+		this->_left = other._left;
+		this->_right = other._right;
+		this->_bottom = other._bottom;
+		this->_top = other._top;
+	}
+};
+
 enum class COLLIDER_TYPE
 {
 	NONE,

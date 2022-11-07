@@ -48,86 +48,26 @@ void Ground::OnCollisionEnter(Collider* other)
 	Object* otherObj = other->GetColliderOwner();
 	if (otherObj->GetObjectName() == L"Player")
 	{
-		otherObj->GetGravity()->SetOnGround(true);
-		// otherObj->GetGravity()->_onLand = true;
+		Player* player = dynamic_cast<Player*>(otherObj);
+		OBJECT_STATE playerCurState = player->GetCurState();
 
-		Vector2 playerPos = other->GetFinalPos();
-		Vector2 playerScale = other->GetColliderScale();
-
-		float playerPX = playerPos._x + (playerScale._x / 2.f);
-		float playerMX = playerPos._x - (playerScale._x / 2.f);
-
-		float playerTopY = playerPos._y - (playerScale._y / 2.f);
-		float playerBottomY = playerPos._y + (playerScale._y / 2.f);
-
-		Vector2 pos = GetCollider()->GetFinalPos();
-		Vector2 scale = GetCollider()->GetColliderScale();
-
-		float scalePX = pos._x + (scale._x / 2.f) + playerScale._x;
-		float scaleMX = pos._x - (scale._x / 2.f) - playerScale._x;
-
-		float scaleTopY = pos._y - (scale._y / 2.f);
-		float scaleBottomY = pos._y + (scale._y / 2.f);
-
-		if ( (playerTopY + 1 > scaleBottomY))
+		// ============================================
+		// JUMP 아닐 경우 충돌체크
+		// ============================================
+		if (playerCurState == OBJECT_STATE::MOVE || playerCurState == OBJECT_STATE::IDLE)
 		{
-			if ((playerPX <= scalePX) && (playerMX >= scaleMX))
-			{
-				// 나(땅 기준)의 나의(땅의) 아랫면에 충돌했을 때
-				otherObj->OnDownToUp(true);
-
-				float lenY = abs(playerPos._y - pos._y);
-				float valueY = ((playerScale._y / 2.f) + (scale._y / 2.f)) - lenY;
-				playerPos = otherObj->GetPos();
-				playerPos._y += valueY;
-
-				otherObj->SetPos(playerPos);
-			}
 			return;
 		}
-		// + (playerScale._y / 2.f)
-		if ( ( (playerBottomY) <= scaleTopY) && (playerPX <= scalePX && playerMX >= scaleMX))
+
+	
+		// ============================================
+		// JUMP일 경우 충돌체크
+		// ============================================
+		if (playerCurState == OBJECT_STATE::JUMP)
 		{
-			// 나(땅의)의 땅의 윗면에 충돌했을 때 (땅에 서있을 때)
-			float lenY = abs(playerPos._y - pos._y);
-			float valueY = ((playerScale._y / 2.f) + (scale._y / 2.f)) - lenY;
-			playerPos = otherObj->GetPos();
-			playerPos._y -= valueY;
-			otherObj->SetPos(playerPos);
+			CheckColDir(otherObj);
 			
-			return;
 		}
-		
-		if (pos._x - (scale._x / 2.f) >= (playerPX - 1) && abs(playerPos._y - pos._y) < (playerScale._y / 2.f + scale._y / 2.f))
-		{
-			// 충돌을 했는데 나(땅의) 왼쪽면에 부딪혔을 때
-			otherObj->OnLeftRight(true);
-
-			float lenX = abs(playerPos._x - pos._x);
-			float valueX = ((playerScale._x / 2.f) + (scale._x / 2.f)) - lenX;
-
-			playerPos = otherObj->GetPos();
-			playerPos._x -= lenX;
-
-			otherObj->GetRigidBody()->SetVelocity(Vector2(-500.f, 0.f));
-			return;
-		}
-
-		if (pos._x + (scale._x / 2.f) <= (playerMX + 1) && abs(playerPos._y - pos._y) < (playerScale._y / 2.f + scale._y / 2.f))
-		{
-			// 충돌을 했는데 나(땅의) 오른쪽면에  부딪혔을 때
-			otherObj->OnLeftRight(true);
-
-			float lenX = abs(playerPos._x - pos._x);
-			float valueX = ((playerScale._x / 2.f) + (scale._x / 2.f)) - lenX;
-
-			playerPos = otherObj->GetPos();
-			playerPos._x += lenX;
-
-			otherObj->GetRigidBody()->SetVelocity(Vector2(500.f, 0.f));
-			return;
-		}
-
 	}
 }
 
@@ -137,23 +77,101 @@ void Ground::OnCollisionStay(Collider* other)
 
 	if (otherObj->GetObjectName() == L"Player")
 	{
-		otherObj->GetGravity()->SetOnGround(true);
-		// otherObj->GetGravity()->_onLand = false;
+		Player* player = dynamic_cast<Player*>(otherObj);
+		OBJECT_STATE playerCurState = player->GetCurState();
 
-		Vector2 objPos = other->GetFinalPos();
-		Vector2 objScale = other->GetColliderScale();
+		Vector2 playerPos = other->GetFinalPos();
+		Vector2 playerScale = other->GetColliderScale();
 
-		Vector2 pos = GetCollider()->GetFinalPos();
-		Vector2 scale = GetCollider()->GetColliderScale();
+		Vector2 groundPos = GetCollider()->GetFinalPos();
+		Vector2 groundScale = GetCollider()->GetColliderScale();
 
-		float len = abs(objPos._y - pos._y);
-		float value = (objScale._y / 2.f + scale._y / 2.f) - len;
+		float playerRightPosX = playerPos._x + (playerScale._x / 2.f);
+		float playerLeftPosX = playerPos._x - (playerScale._x / 2.f);
+		float playerTopPosY = playerPos._y - (playerScale._y / 2.f);
+		float playerBottomPosY = playerPos._y + (playerScale._y / 2.f);
 
-		// 충돌을 접한 상태를 유지하기 위해 의도적으로 1픽셀을 덜 올려줌.
-		objPos = otherObj->GetPos();
-		objPos._y -= value;
+		float groundRightPosX = groundPos._x + (groundScale._x / 2.f);
+		float groundLeftPosX = groundPos._x - (groundScale._x / 2.f);
+		float groundTopPosY = groundPos._y - (groundScale._y / 2.f);
+		float groundBottomPosY = groundPos._y + (groundScale._y / 2.f);
 
-		otherObj->SetPos(objPos);
+		// ground 위쪽면 부딪힐 경우(플레이어가 땅위에 서 있을 경우
+		if (playerBottomPosY >= groundTopPosY && playerTopPosY < groundPos._y)
+		{
+			if (playerRightPosX <= (groundRightPosX + playerScale._x / 2.f) && playerLeftPosX >= groundLeftPosX - (playerScale._x / 2.f))
+			{
+				// 나(땅 기준)의 나의(땅의) 아랫면에 충돌했을 때
+				PLAYER_COL_INFO info = { false, false, false, true };
+				player->SetPlayerColInfo(info);
+
+				otherObj->GetGravity()->SetOnGround(true);
+
+				float lenY = abs(playerPos._y - groundPos._y);
+				float valueY = ((playerScale._y / 2.f) + (groundScale._y / 2.f)) - lenY;
+				playerPos = otherObj->GetPos();
+				playerPos._y -= valueY;
+
+				otherObj->SetPos(playerPos);
+				return;
+			}
+		}
+
+		// ground 왼쪽면 부딪힐 경우
+		if (playerRightPosX + 5 >= groundLeftPosX && playerPos._x < groundLeftPosX)
+		{
+			if (groundTopPosY - (playerScale._y / 2.f) < playerTopPosY && groundBottomPosY + (playerScale._y / 2.f) > playerBottomPosY)
+			{
+				PLAYER_COL_INFO info = { true, false, false, false };
+				player->SetPlayerColInfo(info);
+
+				float lenX = abs(playerPos._x - groundPos._x);
+				float valueX = ((playerScale._x / 2.f) + (groundScale._x / 2.f)) - lenX;
+				playerPos = otherObj->GetPos();
+				playerPos._x -= valueX;
+
+				otherObj->SetPos(playerPos);
+				return;
+			}
+		}
+
+		// ground 오른쪽면 부딪힐 경우
+		if (playerLeftPosX - 5 <= groundRightPosX && playerPos._x > groundRightPosX)
+		{
+			if (groundTopPosY - (playerScale._y / 2.f) < playerTopPosY && groundBottomPosY + (playerScale._y / 2.f) > playerBottomPosY)
+			{
+				PLAYER_COL_INFO info = { false, true, false, false };
+				player->SetPlayerColInfo(info);
+
+				float lenX = abs(playerPos._x - groundPos._x);
+				float valueX = ((playerScale._x / 2.f) + (groundScale._x / 2.f)) - lenX;
+				playerPos = otherObj->GetPos();
+				playerPos._x += valueX;
+
+				otherObj->SetPos(playerPos);
+				return;
+			}
+		}
+
+		// ground 아랫면 부딪힐 경우
+		if (playerTopPosY - 5 < groundBottomPosY && playerPos._y > groundBottomPosY)
+		{
+			if (playerRightPosX <= (groundRightPosX + playerScale._x / 2.f) && playerLeftPosX >= groundLeftPosX - (playerScale._x / 2.f))
+			{
+				PLAYER_COL_INFO info = { false, false, true, false };
+				player->SetPlayerColInfo(info);
+
+				float lenY = abs(playerPos._y - groundPos._y);
+				float valueY = ((playerScale._y / 2.f) + (groundScale._y / 2.f)) - lenY;
+				playerPos = otherObj->GetPos();
+				playerPos._y += valueY;
+
+				otherObj->SetPos(playerPos);
+
+				return;
+			}
+		}
+
 	}
 }
 
@@ -165,5 +183,103 @@ void Ground::OnCollisionExit(Collider* other)
 	{
 		otherObj->GetGravity()->SetOnGround(false);
 		// otherObj->GetGravity()->_onLand = false;
+	}
+}
+
+void Ground::CheckColDir(Object* otherObj)
+{
+	Player* player = dynamic_cast<Player*>(otherObj);
+	OBJECT_STATE playerCurState = player->GetCurState();
+
+	Vector2 playerPos = otherObj->GetCollider()->GetFinalPos();
+	Vector2 playerScale = otherObj->GetCollider()->GetColliderScale();
+
+	Vector2 groundPos = GetCollider()->GetFinalPos();
+	Vector2 groundScale = GetCollider()->GetColliderScale();
+
+	float playerRightPosX = playerPos._x + (playerScale._x / 2.f);
+	float playerLeftPosX = playerPos._x - (playerScale._x / 2.f);
+	float playerTopPosY = playerPos._y - (playerScale._y / 2.f);
+	float playerBottomPosY = playerPos._y + (playerScale._y / 2.f);
+
+	float groundRightPosX = groundPos._x + (groundScale._x / 2.f);
+	float groundLeftPosX = groundPos._x - (groundScale._x / 2.f);
+	float groundTopPosY = groundPos._y - (groundScale._y / 2.f);
+	float groundBottomPosY = groundPos._y + (groundScale._y / 2.f);
+
+	// ground 위쪽면 부딪힐 경우(플레이어가 땅위에 서 있을 경우
+	if (playerBottomPosY >= groundTopPosY && playerTopPosY < groundPos._y)
+	{
+		if (playerRightPosX <= (groundRightPosX + playerScale._x / 2.f) && playerLeftPosX >= groundLeftPosX - (playerScale._x / 2.f))
+		{
+			// 나(땅 기준)의 나의(땅의) 아랫면에 충돌했을 때
+			PLAYER_COL_INFO info = { false, false, false, true };
+			player->SetPlayerColInfo(info);
+
+			otherObj->GetGravity()->SetOnGround(true);
+
+			float lenY = abs(playerPos._y - groundPos._y);
+			float valueY = ((playerScale._y / 2.f) + (groundScale._y / 2.f)) - lenY;
+			playerPos = otherObj->GetPos();
+			playerPos._y -= valueY;
+
+			otherObj->SetPos(playerPos);
+			return;
+		}
+	}
+
+	// ground 왼쪽면 부딪힐 경우
+	if (playerRightPosX + 5 >= groundLeftPosX && playerPos._x < groundLeftPosX)
+	{
+		if (groundTopPosY - (playerScale._y / 2.f) < playerTopPosY && groundBottomPosY + (playerScale._y / 2.f) > playerBottomPosY)
+		{
+			PLAYER_COL_INFO info = { true, false, false, false };
+			player->SetPlayerColInfo(info);
+
+			float lenX = abs(playerPos._x - groundPos._x);
+			float valueX = ((playerScale._x / 2.f) + (groundScale._x / 2.f)) - lenX;
+			playerPos = otherObj->GetPos();
+			playerPos._x -= valueX;
+
+			otherObj->SetPos(playerPos);
+			return;
+		}
+	}
+
+	// ground 오른쪽면 부딪힐 경우
+	if (playerLeftPosX - 5 <= groundRightPosX && playerPos._x > groundRightPosX)
+	{
+		if (groundTopPosY - (playerScale._y / 2.f) < playerTopPosY && groundBottomPosY + (playerScale._y / 2.f) > playerBottomPosY)
+		{
+			PLAYER_COL_INFO info = { false, true, false, false };
+			player->SetPlayerColInfo(info);
+
+			float lenX = abs(playerPos._x - groundPos._x);
+			float valueX = ((playerScale._x / 2.f) + (groundScale._x / 2.f)) - lenX;
+			playerPos = otherObj->GetPos();
+			playerPos._x += valueX;
+
+			otherObj->SetPos(playerPos);
+			return;
+		}
+	}
+
+	// ground 아랫면 부딪힐 경우
+	if (playerTopPosY - 5 < groundBottomPosY && playerPos._y > groundBottomPosY)
+	{
+		if (playerRightPosX <= (groundRightPosX + playerScale._x / 2.f) && playerLeftPosX >= groundLeftPosX - (playerScale._x / 2.f))
+		{
+			PLAYER_COL_INFO info = { false, false, true, false };
+			player->SetPlayerColInfo(info);
+
+			float lenY = abs(playerPos._y - groundPos._y);
+			float valueY = ((playerScale._y / 2.f) + (groundScale._y / 2.f)) - lenY;
+			playerPos = otherObj->GetPos();
+			playerPos._y += valueY;
+
+			otherObj->SetPos(playerPos);
+
+			return;
+		}
 	}
 }

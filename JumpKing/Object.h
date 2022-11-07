@@ -61,13 +61,6 @@ public:
 	void SaveAnimation(const wchar_t* animName);
 
 public:
-	void OnDownToUp(bool e) { _onCollision = e; }
-	void OnLeftRight(bool e) { _onLeftRight = e; }
-
-	bool GetDownToUpCol() { return _onCollision; }
-	bool GetLeftRightCol() { return _onLeftRight; }
-
-public:
 	Collider* GetCollider() { return p_collider; }
 	Animator* GetAnimator() { return p_animator; }
 	RigidBody* GetRigidBody() { return p_rigidBody; }

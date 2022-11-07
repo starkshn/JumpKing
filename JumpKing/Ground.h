@@ -28,5 +28,8 @@ public:
 	// virtual void SetPos(Vector2 pos) override { _pos = pos; }
 
 	void SetOnGround(bool onGround) { _onGround = onGround; }
+
+public:
+	void CheckColDir(Object* otherObj);
 };
 

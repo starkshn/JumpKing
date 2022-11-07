@@ -150,7 +150,7 @@ void Player::Update()
 	_prevState = _curState;
 	_prevDir = _dir;
 
-	// 중력 최대 가속도 테스트를 위한 재배치
+	// Player 위치 초기화
 	if (KEY_TAP(KEY::R))
 	{
 		SetPos(Vector2(640.f, 500.f));
@@ -164,6 +164,9 @@ void Player::Render(HDC dc)
 
 void Player::UpdateState()
 {
+	if (_curState == OBJECT_STATE::FALL || _curState == OBJECT_STATE::OFF || _curState == OBJECT_STATE::JUMP)
+		return;
+
 	if (_curState == OBJECT_STATE::JUMP)
 	{
 		// 점프 하면은 방향 -1
@@ -175,9 +178,6 @@ void Player::UpdateState()
 			_curState = OBJECT_STATE::FALL;
 		}
 	}
-
-	if (_curState == OBJECT_STATE::FALL || _curState == OBJECT_STATE::OFF)
-		return;
 
 	if (KEY_HOLD(KEY::A))
 	{
@@ -344,26 +344,67 @@ void Player::OnCollisionEnter(Collider* other)
 	Object* otherObj = other->GetColliderOwner();
 	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
 	{
+		PLAYER_COL_INFO info = GetPlayerColInfo();
+
+		if (_curState == OBJECT_STATE::IDLE || _curState == OBJECT_STATE::MOVE)
+			return;
+
+		if (_curState == OBJECT_STATE::FALL)
+		{
+			if (info._left)
+			{
+				_curState = OBJECT_STATE::OFF;
+			}
+
+			if (info._right)
+			{
+				_curState = OBJECT_STATE::OFF;
+			}
+
+			if (info._bottom)
+			{
+				_curState = OBJECT_STATE::OFF;
+			}
+
+			if (info._top)
+			{
+				_curState = OBJECT_STATE::IDLE;
+
+				p_land->Play();
+			}
+		}
+
+		if (_curState == OBJECT_STATE::JUMP)
+		{
+			if (info._left)
+			{
+				_curState = OBJECT_STATE::OFF;
+			}
+
+			if (info._right)
+			{
+				_curState = OBJECT_STATE::OFF;
+			}
+
+			if (info._bottom)
+			{
+				_curState = OBJECT_STATE::OFF;
+			}
+
+			if (info._top)
+			{
+				_curState = OBJECT_STATE::IDLE;
+
+				p_land->Play();
+			}
+		}
+
+		// 점프 할때만을 생각한 코드
 		_onJump = false;
 
-		if (GetDownToUpCol())
-		{
-			_curState = OBJECT_STATE::OFF;
-			p_bump->Play();
-		}
+		info = { false, false, false, false };
 
-		if (GetLeftRightCol())
-		{
-			_curState = OBJECT_STATE::OFF;
-			p_bump->Play();
-		}
-
-		Vector2 pos = GetPos();
-		if (pos._y < otherObj->GetPos()._y)
-		{
-			_curState = OBJECT_STATE::IDLE;
-			p_land->Play();
-		}
+		SetPlayerColInfo(info);
 	}
 }
 
@@ -376,7 +417,32 @@ void Player::OnCollisionExit(Collider* other)
 {
 	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
 	{
+		PLAYER_COL_INFO info = GetPlayerColInfo();
+
+		if (info._left)
+		{
+			_curState = OBJECT_STATE::MOVE;
+		}
+		if (info._right)
+		{
+			_curState = OBJECT_STATE::MOVE;
+		}
+		if (info._bottom)
+		{
+
+		}
+		if (info._top)
+		{
+			if (_curState == OBJECT_STATE::SQUAT || _curState == OBJECT_STATE::JUMP)
+				_curState = OBJECT_STATE::JUMP;
+			
+			if (_curState == OBJECT_STATE::IDLE || _curState == OBJECT_STATE::MOVE)
+				_curState = OBJECT_STATE::FALL;
+		}
+
+		info = {false, false, false, false};
+		SetPlayerColInfo(info);
+
 		_onJump = true;
-		OnDownToUp(false);
 	}
 }
