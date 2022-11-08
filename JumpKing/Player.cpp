@@ -344,8 +344,36 @@ void Player::OnCollisionEnter(Collider* other)
 	Object* otherObj = other->GetColliderOwner();
 	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
 	{
-		
-		
+		PLAYER_COL_INFO info = GetPlayerColInfo();
+		OBJECT_STATE playerState = GetCurState();
+
+		switch (playerState)
+		{
+		case OBJECT_STATE::JUMP:
+		{
+			if (info._top)
+				SetState(OBJECT_STATE::IDLE);
+			if (info._left || info._right || info._bottom)
+				SetState(OBJECT_STATE::OFF);
+		}
+		break;
+		case OBJECT_STATE::FALL:
+		{
+			if (info._top)
+				SetState(OBJECT_STATE::IDLE);
+			if (info._left || info._right || info._bottom)
+				SetState(OBJECT_STATE::OFF);
+		}
+		break;
+		case OBJECT_STATE::OFF:
+		{
+			if (info._top)
+				SetState(OBJECT_STATE::IDLE);
+			if (info._left || info._right || info._bottom)
+				SetState(OBJECT_STATE::OFF);
+		}
+		break;
+		}
 	}
 }
 
@@ -396,27 +424,6 @@ void Player::OnCollisionExit(Collider* other)
 	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
 	{
 		PLAYER_COL_INFO info = GetPlayerColInfo();
-
-		/*if (info._left)
-		{
-			_curState = OBJECT_STATE::MOVE;
-		}
-		if (info._right)
-		{
-			_curState = OBJECT_STATE::MOVE;
-		}
-		if (info._bottom)
-		{
-
-		}
-		if (info._top)
-		{
-			if (_curState == OBJECT_STATE::SQUAT || _curState == OBJECT_STATE::JUMP)
-				_curState = OBJECT_STATE::JUMP;
-			
-			if (_curState == OBJECT_STATE::IDLE || _curState == OBJECT_STATE::MOVE)
-				_curState = OBJECT_STATE::FALL;
-		}*/
 
 		info = {false, false, false, false};
 		SetPlayerColInfo(info);

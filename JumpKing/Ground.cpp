@@ -79,7 +79,7 @@ void Ground::OnCollisionStay(Collider* other)
 		Player* player = dynamic_cast<Player*>(otherObj);
 		OBJECT_STATE playerCurState = player->GetCurState();
 
-		if (playerCurState == OBJECT_STATE::IDLE || playerCurState == OBJECT_STATE::MOVE || playerCurState == OBJECT_STATE::FALLEN)
+		if (playerCurState == OBJECT_STATE::IDLE || playerCurState == OBJECT_STATE::MOVE || playerCurState == OBJECT_STATE::FALLEN || playerCurState == OBJECT_STATE::JUMP || playerCurState == OBJECT_STATE::SQUAT || playerCurState == OBJECT_STATE::OFF)
 		{
 			CheckColDir(otherObj);
 		}
