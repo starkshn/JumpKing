@@ -344,73 +344,51 @@ void Player::OnCollisionEnter(Collider* other)
 	Object* otherObj = other->GetColliderOwner();
 	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
 	{
-		PLAYER_COL_INFO info = GetPlayerColInfo();
-
-		if (_curState == OBJECT_STATE::IDLE || _curState == OBJECT_STATE::MOVE)
-			return;
-
-		if (_curState == OBJECT_STATE::FALL)
-		{
-			if (info._left)
-			{
-				_curState = OBJECT_STATE::OFF;
-			}
-
-			if (info._right)
-			{
-				_curState = OBJECT_STATE::OFF;
-			}
-
-			if (info._bottom)
-			{
-				_curState = OBJECT_STATE::OFF;
-			}
-
-			if (info._top)
-			{
-				_curState = OBJECT_STATE::IDLE;
-
-				p_land->Play();
-			}
-		}
-
-		if (_curState == OBJECT_STATE::JUMP)
-		{
-			if (info._left)
-			{
-				_curState = OBJECT_STATE::OFF;
-			}
-
-			if (info._right)
-			{
-				_curState = OBJECT_STATE::OFF;
-			}
-
-			if (info._bottom)
-			{
-				_curState = OBJECT_STATE::OFF;
-			}
-
-			if (info._top)
-			{
-				_curState = OBJECT_STATE::IDLE;
-
-				p_land->Play();
-			}
-		}
-
-		// 점프 할때만을 생각한 코드
-		_onJump = false;
-
-		info = { false, false, false, false };
-
-		SetPlayerColInfo(info);
+		
+		
 	}
 }
 
 void Player::OnCollisionStay(Collider* other)
 {
-	
+	OBJECT_STATE playerState = GetCurState();
+	PLAYER_COL_INFO info;
+
+	Object* otherObj = other->GetColliderOwner();
+	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
+	{
+		switch (playerState)
+		{
+			case OBJECT_STATE::JUMP:
+			{
+				info = GetPlayerColInfo();
+
+				if (info._top)
+				{
+					SetState(OBJECT_STATE::IDLE);
+				}
+			}
+				break;
+			case OBJECT_STATE::FALL:
+			{
+				info = GetPlayerColInfo();
+
+				if (info._top)
+				{
+					SetState(OBJECT_STATE::FALLEN);
+				}
+			}
+				break;
+		}
+
+
+		_onJump = false;
+
+		info = { false, false, false, false };
+
+		SetPlayerColInfo(info);
+
+	}
 }
 
 void Player::OnCollisionExit(Collider* other)
@@ -419,7 +397,7 @@ void Player::OnCollisionExit(Collider* other)
 	{
 		PLAYER_COL_INFO info = GetPlayerColInfo();
 
-		if (info._left)
+		/*if (info._left)
 		{
 			_curState = OBJECT_STATE::MOVE;
 		}
@@ -438,7 +416,7 @@ void Player::OnCollisionExit(Collider* other)
 			
 			if (_curState == OBJECT_STATE::IDLE || _curState == OBJECT_STATE::MOVE)
 				_curState = OBJECT_STATE::FALL;
-		}
+		}*/
 
 		info = {false, false, false, false};
 		SetPlayerColInfo(info);
