@@ -17,7 +17,9 @@ private:
 
 	int _dir;
 	int _prevDir;
-	bool _onJump;
+
+	UINT _jumpLevel;
+	float _acc = 0.f;
 
 	Vector2 _fallDir = { 0.f, 1.f };
 
@@ -25,9 +27,6 @@ private:
 	Sound* p_land;
 	Sound* p_bump;
 	Sound* p_fall;
-
-public:
-	float _ratio;
 
 public:
 	Player();
@@ -56,6 +55,30 @@ public:
 	OBJECT_STATE GetCurState() { return _curState; }
 	const PLAYER_COL_INFO& GetPlayerColInfo() { return _playerColInfo; }
 	int GetPlayerDir() { return _dir; }
+
+	UINT GetJumpLevel(float& acc)
+	{
+		UINT jumpLevel = 0;
+
+		if (acc >= 2.f)
+		{
+			jumpLevel = 1;
+			acc = 0.f;
+			return jumpLevel;
+		}
+		else if (acc >= 1.f)
+		{
+			jumpLevel = 2;
+			acc = 0.f;
+			return jumpLevel;
+		}
+		else
+		{
+			jumpLevel = 3;
+			acc = 0.f;
+			return jumpLevel;
+		}
+	}
 
 public:
 	bool CheckColDir(Object* otherObj);

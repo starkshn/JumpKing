@@ -20,8 +20,7 @@ Player::Player()
 	_curState(OBJECT_STATE::IDLE),
 	_prevState(OBJECT_STATE::IDLE),
 	_dir(1),
-	_prevDir(1),
-	_onJump(false)
+	_prevDir(1)
 {
 	CreateCollider();
 	GetCollider()->SetOffsetPos(Vector2{ 0.f, 10.f });
@@ -201,14 +200,19 @@ void Player::UpdateState()
 		}
 	}
 
-	if (KEY_TAP(KEY::SPACE) || KEY_HOLD(KEY::SPACE))
+	if (KEY_TAP(KEY::SPACE))
 	{
-		if (_onJump == false)
-		{
-			_curState = OBJECT_STATE::SQUAT;
-			GetCollider()->SetOffsetPos(Vector2{ 0.f, 30.f });
-			GetCollider()->SetColliderScale(Vector2{ 60.f, 40.f });
-		}
+		SetState(OBJECT_STATE::SQUAT);
+	}
+
+	if (KEY_HOLD(KEY::SPACE))
+	{
+		SetState(OBJECT_STATE::SQUAT);
+		GetCollider()->SetOffsetPos(Vector2{ 0.f, 30.f });
+		GetCollider()->SetColliderScale(Vector2{ 60.f, 40.f });
+			
+		_acc += DeltaTime_F;
+		
 	}
 	else if (KEY_AWAY(KEY::SPACE))
 	{
@@ -227,7 +231,9 @@ void Player::UpdateState()
 			GetRigidBody()->SetVelocity(Vector2(curVel._x, -200.f));*/
 			// ===================
 
-			GetRigidBody()->AddVelocity(Vector2(_dir * 300.f, -2000.f));
+			_jumpLevel = GetJumpLevel(_acc);
+
+			GetRigidBody()->AddVelocity(Vector2(_dir * 300.f, -2000.f / _jumpLevel));
 		}
 	}
 }
@@ -363,27 +369,46 @@ void Player::OnCollisionEnter(Collider* other)
 		}
 		else
 		{
-			// JUMP, FALL OFF 일 경우 Enter발생하면 무조건 OFF
-			if (playerState == OBJECT_STATE::FALL || playerState == OBJECT_STATE::JUMP || playerState == OBJECT_STATE::OFF)
-			{
-				Vector2 curVelocity = GetRigidBody()->GetVelocity();
-				Vector2 percentValue = VelocityToPercent(curVelocity);
-				GetRigidBody()->SetVelocity(Vector2(0.f, 0.f));
+			Vector2 curVelocity = GetRigidBody()->GetVelocity();
+			Vector2 percentValue = VelocityToPercent(curVelocity);
+			GetRigidBody()->SetVelocity(Vector2(0.f, 0.f));
 
+			// JUMP, FALL OFF 일 경우 Enter발생하면 무조건 OFF
+			if (playerState == OBJECT_STATE::JUMP)
+			{
 				if (_dir == -1)
 				{
-					GetRigidBody()->AddVelocity(Vector2((_dir * -1) * ((percentValue._x + 200.f )), percentValue._y * -1));
+					GetRigidBody()->AddVelocity(Vector2(_dir * -1 * (percentValue._x + 200.f), curVelocity._y / _jumpLevel));
 				}
 
 				if (_dir == 1)
 				{
-					GetRigidBody()->AddVelocity(Vector2((_dir) * ((percentValue._x + 200.f )* -1), percentValue._y * -1));
+					GetRigidBody()->AddVelocity(Vector2(_dir * ((percentValue._x + 200.f) * -1), curVelocity._y / _jumpLevel));
 				}
-			
+				
 				SetState(OBJECT_STATE::OFF);
 			}
-		}
 
+			if (playerState == OBJECT_STATE::FALL)
+			{
+
+			}
+
+			if (playerState == OBJECT_STATE::OFF)
+			{
+				if (_dir == -1)
+				{
+					GetRigidBody()->AddVelocity(Vector2((_dir * -1) * (200.f),  200.f * -1));
+				}
+
+				if (_dir == 1)
+				{
+					GetRigidBody()->AddVelocity(Vector2(_dir * 200.f * -1, 200.f * -1));
+				}
+			}
+
+			_jumpLevel = 0;
+		}
 	}
 }
 
@@ -403,8 +428,6 @@ void Player::OnCollisionExit(Collider* other)
 {
 	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
 	{
-		_onJump = true;
-
 		OBJECT_STATE playerState = GetCurState();
 		
 		if (playerState == OBJECT_STATE::MOVE)
@@ -462,7 +485,7 @@ bool Player::CheckColDir(Object* otherObj)
 	}
 
 	// ground 아랫면 부딪힐 경우
-	if (playerTopPosY <= groundBottomPosY && groundPos._y > groundBottomPosY)
+	if (playerTopPosY <= groundBottomPosY && playerPos._y > groundBottomPosY)
 	{
 		if (playerRightPosX <= (groundRightPosX + groundScale._x / 2.f) && playerLeftPosX >= groundLeftPosX - (groundScale._x / 2.f))
 		{

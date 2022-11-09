@@ -85,12 +85,7 @@ void Ground::OnCollisionStay(Collider* other)
 
 void Ground::OnCollisionExit(Collider* other)
 {
-	Object* otherObj = other->GetColliderOwner();
-
-	if (otherObj->GetObjectName() == L"Player")
-	{
-		
-	}
+	
 }
 
 void Ground::CheckColDir(Object* otherObj)
