@@ -52,17 +52,17 @@ void Ground::OnCollisionEnter(Collider* other)
 		Player* player = dynamic_cast<Player*>(otherObj);
 		OBJECT_STATE playerCurState = player->GetCurState();
 
-		// ============================================
+		// =============================================
 		// JUMP 아닐 경우 충돌체크
-		// ============================================
+		// =============================================
 		if (playerCurState == OBJECT_STATE::MOVE || playerCurState == OBJECT_STATE::IDLE)
 		{
 			return;
 		}
 
-		// ============================================
+		// =============================================
 		// JUMP일 경우 충돌체크
-		// ============================================
+		// =============================================
 		if (playerCurState == OBJECT_STATE::JUMP || playerCurState == OBJECT_STATE::FALL)
 		{
 			CheckColDir(otherObj);
@@ -79,10 +79,7 @@ void Ground::OnCollisionStay(Collider* other)
 		Player* player = dynamic_cast<Player*>(otherObj);
 		OBJECT_STATE playerCurState = player->GetCurState();
 
-		if (playerCurState == OBJECT_STATE::IDLE || playerCurState == OBJECT_STATE::MOVE || playerCurState == OBJECT_STATE::FALLEN || playerCurState == OBJECT_STATE::JUMP || playerCurState == OBJECT_STATE::SQUAT || playerCurState == OBJECT_STATE::OFF)
-		{
-			CheckColDir(otherObj);
-		}
+		CheckColDir(otherObj);
 	}
 }
 

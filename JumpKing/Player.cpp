@@ -13,6 +13,7 @@
 #include "RigidBody.h"
 #include "Gravity.h"
 #include "Sound.h"
+#include "Ground.h"
 
 Player::Player()
 	:
@@ -226,7 +227,7 @@ void Player::UpdateState()
 			GetRigidBody()->SetVelocity(Vector2(curVel._x, -200.f));*/
 			// ===================
 
-			GetRigidBody()->AddVelocity(Vector2(_dir * 400.f, -2000.f));
+			GetRigidBody()->AddVelocity(Vector2(_dir * 300.f, -2000.f));
 		}
 	}
 }
@@ -241,24 +242,24 @@ void Player::UpdateMove()
 	if (KEY_HOLD(KEY::A))
 	{
 		// rd->AddForce(Vector2(-200.f, 0.f));
-		rd->SetVelocity(Vector2(-250.f, rd->GetVelocity()._y));
+		rd->SetVelocity(Vector2(-300.f, rd->GetVelocity()._y));
 	}
 	if (KEY_HOLD(KEY::D))
 	{
 		// rd->AddForce(Vector2(200.f, 0.f));
-		rd->SetVelocity(Vector2(250.f, rd->GetVelocity()._y));
+		rd->SetVelocity(Vector2(300.f, rd->GetVelocity()._y));
 	}
 
 	if (KEY_TAP(KEY::A))
 	{
 		// rd->AddVelocity(Vector2(-200.f, 0.f));
-		rd->SetVelocity(Vector2(-250.f, rd->GetVelocity()._y));
+		rd->SetVelocity(Vector2(-300.f, rd->GetVelocity()._y));
 
 	}
 	if (KEY_TAP(KEY::D))
 	{
 		// rd->AddVelocity(Vector2(200.f, 0.f));
-		rd->SetVelocity(Vector2(250.f, rd->GetVelocity()._y));
+		rd->SetVelocity(Vector2(300.f, rd->GetVelocity()._y));
 	}
 }
 
@@ -344,90 +345,128 @@ void Player::OnCollisionEnter(Collider* other)
 	Object* otherObj = other->GetColliderOwner();
 	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
 	{
-		PLAYER_COL_INFO info = GetPlayerColInfo();
+		bool result = CheckColDir(otherObj);
 		OBJECT_STATE playerState = GetCurState();
 
-		switch (playerState)
+		// result == true라면은 땅에 착지한 경우
+		if (result)
 		{
-		case OBJECT_STATE::JUMP:
-		{
-			if (info._top)
+			if (playerState == OBJECT_STATE::JUMP)
+			{
 				SetState(OBJECT_STATE::IDLE);
-			if (info._left || info._right || info._bottom)
-				SetState(OBJECT_STATE::OFF);
+			}
+			
+			if (playerState == OBJECT_STATE::FALL || playerState == OBJECT_STATE::OFF)
+			{
+				SetState(OBJECT_STATE::FALLEN);
+			}
 		}
-		break;
-		case OBJECT_STATE::FALL:
+		else
 		{
-			if (info._top)
-				SetState(OBJECT_STATE::IDLE);
-			if (info._left || info._right || info._bottom)
+			// JUMP, FALL OFF 일 경우 Enter발생하면 무조건 OFF
+			if (playerState == OBJECT_STATE::FALL || playerState == OBJECT_STATE::JUMP || playerState == OBJECT_STATE::OFF)
+			{
+				Vector2 curVelocity = GetRigidBody()->GetVelocity();
+				Vector2 percentValue = VelocityToPercent(curVelocity);
+				GetRigidBody()->SetVelocity(Vector2(0.f, 0.f));
+
+				if (_dir == -1)
+				{
+					GetRigidBody()->AddVelocity(Vector2((_dir * -1) * ((percentValue._x + 200.f )), percentValue._y * -1));
+				}
+
+				if (_dir == 1)
+				{
+					GetRigidBody()->AddVelocity(Vector2((_dir) * ((percentValue._x + 200.f )* -1), percentValue._y * -1));
+				}
+			
 				SetState(OBJECT_STATE::OFF);
+			}
 		}
-		break;
-		case OBJECT_STATE::OFF:
-		{
-			if (info._top)
-				SetState(OBJECT_STATE::IDLE);
-			if (info._left || info._right || info._bottom)
-				SetState(OBJECT_STATE::OFF);
-		}
-		break;
-		}
+
 	}
 }
 
 void Player::OnCollisionStay(Collider* other)
 {
-	OBJECT_STATE playerState = GetCurState();
+	/*OBJECT_STATE playerState = GetCurState();
 	PLAYER_COL_INFO info;
 
 	Object* otherObj = other->GetColliderOwner();
 	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
 	{
-		switch (playerState)
-		{
-			case OBJECT_STATE::JUMP:
-			{
-				info = GetPlayerColInfo();
-
-				if (info._top)
-				{
-					SetState(OBJECT_STATE::IDLE);
-				}
-			}
-				break;
-			case OBJECT_STATE::FALL:
-			{
-				info = GetPlayerColInfo();
-
-				if (info._top)
-				{
-					SetState(OBJECT_STATE::FALLEN);
-				}
-			}
-				break;
-		}
-
-
-		_onJump = false;
-
-		info = { false, false, false, false };
-
-		SetPlayerColInfo(info);
-
-	}
+		CheckColDir(otherObj);
+	}*/
 }
 
 void Player::OnCollisionExit(Collider* other)
 {
 	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
 	{
-		PLAYER_COL_INFO info = GetPlayerColInfo();
-
-		info = {false, false, false, false};
-		SetPlayerColInfo(info);
-
 		_onJump = true;
+
+		OBJECT_STATE playerState = GetCurState();
+		
+		if (playerState == OBJECT_STATE::MOVE)
+			SetState(OBJECT_STATE::FALL);
+	}
+}
+
+bool Player::CheckColDir(Object* otherObj)
+{
+	OBJECT_STATE playerState = GetCurState();
+
+	Ground* ground = dynamic_cast<Ground*>(otherObj);
+
+	Vector2 playerPos = GetCollider()->GetFinalPos();
+	Vector2 playerScale = GetCollider()->GetColliderScale();
+
+	Vector2 groundPos = otherObj->GetCollider()->GetFinalPos();
+	Vector2 groundScale = otherObj->GetCollider()->GetColliderScale();
+
+	float playerRightPosX = playerPos._x + (playerScale._x / 2.f);
+	float playerLeftPosX = playerPos._x - (playerScale._x / 2.f);
+	float playerTopPosY = playerPos._y - (playerScale._y / 2.f);
+	float playerBottomPosY = playerPos._y + (playerScale._y / 2.f);
+
+	float groundRightPosX = groundPos._x + (groundScale._x / 2.f);
+	float groundLeftPosX = groundPos._x - (groundScale._x / 2.f);
+	float groundTopPosY = groundPos._y - (groundScale._y / 2.f);
+	float groundBottomPosY = groundPos._y + (groundScale._y / 2.f);
+
+	// ground 위쪽면 부딪힐 경우(플레이어가 땅위에 서 있을 경우
+	if (playerBottomPosY + 5 >= groundTopPosY && playerPos._y < groundTopPosY)
+	{
+		if (playerRightPosX <= (groundRightPosX + groundScale._x / 2.f) && playerLeftPosX >= groundLeftPosX - (groundScale._x / 2.f))
+		{
+			return true;
+		}
+	}
+
+	// ground 왼쪽면 부딪힐 경우
+	if (playerRightPosX  >= groundLeftPosX && playerPos._x < groundLeftPosX)
+	{
+		if (groundTopPosY - (groundScale._y / 2.f) < playerTopPosY && groundBottomPosY + (groundScale._y / 2.f) > playerBottomPosY)
+		{
+			return false;
+		}
+	}
+
+	// ground 오른쪽면 부딪힐 경우
+	if (playerLeftPosX <= groundRightPosX && playerPos._x > groundRightPosX)
+	{
+		if (groundTopPosY - (groundScale._y / 2.f) < playerTopPosY && groundBottomPosY + (groundScale._y / 2.f) > playerBottomPosY)
+		{
+			return false;
+		}
+	}
+
+	// ground 아랫면 부딪힐 경우
+	if (playerTopPosY <= groundBottomPosY && groundPos._y > groundBottomPosY)
+	{
+		if (playerRightPosX <= (groundRightPosX + groundScale._x / 2.f) && playerLeftPosX >= groundLeftPosX - (groundScale._x / 2.f))
+		{
+			return false;
+		}
 	}
 }

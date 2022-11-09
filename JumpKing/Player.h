@@ -17,7 +17,6 @@ private:
 
 	int _dir;
 	int _prevDir;
-
 	bool _onJump;
 
 	Vector2 _fallDir = { 0.f, 1.f };
@@ -26,6 +25,9 @@ private:
 	Sound* p_land;
 	Sound* p_bump;
 	Sound* p_fall;
+
+public:
+	float _ratio;
 
 public:
 	Player();
@@ -54,5 +56,18 @@ public:
 	OBJECT_STATE GetCurState() { return _curState; }
 	const PLAYER_COL_INFO& GetPlayerColInfo() { return _playerColInfo; }
 	int GetPlayerDir() { return _dir; }
+
+public:
+	bool CheckColDir(Object* otherObj);
+
+	Vector2 VelocityToPercent(const Vector2& velocity)
+	{
+		Vector2 originVelocity = { 400.f, -2000.f };
+
+		float xPercent = (velocity._x / originVelocity._x) * 100;
+		float yPercent = (velocity._y / originVelocity._y) * 100;
+
+		return Vector2(xPercent, yPercent);
+	}
 };
 
