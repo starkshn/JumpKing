@@ -132,6 +132,7 @@ enum class HPEN_TYPE
 	RED,
 	GREEN,
 	BLUE,
+	TRANS,
 
 	END,
 };

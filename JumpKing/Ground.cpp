@@ -27,22 +27,10 @@ void Ground::Update()
 
 }
 
-//void Ground::Render(HDC dc)
-//{
-//	Vector2 renderPos = CameraManager::GetInstance()->GetRenderPos(_pos);
-//
-//	Rectangle
-//	(
-//		dc,
-//		static_cast<int>(renderPos._x),
-//		static_cast<int>(renderPos._y),
-//		static_cast<int>(renderPos._x + _scale._x),
-//		static_cast<int>(renderPos._y + _scale._y)
-//	);
-//
-// 
-//	ComponentRender(dc);
-//}
+void Ground::Render(HDC dc)
+{
+	ComponentRender(dc);
+}
 
 void Ground::OnCollisionEnter(Collider* other)
 {
@@ -131,7 +119,7 @@ void Ground::CheckColDir(Object* otherObj)
 	}
 
 	// ground ¿ÞÂÊ¸é ºÎµúÈú °æ¿ì
-	if (playerRightPosX + 5 >= groundLeftPosX && playerPos._x < groundLeftPosX)
+	if (playerRightPosX >= groundLeftPosX && playerPos._x < groundLeftPosX)
 	{
 		if (groundTopPosY - (playerScale._y / 2.f) < playerTopPosY && groundBottomPosY + (playerScale._y / 2.f) > playerBottomPosY)
 		{
@@ -149,7 +137,7 @@ void Ground::CheckColDir(Object* otherObj)
 	}
 
 	// ground ¿À¸¥ÂÊ¸é ºÎµúÈú °æ¿ì
-	if (playerLeftPosX - 5 <= groundRightPosX && playerPos._x > groundRightPosX)
+	if (playerLeftPosX <= groundRightPosX && playerPos._x > groundRightPosX)
 	{
 		if (groundTopPosY - (playerScale._y / 2.f) < playerTopPosY && groundBottomPosY + (playerScale._y / 2.f) > playerBottomPosY)
 		{

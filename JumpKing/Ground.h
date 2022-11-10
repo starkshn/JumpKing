@@ -17,7 +17,7 @@ public:
 public:
 	virtual void Init() override;
 	virtual void Update() override;
-	// virtual void Render(HDC dc) override;
+	virtual void Render(HDC dc) override;
 
 public:
 	virtual void OnCollisionEnter(Collider* other);

@@ -223,6 +223,14 @@ void Player::UpdateState()
 
 		p_jump->Play();
 
+		bool left = false;
+		bool right = false;
+
+		if (KEY_HOLD(KEY::A))
+			left = true;
+		if (KEY_HOLD(KEY::D))
+			right = true;
+
 		if (GetRigidBody())
 		{
 			// ===================
@@ -233,7 +241,17 @@ void Player::UpdateState()
 
 			_jumpLevel = GetJumpLevel(_acc);
 
-			GetRigidBody()->AddVelocity(Vector2(_dir * 300.f, -2000.f / _jumpLevel));
+			if (left)
+			{
+				GetRigidBody()->AddVelocity(Vector2(_dir * 300.f, -2200.f / _jumpLevel));
+			}
+
+			if (right)
+			{
+				GetRigidBody()->AddVelocity(Vector2(_dir * 300.f, -2200.f / _jumpLevel));
+			}
+
+			GetRigidBody()->AddVelocity(Vector2(0.f, -2200.f / _jumpLevel));
 		}
 	}
 }
@@ -351,12 +369,14 @@ void Player::OnCollisionEnter(Collider* other)
 	Object* otherObj = other->GetColliderOwner();
 	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
 	{
-		bool result = CheckColDir(otherObj);
+		_onTop = CheckColDir(otherObj);
 		OBJECT_STATE playerState = GetCurState();
 
 		// result == true라면은 땅에 착지한 경우
-		if (result)
+		if (_onTop)
 		{
+			p_land->Play();
+
 			if (playerState == OBJECT_STATE::JUMP)
 			{
 				SetState(OBJECT_STATE::IDLE);
@@ -376,6 +396,8 @@ void Player::OnCollisionEnter(Collider* other)
 			// JUMP, FALL OFF 일 경우 Enter발생하면 무조건 OFF
 			if (playerState == OBJECT_STATE::JUMP)
 			{
+				p_bump->Play();
+				
 				if (_dir == -1)
 				{
 					GetRigidBody()->AddVelocity(Vector2(_dir * -1 * (percentValue._x + 200.f), curVelocity._y / _jumpLevel));
@@ -396,6 +418,8 @@ void Player::OnCollisionEnter(Collider* other)
 
 			if (playerState == OBJECT_STATE::OFF)
 			{
+				p_bump->Play();
+
 				if (_dir == -1)
 				{
 					GetRigidBody()->AddVelocity(Vector2((_dir * -1) * (200.f),  200.f * -1));
@@ -429,9 +453,14 @@ void Player::OnCollisionExit(Collider* other)
 	if (other->GetColliderOwner()->GetObjectName() == L"Ground")
 	{
 		OBJECT_STATE playerState = GetCurState();
-		
-		if (playerState == OBJECT_STATE::MOVE)
-			SetState(OBJECT_STATE::FALL);
+
+		if (_onTop)
+		{
+			if (playerState == OBJECT_STATE::MOVE || playerState == OBJECT_STATE::IDLE)
+				SetState(OBJECT_STATE::FALL);
+		}
+
+		_onTop = false;
 	}
 }
 

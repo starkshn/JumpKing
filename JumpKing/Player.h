@@ -15,6 +15,7 @@ private:
 	// 충돌시 어느면에 충돌했는지 확인하기 위한 구조체
 	PLAYER_COL_INFO _playerColInfo;
 
+	bool _onTop = false;
 	int _dir;
 	int _prevDir;
 

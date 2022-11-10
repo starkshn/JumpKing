@@ -146,4 +146,5 @@ void Core::CreateHpen()
 	h_pens[static_cast<UINT>(HPEN_TYPE::RED)] = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
 	h_pens[static_cast<UINT>(HPEN_TYPE::GREEN)] = CreatePen(PS_SOLID, 1, RGB(0, 255, 0));
 	h_pens[static_cast<UINT>(HPEN_TYPE::BLUE)] = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
+	h_pens[static_cast<UINT>(HPEN_TYPE::TRANS)] = CreatePen(PS_NULL, 0, RGB(0, 0, 0));
 }

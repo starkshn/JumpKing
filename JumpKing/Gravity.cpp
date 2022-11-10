@@ -21,7 +21,7 @@ Gravity::~Gravity()
 
 void Gravity::FinalUpdate()
 {
-	p_owner->GetRigidBody()->SetAccelAlpha(Vector2(0.f, 800.f));
+	p_owner->GetRigidBody()->SetAccelAlpha(Vector2(0.f, 1400.f));
 }
 
 void Gravity::SetOnGround(bool ground)
