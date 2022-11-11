@@ -5,7 +5,6 @@
 # Prerequisites
 *.d
 
-
 *.pdb
 *.ipch
 *.db
@@ -36,7 +35,6 @@
 *.lib
 
 # Executables
-*.exe
 *.out
 *.app
 
