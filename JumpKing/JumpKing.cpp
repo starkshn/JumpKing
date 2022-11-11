@@ -10,6 +10,8 @@
 #include "Scene.h"
 #include "StageScene.h"
 
+#include "Object.h"
+
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
@@ -25,6 +27,7 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 INT_PTR CALLBACK CheckGroundType(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+INT_PTR CALLBACK CheckGroundRender(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -87,8 +90,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     return (int) msg.wParam;
 }
-
-
 
 //
 //  함수: MyRegisterClass()
@@ -160,6 +161,7 @@ bool g_lButtonDown = false;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    // 32774 132
     switch (message)
     {
     case WM_COMMAND:
@@ -173,6 +175,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 break;
             case ID_GROUND_TYPE:
                 DialogBox(hInst, MAKEINTRESOURCE(ID_CHECK_GROUND_TYPE), hWnd, CheckGroundType);
+                break;
+            case SELECT_RENDERING:
+                DialogBox(hInst, MAKEINTRESOURCE(CHECK_GROUND_RENDER), hWnd, CheckGroundRender);
                 break;
             case IDM_EXIT:
                 DestroyWindow(hWnd);
@@ -266,6 +271,54 @@ INT_PTR CALLBACK CheckGroundType(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 StageScene* stagePtr = dynamic_cast<StageScene*>(SceneManager::GetInstance()->GetSceneByVec());
 
                 stagePtr->SetGroundTypeInfo(typeInfo);
+            }
+
+            EndDialog(hDlg, LOWORD(wParam));
+            return (INT_PTR)TRUE;
+        }
+        else if (LOWORD(wParam) == IDCANCEL)
+        {
+            EndDialog(hDlg, LOWORD(wParam));
+            return (INT_PTR)TRUE;
+        }
+        break;
+    }
+    return (INT_PTR)FALSE;
+}
+
+// =========================
+// Ground Render Check Box
+// =========================
+INT_PTR CALLBACK CheckGroundRender(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    UNREFERENCED_PARAMETER(lParam);
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        return (INT_PTR)TRUE;
+
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDOK)
+        {
+            // Ground Render 할것인지 안할 것인지 설정
+
+            if (IsDlgButtonChecked(hDlg, RenderON))
+            {
+                bool isRender;
+                isRender = IsDlgButtonChecked(hDlg, RenderON);
+
+                SceneManager::GetInstance()->SetColliderIsRender(isRender);
+            }
+
+            if (IsDlgButtonChecked(hDlg, RenderOFF))
+            {
+                bool isRender;
+                isRender = IsDlgButtonChecked(hDlg, RenderOFF);
+
+                if (isRender != false)
+                    isRender = false;
+
+                SceneManager::GetInstance()->SetColliderIsRender(isRender);
             }
 
             EndDialog(hDlg, LOWORD(wParam));

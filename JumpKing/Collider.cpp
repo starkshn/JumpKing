@@ -53,22 +53,42 @@ void Collider::FinalUpdate()
 // ======================================================
 void Collider::Render(HDC dc)
 {
-	HPEN_TYPE pen = HPEN_TYPE::TRANS;
+	bool isRender = SceneManager::GetInstance()->GetColliderIsRender();
 
-	GDI b(dc, HBRUSH_TYPE::HOLLOW);
-	GDI p(dc, pen);
+	// Ground Render true老 版快
+	if (isRender == false)
+	{
+		HPEN_TYPE pen = HPEN_TYPE::TRANS;
 
-	Vector2 renderPos = CameraManager::GetInstance()->GetRenderPos(_finalPos);
+		GDI b(dc, HBRUSH_TYPE::HOLLOW);
+		GDI p(dc, pen);
 
-	Rectangle
-	(
-		dc,
-		static_cast<int>(renderPos._x - _colliderScale._x / 2.f),
-		static_cast<int>(renderPos._y - _colliderScale._y / 2.f),
-		static_cast<int>(renderPos._x + _colliderScale._x / 2.f),
-		static_cast<int>(renderPos._y + _colliderScale._y / 2.f)
-	);
+		Vector2 renderPos = CameraManager::GetInstance()->GetRenderPos(_finalPos);
+	}
+	else
+	{
+		// Ground Render false老 版快
+		HPEN_TYPE pen = HPEN_TYPE::GREEN;
 
+		if (_colCount)
+		{
+			pen = HPEN_TYPE::RED;
+		}
+
+		GDI b(dc, HBRUSH_TYPE::HOLLOW);
+		GDI p(dc, pen);
+
+		Vector2 renderPos = CameraManager::GetInstance()->GetRenderPos(_finalPos);
+
+		Rectangle
+		(
+			dc,
+			static_cast<int>(renderPos._x - _colliderScale._x / 2.f),
+			static_cast<int>(renderPos._y - _colliderScale._y / 2.f),
+			static_cast<int>(renderPos._x + _colliderScale._x / 2.f),
+			static_cast<int>(renderPos._y + _colliderScale._y / 2.f)
+		);
+	}
 }
 
 // ======================================================

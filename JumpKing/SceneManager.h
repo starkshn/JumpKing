@@ -27,6 +27,8 @@ private:
 	static UINT g_staticStage;
 
 	vector<Scene*>::iterator _stageIter;
+
+	bool _colliderIsRender = false;
 	
 private:
 	void ChangeRealScene(SCENE_TYPE sceneType, Object* player);
@@ -53,7 +55,11 @@ public:
 
 	void SetStaticStage(UINT stageNumber) { g_staticStage = stageNumber; }
 
+	void SetColliderIsRender(bool isRender) { _colliderIsRender = isRender; }
+
 public:
+	bool GetColliderIsRender() { return _colliderIsRender; }
+
 	vector<Object*>& GetObjectsVec(UINT idx) { return _objects[idx]; }
 
 	const vector<Object*>& GetGroupObjects(const GROUP_TYPE& type)

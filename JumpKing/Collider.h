@@ -17,6 +17,7 @@ private:
 	Vector2		_colliderScale;
 
 	bool		_active;
+	
 
 	COLLIDER_TYPE_INFO _colTypeInfo;
 
@@ -44,7 +45,7 @@ public:
 	Vector2	GetOffsetPos() { return _offsetPos; }
 	Vector2	GetColliderScale() { return _colliderScale; }
 	Vector2	GetFinalPos() { return _finalPos; }
-	UINT GetID() { return _ID; }
+	UINT	GetID() { return _ID; }
 	Object* GetColliderOwner() { return p_owner; }
 
 	friend class Object;

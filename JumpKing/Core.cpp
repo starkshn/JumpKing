@@ -17,6 +17,7 @@
 #include "GDI.h"
 #include "Texture.h"
 
+
 Core::Core()
 	:
 	h_wnd(0),

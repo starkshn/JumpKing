@@ -10,7 +10,6 @@ class RigidBody;
 class Texture;
 class Gravity;
 
-
 class Object
 {
 private:
