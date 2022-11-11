@@ -5,15 +5,6 @@
 # Prerequisites
 *.d
 
-# 폴더 무시
-JumpKing/x64/Debug
-JumpKing/Output/bin/Contents/Textures/Stage
-.vs/JumpKing/v17
-
-# 파일 무시
-JumpKing.pdb
-SCENE.ipch
-Browse.VC.db
 
 *.pdb
 *.ipch
